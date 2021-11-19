@@ -1,2 +1,14 @@
 # Data sources
 
+We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.
+
+Specifically, we plan to merge and use the following datasets:
+
+*   [name.basics.tsv.gz](https://datasets.imdbws.com/name.basics.tsv.gz)
+    +   This dataset gives us a list of all individuals listed in IMDb. This dataset will help us answer question 3 as it contains a comma separated list of the top 3 primary professions for each individual.
+*   [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
+    +   This dataset will provide us with basic information about the content such as type of content (movie, TV show, etc), title, genre, start year and end year, as well as runtime. This dataset will help us answer question 1 as it also contains a column indicating whether the title is adult rated or not.
+*   [title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
+    +   This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.
+*   [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
+    +   This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.
