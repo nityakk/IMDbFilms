@@ -9,9 +9,8 @@ library(reshape2)
 
 Load data
 ```{r}
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
 names[names == "\\N"] <- NA
-
 ```
 
 ```{r}
@@ -45,20 +44,6 @@ missing_plots <- function(data, percent = FALSE) {
   
   missing_patterns3 <- missing_patterns2 %>% 
       mutate(missing2 = ifelse(id == a_x, 0, missing2))
-   
-  temp_x <- length(unique(missing_patterns3$key)) / 2 + 0.5
-  temp_y <- nrow(missing_patterns) - a_x + 1
-  
-  # main plot
-  main <- ggplot(missing_patterns3, aes(x = fct_reorder(key, -missing2, mean), y = fct_rev(fct_reorder(missing_patterns3$id,as.integer(missing_patterns3$id))), 
-                                        fill = as.factor(missing2))) +
-    geom_tile(color="white", alpha = 0.8) +
-    scale_x_discrete(label=function(x) abbreviate(x, minlength = 3)) +
-    scale_fill_manual(values=c("gray60","gray80","mediumpurple1")) +
-    xlab("variable") +
-    ylab("missing pattern") +
-    annotate("text",x = temp_x, y = temp_y, label= "complete cases", fontface = 1, color="black") +
-    theme(legend.position="none", axis.line = element_line(colour = "black"))
 
   #Plot Upper Side
   freq <- c()
@@ -98,8 +83,25 @@ missing_plots <- function(data, percent = FALSE) {
       xlab("") +
       ylab("num rows missing:") +
       theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
-  }
+  } 
   
+  temp_x <- length(unique(missing_patterns3$key)) / 2 + 0.5
+  temp_y <- nrow(missing_patterns) - a_x + 1
+  
+  temp_f = levels((reorder(value, -freq)))
+  missing_patterns3$key <- fct_relevel(missing_patterns3$key, temp_f)
+
+  # main plot
+  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(missing_patterns3$id,as.integer(missing_patterns3$id))), 
+                                        fill = as.factor(missing2))) +
+    geom_tile(color="white", alpha = 0.8) +
+    scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
+    scale_fill_manual(values=c("gray60","gray80","mediumpurple1")) +
+    xlab("variable") +
+    ylab("missing pattern") +
+    annotate("text",x = temp_x, y = temp_y, label= "complete cases", fontface = 1, color="black") +
+    theme(legend.position="none", axis.line = element_line(colour = "black"))
+
   # Plot Right Side
   A_x <- length(unique((melted$Var1)))
   area.color <- replicate(A_x, "blue")
@@ -127,14 +129,28 @@ missing_plots <- function(data, percent = FALSE) {
       theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
   }
 
-  final_plot <- col + plot_spacer() + main + row + plot_layout(ncol = 2, 
-                                                               widths = c(4, 1),
-                                                               heights = c(1, 3))
+  final_plot <- col + plot_spacer() + main + row + plot_layout(ncol = 2,widths = c(5, 1),heights = c(1, 3))
   final_plot
 }
 ```
 
 ```{r}
-missing_plots(names)
+missing_plots(names, percent = FALSE)
+missing_plots(names, percent = TRUE)
 ```
+<br/>We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
+1.nconst (string) - alphanumeric unique identifier of the name/person.<br/>
+2.primaryName (string)– name by which the person is most often credited.<br/>
+3.birthYear – in YYYY format.<br/>
+4.deathYear – in YYYY format if applicable.<br/>
+5.primaryProfession (array of strings)– the top-3 professions of the person.<br/>
+6.knownForTitles (array of tconsts) – titles the person is known for.<br/><br/>
 
+The first graph above shows the missing values counts whereas the second graph denotes the missing values by percentage.<br/>
+Analysis:<br/>
+1. It is observed from the graphs above that the dataset has no missing values for the columns that denotes the person's detail such as the unique number used to identify them, the person's name and the person's profession. Thus, there is no inconsistency in the data that reveals information about the celebrities.<br/>
+2. The variable that is missing at maximum instances is the death year of the person followed the birth year. It is evident from the percentage plot as well which shows that death year is missing in almost 90% of the data while the birth year is missing in approximately 80% of the data.<br/>
+3. Apart from the death year and birth year variables, the column that has missing values in the 'name' dataset is knownForTitles. This implies that for some celebrities it is known that for what titles they are most known for. The knownForTitles variable is missing in ~15% of the rows.<br/>
+4. It is interpreted from the right side bar plot the proportion of rows having complete values is very less that is approximately 1%.<br/>
+5. There are more number of rows that has missing values for both, that is, death year as well as birth year compared to having missing values for individual columns. Moreover, the percentage of rows that has only death year or birth year as missing values is also less than the percentage of rows that has death year, birth year, and knownForTitles together missing.<br/>
+6. Interestingly, there are very less percentage of rows that has only knownForTitle as the missing values, that is, almost < 1%. This column is always seen missing in a significant proportion with death year and birth year both. At cases where knownForTitles is missing with either death year or birth year, its percentage is also observed to be < 1%.<br/>
