@@ -6,14 +6,6 @@ library(patchwork)
 library(reshape2)
 ```
 
-
-Load data
-```{r}
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-names[names == "\\N"] <- NA
-
-```
-
 ```{r}
 # cp = 0 for counts, 1 for percents
 missing_plots <- function(data, percent = FALSE) {
@@ -135,6 +127,9 @@ missing_plots <- function(data, percent = FALSE) {
 ```
 
 ```{r}
-missing_plots(names)
+missing_plots(names, percent = TRUE)
+missing_plots(basics, percent = TRUE)
+missing_plots(crew, percent = TRUE)
+missing_plots(ratings, percent = TRUE)
 ```
 

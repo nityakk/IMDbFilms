@@ -1,5 +1,55 @@
 # Data transformation
-```{r}
 
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(reshape2)
+```
+
+Load data
+```{r}
+names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+names[names == "\\N"] <- NA
+
+basics <- read.table(file = 'sources/basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics[basics == "\\N"] <- NA
+
+crew <- read.table(file = 'sources/crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew[crew == "\\N"] <- NA
+
+ratings <- read.table(file = 'sources/ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings[ratings == "\\N"] <- NA
+```
+
+
+
+```{r}
+head(names)
+```
+```{r}
+head(basics)
+```
+```{r}
+head(crew)
+```
+
+```{r}
+head(ratings)
+```
+
+```{r}
+basics_ratings <- merge(basics, ratings, by="tconst")
+head(basics_ratings)
+```
+
+```{r}
+basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
+head(basics_ratings_crew)
+```
+
+```{r}
+byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
+head(byDirectors)
 ```
 
