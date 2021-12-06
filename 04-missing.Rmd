@@ -9,7 +9,7 @@ library(reshape2)
 
 
 ```{r}
-#Load data
+# Load data
 names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
 names[names == "\\N"] <- NA
 ```
