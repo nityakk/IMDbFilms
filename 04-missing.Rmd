@@ -142,7 +142,8 @@ missing_plots(basics, percent = TRUE)
 missing_plots(crew, percent = TRUE)
 missing_plots(ratings, percent = TRUE)
 ```
-<br/><br/> We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
+<br/><br/> 
+We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
 1.nconst (string) - alphanumeric unique identifier of the name/person.<br/>
 2.primaryName (string)– name by which the person is most often credited.<br/>
 3.birthYear – in YYYY format.<br/>
