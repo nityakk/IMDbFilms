@@ -70,5 +70,9 @@ b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
 ```
 
 ```{r}
-ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r}
+plot1
 ```
