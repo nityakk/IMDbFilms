@@ -9,16 +9,16 @@ library(reshape2)
 
 Load data
 ```{r}
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+names <- read.csv(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 names[names == "\\N"] <- NA
 
-basics <- read.table(file = 'sources/basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics <- read.csv(file = 'sources/basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 basics[basics == "\\N"] <- NA
 
-crew <- read.table(file = 'sources/crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew <- read.csv(file = 'sources/crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 crew[crew == "\\N"] <- NA
 
-ratings <- read.table(file = 'sources/ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings <- read.csv(file = 'sources/ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 ratings[ratings == "\\N"] <- NA
 ```
 
@@ -30,6 +30,7 @@ head(names)
 ```{r}
 head(basics)
 ```
+
 ```{r}
 head(crew)
 ```
@@ -53,3 +54,21 @@ byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nco
 head(byDirectors)
 ```
 
+```{r}
+basics_ratings <- basics_ratings[,c(5,6,10,11)]
+basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
+basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
+basics_ratings <- basics_ratings %>% drop_na(startYear)
+```
+
+```{r}
+b1 <- basics_ratings %>% group_by(startYear) %>% summarise(isAdult = sum(isAdult))
+b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n()) %>% mutate(freq = round(cnt / sum(cnt), 3)) %>% arrange(desc(freq))
+b2 <- b2[,c(1,2)]
+b_final <- merge(b1, b2, by="startYear")
+b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
+```
+
+```{r}
+ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
