@@ -74,5 +74,5 @@ plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line()
 ```
 
 ```{r}
-plot1
+plot1 
 ```
