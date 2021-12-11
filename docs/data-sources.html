@@ -24,7 +24,7 @@
 <meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -113,10 +113,56 @@
 <li>This dataset will provide us with basic information about the content such as type of content (movie, TV show, etc), title, genre, start year and end year, as well as runtime. This dataset will help us answer question 1 as it also contains a column indicating whether the title is adult rated or not.</li>
 </ul></li>
 <li><a href="https://datasets.imdbws.com/title.crew.tsv.gz">title.crew.tsv.gz</a>
-+This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.</li>
+<ul>
+<li>This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.</li>
+</ul></li>
 <li><a href="https://datasets.imdbws.com/title.ratings.tsv.gz">title.ratings.tsv.gz</a>
-+This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.</li>
+<ul>
+<li>This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.</li>
+</ul></li>
 </ul>
+<pre><code>##      nconst     primaryName birthYear deathYear
+## 1 nm0000001    Fred Astaire      1899      1987
+## 2 nm0000002   Lauren Bacall      1924      2014
+## 3 nm0000003 Brigitte Bardot      1934      &lt;NA&gt;
+## 4 nm0000004    John Belushi      1949      1982
+## 5 nm0000005  Ingmar Bergman      1918      2007
+## 6 nm0000006  Ingrid Bergman      1915      1982
+##                     primaryProfession                          knownForTitles
+## 1      soundtrack,actor,miscellaneous tt0053137,tt0050419,tt0072308,tt0031983
+## 2                  actress,soundtrack tt0037382,tt0117057,tt0038355,tt0071877
+## 3 actress,soundtrack,music_department tt0056404,tt0054452,tt0057345,tt0049189
+## 4             actor,soundtrack,writer tt0077975,tt0072562,tt0080455,tt0078723
+## 5               writer,director,actor tt0083922,tt0060827,tt0050976,tt0050986
+## 6         actress,soundtrack,producer tt0077711,tt0034583,tt0036855,tt0038109</code></pre>
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres
+## 1      1894    &lt;NA&gt;              1        Documentary,Short
+## 2      1892    &lt;NA&gt;              5          Animation,Short
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance
+## 4      1892    &lt;NA&gt;             12          Animation,Short
+## 5      1893    &lt;NA&gt;              1             Comedy,Short
+## 6      1894    &lt;NA&gt;              1                    Short</code></pre>
+<pre><code>##      tconst directors writers
+## 1 tt0000001 nm0005690    &lt;NA&gt;
+## 2 tt0000002 nm0721526    &lt;NA&gt;
+## 3 tt0000003 nm0721526    &lt;NA&gt;
+## 4 tt0000004 nm0721526    &lt;NA&gt;
+## 5 tt0000005 nm0005690    &lt;NA&gt;
+## 6 tt0000006 nm0005690    &lt;NA&gt;</code></pre>
+<pre><code>##      tconst averageRating numVotes
+## 1 tt0000001           5.7     1842
+## 2 tt0000002           6.0      237
+## 3 tt0000003           6.5     1604
+## 4 tt0000004           6.0      154
+## 5 tt0000005           6.2     2423
+## 6 tt0000006           5.2      158</code></pre>
 
 </div>
             </section>

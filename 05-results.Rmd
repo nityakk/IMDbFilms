@@ -3,7 +3,7 @@
 ## Initial Exploration:
 ```{r}
 basics_ratings_crew
-```
+```   
 ```{r}
 full_year <- basics_ratings_crew %>%
   group_by(startYear) %>%
@@ -42,19 +42,8 @@ plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line()
 ```{r}
 plot1 
 ```
+
 ```{r}
-b_0 <- filter(basics_ratings, isAdult == 0)
-b_1 <- filter(basics_ratings, isAdult == 1)
-
-b_0_0 <- b_0 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
-b_1_1 <- b_1 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
-
-b_num_votes <- merge(b_0_0, b_1_1, by = 'startYear', all = TRUE)
-b_num_votes[is.na(b_num_votes)] <- 0
-
-b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
-b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
-
 plot2 <- ggplot(b_num_votes, aes(startYear)) + 
     geom_line(aes(y = numVotes.x, colour = "non_Adult")) + 
     geom_line(aes(y = numVotes.y, colour = "Adult")) + 
@@ -70,26 +59,11 @@ plot2
 ```
 
 ```{r}
-t2 <- byDirectors %>%
-    group_by(directors, titleType) %>%
-    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
-```
-
-
-```{r}
-df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
-df1 <- df1[!is.na(df1$directors),]
-
-df1$director_writer_pair <- paste(df1$directors,"-", df1$writers)
-tt <- df1 %>% count(director_writer_pair, sort = TRUE)
-ttt <- c(tt[1:32,1])
-
-df2 <- subset(df1, director_writer_pair %in% ttt)
-
-ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_boxplot() + 
+plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_boxplot() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
     scale_x_discrete(label = abbreviate)
 ```
+
 
 ```{r}
 last10years <- df2[which(df2$startYear=='2020'), ]
@@ -116,4 +90,9 @@ ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
   geom_density_ridges()
   #theme_ridges()+
   #theme(legend.position = "none")
+```
+
+
+```{r}
+plot3
 ```

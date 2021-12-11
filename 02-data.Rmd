@@ -12,3 +12,33 @@ Specifically, we plan to merge and use the following datasets:
     +   This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.
 *   [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
     +   This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.
+
+```{r}
+names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+names[names == "\\N"] <- NA
+
+basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics[basics == "\\N"] <- NA
+
+crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew[crew == "\\N"] <- NA
+
+ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings[ratings == "\\N"] <- NA
+```
+
+```{r}
+head(names)
+```
+
+```{r}
+head(basics)
+```
+
+```{r}
+head(crew)
+```
+
+```{r}
+head(ratings)
+```
