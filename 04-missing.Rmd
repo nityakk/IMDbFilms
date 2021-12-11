@@ -10,8 +10,8 @@ library(reshape2)
 
 ```{r}
 # Load data
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
-names[names == "\\N"] <- NA
+# names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
+# names[names == "\\N"] <- NA
 ```
 
 
@@ -94,8 +94,7 @@ missing_plots <- function(data, percent = FALSE) {
   missing_patterns3$key <- fct_relevel(missing_patterns3$key, temp_f)
 
   # main plot
-  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(missing_patterns3$id,as.integer(missing_patterns3$id))), 
-                                        fill = as.factor(missing2))) +
+  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(id,as.integer(id))), fill = as.factor(missing2))) +
     geom_tile(color="white", alpha = 0.8) +
     scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
     scale_fill_manual(values=c("gray60","gray80","mediumpurple1")) +

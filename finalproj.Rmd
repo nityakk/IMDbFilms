@@ -4,6 +4,12 @@ author: "Nitya Krishna Kumar, Binny Naik"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
+--- 
+title: "Analysis of various films on IMDb"
+author: "Nitya Krishna Kumar, Binny Naik"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
 ```{r include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -41,67 +47,11 @@ Specifically, we plan to merge and use the following datasets:
 
 <!--chapter:end:02-data.Rmd-->
 
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE
-)
-```
+
 # Data transformation
 
+Placeholder
 
-```{r}
-library(tidyverse)
-library(patchwork)
-library(reshape2)
-```
-
-Load data
-```{r}
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-names[names == "\\N"] <- NA
-
-basics <- read.table(file = 'sources/basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-basics[basics == "\\N"] <- NA
-
-crew <- read.table(file = 'sources/crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-crew[crew == "\\N"] <- NA
-
-ratings <- read.table(file = 'sources/ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-ratings[ratings == "\\N"] <- NA
-```
-
-
-
-```{r}
-head(names)
-```
-```{r}
-head(basics)
-```
-```{r}
-head(crew)
-```
-
-```{r}
-head(ratings)
-```
-
-```{r}
-basics_ratings <- merge(basics, ratings, by="tconst")
-head(basics_ratings)
-```
-
-```{r}
-basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
-head(basics_ratings_crew)
-```
-
-```{r}
-byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
-head(byDirectors)
-```
 
 
 <!--chapter:end:03-cleaning.Rmd-->
@@ -122,10 +72,11 @@ library(reshape2)
 ```
 
 
-Load data
+
 ```{r}
-names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
-names[names == "\\N"] <- NA
+# Load data
+# names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
+# names[names == "\\N"] <- NA
 ```
 
 
@@ -208,8 +159,7 @@ missing_plots <- function(data, percent = FALSE) {
   missing_patterns3$key <- fct_relevel(missing_patterns3$key, temp_f)
 
   # main plot
-  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(missing_patterns3$id,as.integer(missing_patterns3$id))), 
-                                        fill = as.factor(missing2))) +
+  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(id,as.integer(id))), fill = as.factor(missing2))) +
     geom_tile(color="white", alpha = 0.8) +
     scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
     scale_fill_manual(values=c("gray60","gray80","mediumpurple1")) +
@@ -257,7 +207,9 @@ missing_plots(basics, percent = TRUE)
 missing_plots(crew, percent = TRUE)
 missing_plots(ratings, percent = TRUE)
 ```
-<br/>We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
+
+<br/><br/> 
+We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
 1.nconst (string) - alphanumeric unique identifier of the name/person.<br/>
 2.primaryName (string)– name by which the person is most often credited.<br/>
 3.birthYear – in YYYY format.<br/>
@@ -276,14 +228,12 @@ Analysis:<br/>
 
 <!--chapter:end:04-missing.Rmd-->
 
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE
-)
-```
+
 # Results
+
+Placeholder
+
+
 
 <!--chapter:end:05-results.Rmd-->
 
