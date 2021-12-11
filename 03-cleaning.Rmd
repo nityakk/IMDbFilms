@@ -69,11 +69,19 @@ ttt <- c(tt[1:32,1])
 df2 <- subset(df1, director_writer_pair %in% ttt)
 ```
 
-```{r}
-tttt <- df1 %>%
-    group_by(director_writer_pair) %>%
-    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
 
+```{r}
+last10years <- df2[which(df2$startYear=='2020'), ]
+last10years
+```
+
+
+```{r}
+tttt <- last10years %>%
+    group_by(director_writer_pair, directors, writers) %>%
+    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+tttt
 t_final <- merge(tttt, tt, by = 'director_writer_pair')
-t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
+t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
+t_final
 ```

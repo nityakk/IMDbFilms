@@ -19,21 +19,21 @@ worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
 worksovertime
 ```
 
-
-
-
-
 ```{r}
-b1 <- basics_ratings %>% group_by(startYear) %>% summarise(isAdult = sum(isAdult))
-b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n()) %>% mutate(freq = round(cnt / sum(cnt), 3)) %>% arrange(desc(freq))
-b2 <- b2[,c(1,2)]
-b_final <- merge(b1, b2, by="startYear")
-b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
+full_votes <- basics_ratings_crew %>%
+  group_by(startYear) %>%
+  summarise(weightedVotes = sum(numVotes))
+full_votes
 ```
 
 ```{r}
-b_final
+votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
+  geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+  theme(axis.line = element_line(color="gray22")) +
+  scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
+votesOvertime
 ```
+
 
 ```{r}
 plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -65,29 +65,13 @@ plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_bo
 ```
 
 
-```{r}
-last10years <- df2[which(df2$startYear=='2020'), ]
-last10years
-```
-
-
-```{r}
-tttt <- last10years %>%
-    group_by(director_writer_pair, directors, writers) %>%
-    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-tttt
-t_final <- merge(tttt, tt, by = 'director_writer_pair')
-t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
-t_final
-```
-
 Director writer pair - ridgeplot
 ```{r}
 library(ggridges)
 
 
-ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
-  geom_density_ridges()
+# ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
+#   geom_density_ridges()
   #theme_ridges()+
   #theme(legend.position = "none")
 ```
