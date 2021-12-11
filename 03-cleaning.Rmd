@@ -76,6 +76,12 @@ last20years
 write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
 ```
 
+```{r}
+last100years <- df2[which(strtoi(df2$startYear) >= '1900'), ]
+last100years
+write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
+```
+
 
 ```{r}
 tttt <- last20years %>%

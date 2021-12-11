@@ -11,28 +11,96 @@
 
   <script>
   
-  // set the dimensions and margins of the graph
-  var margin = {top: 10, right: 30, bottom: 30, left: 60},
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+    var w = 300;
+		var h = 300;
+		var padding = 40;
+
+		//Create scale functions
+		var xScale = d3.scaleLinear()
+		.domain([0, 1])
+		.range([padding, w - padding / 2]);
+
+		var yScale = d3.scaleLinear()
+		.domain([0, 1])
+		.range([h - padding, padding / 2]);
+
+		// define X axis
+		var xAxis = d3.axisBottom()
+		.scale(xScale)
+		.ticks(5);
+
+		//Define Y axis
+		var yAxis = d3.axisLeft()
+		.scale(yScale)
+		.ticks(5);
+      
+		var svg = d3.select("body")
+		  .append("svg")
+		  .attr("width", w)
+		  .attr("height", h);
+		  
+		//Create X axis
+		svg.append("g")
+		.attr("id", "xaxis")
+		.attr("transform", "translate(0," + (h - padding) + ")")
+		.call(xAxis);
+		
+				//Create Y axis
+		svg.append("g")
+		.attr("id", "yaxis")
+		.attr("transform", "translate(" + padding + ",0)")
+		.call(yAxis);
   
-  // append the svg object to the body of the page
-  var svg = d3.select("#my_dataviz")
-    .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
   
+  d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/last100years.csv")//, rowConverter)
+		  .then(function(data) {
+
+
+		  xScale
+		  .domain([d3.min(data.map(d => d.startYear)),
+		           d3.max(data.map(d => d.startYear))]);
+
+		  yScale
+		  .domain([d3.min(data.map(d => d.averageRating)),
+		           d3.max(data.map(d => d.averageRating))]);
+
+				d3.select("#xaxis").call(xAxis);
+
+				d3.select("#yaxis").call(yAxis);
+
+		    d3.select("svg")
+		      .selectAll("circle")
+		      .data(data)
+		      .enter()
+		      .append("circle")
+		      .attr("cx", d => xScale(d.startYear))
+		      .attr("cy", d => yScale(d.averageRating))
+		      .attr("r", "3")
+		      .attr("fill", "blue");
+
+		  })
+		  .catch(function(error) {
+        d3.select("body")
+          .append("h2")
+          .text("I can't find the data!!! :-(")
+		  });
+  
+  
+/*		  var rowConverter = function (d) {
+		    	if (!isNaN(d.graduation_rate) && !isNaN(d.attendance_rate)) {
+    		    return {
+    					grad: +d.graduation_rate,
+    					attend: +d.attendance_rate,
+    					name: d.school_name
+    		    }
+		  }
+		    	};
+  */
     //Read the data
-    d3.csv("../sources/last20years.csv", function(data) {
-      for (var i = 0; i < data.length; i++) {
-        console.log(data[i].primaryTitle);
-        console.log(data[i].startYear);
-    }
+    //d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/last20years.csv", function(data) {
+		
   
-  })
+  //});
   
   </script>
 </html>
