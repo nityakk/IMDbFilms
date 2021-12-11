@@ -24,7 +24,7 @@
 <meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
 
 
-<meta name="date" content="2021-11-30" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -101,84 +101,83 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
-<p>Load data</p>
-<pre><code>##      nconst     primaryName birthYear deathYear
-## 1 nm0000001    Fred Astaire      1899      1987
-## 2 nm0000002   Lauren Bacall      1924      2014
-## 3 nm0000003 Brigitte Bardot      1934      &lt;NA&gt;
-## 4 nm0000004    John Belushi      1949      1982
-## 5 nm0000005  Ingmar Bergman      1918      2007
-## 6 nm0000006  Ingrid Bergman      1915      1982
-##                     primaryProfession                          knownForTitles
-## 1      soundtrack,actor,miscellaneous tt0053137,tt0031983,tt0072308,tt0050419
-## 2                  actress,soundtrack tt0117057,tt0071877,tt0038355,tt0037382
-## 3 actress,soundtrack,music_department tt0049189,tt0057345,tt0054452,tt0056404
-## 4             actor,soundtrack,writer tt0077975,tt0080455,tt0072562,tt0078723
-## 5               writer,director,actor tt0050976,tt0060827,tt0050986,tt0083922
-## 6         actress,soundtrack,producer tt0034583,tt0077711,tt0038109,tt0036855</code></pre>
-<pre><code>##      tconst averageRating numVotes
-## 1 tt0000001           5.7     1841
-## 2 tt0000002           6.0      236
-## 3 tt0000003           6.5     1602
-## 4 tt0000004           6.0      153
-## 5 tt0000005           6.2     2421
-## 6 tt0000006           5.2      158</code></pre>
-<pre><code>##      tconst directors writers
-## 1 tt0000001 nm0005690    &lt;NA&gt;
-## 2 tt0000002 nm0721526    &lt;NA&gt;
-## 3 tt0000003 nm0721526    &lt;NA&gt;
-## 4 tt0000004 nm0721526    &lt;NA&gt;
-## 5 tt0000005 nm0005690    &lt;NA&gt;
-## 6 tt0000006 nm0005690    &lt;NA&gt;</code></pre>
-<pre><code>##      tconst averageRating numVotes
-## 1 tt0000001           5.7     1841
-## 2 tt0000002           6.0      236
-## 3 tt0000003           6.5     1602
-## 4 tt0000004           6.0      153
-## 5 tt0000005           6.2     2421
-## 6 tt0000006           5.2      158</code></pre>
-<pre><code>##      tconst averageRating.x numVotes.x averageRating.y numVotes.y
-## 1 tt0000001             5.7       1841             5.7       1841
-## 2 tt0000002             6.0        236             6.0        236
-## 3 tt0000003             6.5       1602             6.5       1602
-## 4 tt0000004             6.0        153             6.0        153
-## 5 tt0000005             6.2       2421             6.2       2421
-## 6 tt0000006             5.2        158             5.2        158</code></pre>
-<pre><code>##      tconst averageRating.x numVotes.x averageRating.y numVotes.y directors
-## 1 tt0000001             5.7       1841             5.7       1841 nm0005690
-## 2 tt0000002             6.0        236             6.0        236 nm0721526
-## 3 tt0000003             6.5       1602             6.5       1602 nm0721526
-## 4 tt0000004             6.0        153             6.0        153 nm0721526
-## 5 tt0000005             6.2       2421             6.2       2421 nm0005690
-## 6 tt0000006             5.2        158             5.2        158 nm0005690
-##   writers
-## 1    &lt;NA&gt;
-## 2    &lt;NA&gt;
-## 3    &lt;NA&gt;
-## 4    &lt;NA&gt;
-## 5    &lt;NA&gt;
-## 6    &lt;NA&gt;</code></pre>
-<pre><code>##   directors    tconst averageRating.x numVotes.x averageRating.y numVotes.y
-## 1 nm0000005 tt0044060             7.5       5774             7.5       5774
-## 2 nm0000005 tt0053772             7.1       4015             7.1       4015
-## 3 nm0000005 tt0052017             7.5       2857             7.5       2857
-## 4 nm0000005 tt2265239             7.1        127             7.1        127
-## 5 nm0000005 tt0083922             8.1      61458             8.1      61458
-## 6 nm0000005 tt0069467             8.1      32714             8.1      32714
-##               writers    primaryName birthYear deathYear     primaryProfession
-## 1 nm0000005,nm0340471 Ingmar Bergman      1918      2007 writer,director,actor
-## 2 nm0051923,nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 3 nm0000005,nm0410694 Ingmar Bergman      1918      2007 writer,director,actor
-## 4           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 5           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 6           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres averageRating
+## 1      1894    &lt;NA&gt;              1        Documentary,Short           5.7
+## 2      1892    &lt;NA&gt;              5          Animation,Short           6.0
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance           6.5
+## 4      1892    &lt;NA&gt;             12          Animation,Short           6.0
+## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
+## 6      1894    &lt;NA&gt;              1                    Short           5.2
+##   numVotes
+## 1     1842
+## 2      237
+## 3     1604
+## 4      154
+## 5     2423
+## 6      158</code></pre>
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres averageRating
+## 1      1894    &lt;NA&gt;              1        Documentary,Short           5.7
+## 2      1892    &lt;NA&gt;              5          Animation,Short           6.0
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance           6.5
+## 4      1892    &lt;NA&gt;             12          Animation,Short           6.0
+## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
+## 6      1894    &lt;NA&gt;              1                    Short           5.2
+##   numVotes directors writers
+## 1     1842 nm0005690    &lt;NA&gt;
+## 2      237 nm0721526    &lt;NA&gt;
+## 3     1604 nm0721526    &lt;NA&gt;
+## 4      154 nm0721526    &lt;NA&gt;
+## 5     2423 nm0005690    &lt;NA&gt;
+## 6      158 nm0005690    &lt;NA&gt;</code></pre>
+<pre><code>##   directors    tconst titleType                     primaryTitle
+## 1 nm0000005 tt0080397   tvMovie From the Life of the Marionettes
+## 2 nm0000005 tt0069467     movie                 Cries &amp; Whispers
+## 3 nm0000005 tt6725014     movie           Scenes from a Marriage
+## 4 nm0000005 tt0064897   tvMovie                         The Rite
+## 5 nm0000005 tt0184741   tvMovie                  The Misanthrope
+## 6 nm0000005 tt0044060     movie                 Summer Interlude
+##                   originalTitle isAdult startYear endYear runtimeMinutes
+## 1 Aus dem Leben der Marionetten       0      1980    &lt;NA&gt;            104
+## 2            Viskningar och rop       0      1972    &lt;NA&gt;             91
+## 3       Scener ur ett äktenskap       0      1974    &lt;NA&gt;            169
+## 4                         Riten       0      1969    &lt;NA&gt;             72
+## 5                   Misantropen       0      1974    &lt;NA&gt;            115
+## 6                     Sommarlek       0      1951    &lt;NA&gt;             96
+##          genres averageRating numVotes             writers    primaryName
+## 1         Drama           7.4     4164           nm0000005 Ingmar Bergman
+## 2         Drama           8.1    32736           nm0000005 Ingmar Bergman
+## 3         Drama           8.4     6019           nm0000005 Ingmar Bergman
+## 4         Drama           7.1     2787           nm0000005 Ingmar Bergman
+## 5         Drama           6.8       67 nm0359753,nm0596942 Ingmar Bergman
+## 6 Drama,Romance           7.5     5779 nm0000005,nm0340471 Ingmar Bergman
+##   birthYear deathYear     primaryProfession
+## 1      1918      2007 writer,director,actor
+## 2      1918      2007 writer,director,actor
+## 3      1918      2007 writer,director,actor
+## 4      1918      2007 writer,director,actor
+## 5      1918      2007 writer,director,actor
+## 6      1918      2007 writer,director,actor
 ##                            knownForTitles
-## 1 tt0050976,tt0060827,tt0050986,tt0083922
-## 2 tt0050976,tt0060827,tt0050986,tt0083922
-## 3 tt0050976,tt0060827,tt0050986,tt0083922
-## 4 tt0050976,tt0060827,tt0050986,tt0083922
-## 5 tt0050976,tt0060827,tt0050986,tt0083922
-## 6 tt0050976,tt0060827,tt0050986,tt0083922</code></pre>
+## 1 tt0083922,tt0060827,tt0050976,tt0050986
+## 2 tt0083922,tt0060827,tt0050976,tt0050986
+## 3 tt0083922,tt0060827,tt0050976,tt0050986
+## 4 tt0083922,tt0060827,tt0050976,tt0050986
+## 5 tt0083922,tt0060827,tt0050976,tt0050986
+## 6 tt0083922,tt0060827,tt0050976,tt0050986</code></pre>
 
 </div>
             </section>

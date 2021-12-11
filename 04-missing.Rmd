@@ -1,21 +1,6 @@
 # Missing values
 
 ```{r}
-library(tidyverse)
-library(patchwork)
-library(reshape2)
-```
-
-
-
-```{r}
-# Load data
-# names <- read.table(file = 'sources/names.tsv', sep = '\t', header = TRUE, fill = TRUE)
-# names[names == "\\N"] <- NA
-```
-
-
-```{r}
 # cp = 0 for counts, 1 for percents
 missing_plots <- function(data, percent = FALSE) {
   

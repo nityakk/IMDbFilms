@@ -7,37 +7,6 @@ library(patchwork)
 library(reshape2)
 ```
 
-Load data
-```{r}
-names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-names[names == "\\N"] <- NA
-
-basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-basics[basics == "\\N"] <- NA
-
-crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-crew[crew == "\\N"] <- NA
-
-ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-ratings[ratings == "\\N"] <- NA
-```
-
-```{r}
-head(names)
-```
-
-```{r}
-head(basics)
-```
-
-```{r}
-head(crew)
-```
-
-```{r}
-head(ratings)
-```
-
 ```{r}
 basics_ratings <- merge(basics, ratings, by="tconst")
 head(basics_ratings)
@@ -66,4 +35,44 @@ b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n()) %>% mutate
 b2 <- b2[,c(1,2)]
 b_final <- merge(b1, b2, by="startYear")
 b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
+```
+
+```{r}
+b_0 <- filter(basics_ratings, isAdult == 0)
+b_1 <- filter(basics_ratings, isAdult == 1)
+
+b_0_0 <- b_0 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
+b_1_1 <- b_1 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
+
+b_num_votes <- merge(b_0_0, b_1_1, by = 'startYear', all = TRUE)
+b_num_votes[is.na(b_num_votes)] <- 0
+
+b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
+b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
+```
+
+```{r}
+t2 <- byDirectors %>%
+    group_by(directors, titleType) %>%
+    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
+```
+
+```{r}
+df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
+df1 <- df1[!is.na(df1$directors),]
+
+df1$director_writer_pair <- paste(df1$directors,"-", df1$writers)
+tt <- df1 %>% count(director_writer_pair, sort = TRUE)
+ttt <- c(tt[1:32,1])
+
+df2 <- subset(df1, director_writer_pair %in% ttt)
+```
+
+```{r}
+tttt <- df1 %>%
+    group_by(director_writer_pair) %>%
+    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
+
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
 ```
