@@ -92,3 +92,12 @@ t_final <- merge(tttt, tt, by = 'director_writer_pair')
 t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
 t_final
 ```
+
+```{r}
+directorRatings <- last100years %>%
+    group_by(directors, startYear) %>%
+    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings
+write.csv(last20years,"sources_short/directorRatings.csv", row.names = FALSE)
+```
+
