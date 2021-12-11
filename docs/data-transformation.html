@@ -24,7 +24,7 @@
 <meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
 
 
-<meta name="date" content="2021-11-30" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -116,13 +116,20 @@
 ## 4             actor,soundtrack,writer tt0077975,tt0080455,tt0072562,tt0078723
 ## 5               writer,director,actor tt0050976,tt0060827,tt0050986,tt0083922
 ## 6         actress,soundtrack,producer tt0034583,tt0077711,tt0038109,tt0036855</code></pre>
-<pre><code>##      tconst averageRating numVotes
-## 1 tt0000001           5.7     1841
-## 2 tt0000002           6.0      236
-## 3 tt0000003           6.5     1602
-## 4 tt0000004           6.0      153
-## 5 tt0000005           6.2     2421
-## 6 tt0000006           5.2      158</code></pre>
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres
+## 1      1894    &lt;NA&gt;              1        Documentary,Short
+## 2      1892    &lt;NA&gt;              5          Animation,Short
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance
+## 4      1892    &lt;NA&gt;             12          Animation,Short
+## 5      1893    &lt;NA&gt;              1             Comedy,Short
+## 6      1894    &lt;NA&gt;              1                    Short</code></pre>
 <pre><code>##      tconst directors writers
 ## 1 tt0000001 nm0005690    &lt;NA&gt;
 ## 2 tt0000002 nm0721526    &lt;NA&gt;
@@ -137,41 +144,76 @@
 ## 4 tt0000004           6.0      153
 ## 5 tt0000005           6.2     2421
 ## 6 tt0000006           5.2      158</code></pre>
-<pre><code>##      tconst averageRating.x numVotes.x averageRating.y numVotes.y
-## 1 tt0000001             5.7       1841             5.7       1841
-## 2 tt0000002             6.0        236             6.0        236
-## 3 tt0000003             6.5       1602             6.5       1602
-## 4 tt0000004             6.0        153             6.0        153
-## 5 tt0000005             6.2       2421             6.2       2421
-## 6 tt0000006             5.2        158             5.2        158</code></pre>
-<pre><code>##      tconst averageRating.x numVotes.x averageRating.y numVotes.y directors
-## 1 tt0000001             5.7       1841             5.7       1841 nm0005690
-## 2 tt0000002             6.0        236             6.0        236 nm0721526
-## 3 tt0000003             6.5       1602             6.5       1602 nm0721526
-## 4 tt0000004             6.0        153             6.0        153 nm0721526
-## 5 tt0000005             6.2       2421             6.2       2421 nm0005690
-## 6 tt0000006             5.2        158             5.2        158 nm0005690
-##   writers
-## 1    &lt;NA&gt;
-## 2    &lt;NA&gt;
-## 3    &lt;NA&gt;
-## 4    &lt;NA&gt;
-## 5    &lt;NA&gt;
-## 6    &lt;NA&gt;</code></pre>
-<pre><code>##   directors    tconst averageRating.x numVotes.x averageRating.y numVotes.y
-## 1 nm0000005 tt0044060             7.5       5774             7.5       5774
-## 2 nm0000005 tt0053772             7.1       4015             7.1       4015
-## 3 nm0000005 tt0052017             7.5       2857             7.5       2857
-## 4 nm0000005 tt2265239             7.1        127             7.1        127
-## 5 nm0000005 tt0083922             8.1      61458             8.1      61458
-## 6 nm0000005 tt0069467             8.1      32714             8.1      32714
-##               writers    primaryName birthYear deathYear     primaryProfession
-## 1 nm0000005,nm0340471 Ingmar Bergman      1918      2007 writer,director,actor
-## 2 nm0051923,nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 3 nm0000005,nm0410694 Ingmar Bergman      1918      2007 writer,director,actor
-## 4           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 5           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
-## 6           nm0000005 Ingmar Bergman      1918      2007 writer,director,actor
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres averageRating
+## 1      1894    &lt;NA&gt;              1        Documentary,Short           5.7
+## 2      1892    &lt;NA&gt;              5          Animation,Short           6.0
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance           6.5
+## 4      1892    &lt;NA&gt;             12          Animation,Short           6.0
+## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
+## 6      1894    &lt;NA&gt;              1                    Short           5.2
+##   numVotes
+## 1     1841
+## 2      236
+## 3     1602
+## 4      153
+## 5     2421
+## 6      158</code></pre>
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres averageRating
+## 1      1894    &lt;NA&gt;              1        Documentary,Short           5.7
+## 2      1892    &lt;NA&gt;              5          Animation,Short           6.0
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance           6.5
+## 4      1892    &lt;NA&gt;             12          Animation,Short           6.0
+## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
+## 6      1894    &lt;NA&gt;              1                    Short           5.2
+##   numVotes directors writers
+## 1     1841 nm0005690    &lt;NA&gt;
+## 2      236 nm0721526    &lt;NA&gt;
+## 3     1602 nm0721526    &lt;NA&gt;
+## 4      153 nm0721526    &lt;NA&gt;
+## 5     2421 nm0005690    &lt;NA&gt;
+## 6      158 nm0005690    &lt;NA&gt;</code></pre>
+<pre><code>##   directors    tconst titleType                      primaryTitle
+## 1 nm0000005 tt0064793     movie               The Passion of Anna
+## 2 nm0000005 tt0313247   tvMovie                       Backanterna
+## 3 nm0000005 tt2297774 tvEpisode                        TÃ¥redalen
+## 4 nm0000005 tt0090955     movie The Making of Fanny and Alexander
+## 5 nm0000005 tt7781442 tvEpisode         Familjen Ekdahl firar jul
+## 6 nm0000005 tt0050502   tvMovie             Mr. Sleeman Is Coming
+##                  originalTitle isAdult startYear endYear runtimeMinutes
+## 1                   En passion       0      1969    &lt;NA&gt;            101
+## 2                  Backanterna       0      1993    &lt;NA&gt;            140
+## 3                   TÃ¥redalen       0      1973    &lt;NA&gt;             49
+## 4 Dokument Fanny och Alexander       0      1984    &lt;NA&gt;            110
+## 5    Familjen Ekdahl firar jul       0      1983    &lt;NA&gt;             96
+## 6          Herr Sleeman kommer       0      1957    &lt;NA&gt;             43
+##        genres averageRating numVotes                       writers
+## 1       Drama           7.7     9229                     nm0000005
+## 2       Music           6.4       61 nm0259344,nm0262381,nm0831588
+## 3       Drama           8.7      296                     nm0000005
+## 4 Documentary           7.5      913                     nm0000005
+## 5       Drama           8.7      169                     nm0000005
+## 6       Drama           6.2      163                     nm0074790
+##      primaryName birthYear deathYear     primaryProfession
+## 1 Ingmar Bergman      1918      2007 writer,director,actor
+## 2 Ingmar Bergman      1918      2007 writer,director,actor
+## 3 Ingmar Bergman      1918      2007 writer,director,actor
+## 4 Ingmar Bergman      1918      2007 writer,director,actor
+## 5 Ingmar Bergman      1918      2007 writer,director,actor
+## 6 Ingmar Bergman      1918      2007 writer,director,actor
 ##                            knownForTitles
 ## 1 tt0050976,tt0060827,tt0050986,tt0083922
 ## 2 tt0050976,tt0060827,tt0050986,tt0083922

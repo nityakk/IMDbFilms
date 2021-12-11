@@ -5,6 +5,7 @@
 library(tidyverse)
 library(patchwork)
 library(reshape2)
+library(ggplot2)
 ```
 
 Load data
@@ -60,10 +61,4 @@ basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
 basics_ratings <- basics_ratings %>% drop_na(startYear)
 ```
 
-```{r}
-b1 <- basics_ratings %>% group_by(startYear) %>% summarise(isAdult = sum(isAdult))
-b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n()) %>% mutate(freq = round(cnt / sum(cnt), 3)) %>% arrange(desc(freq))
-b2 <- b2[,c(1,2)]
-b_final <- merge(b1, b2, by="startYear")
-b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
-```
+
