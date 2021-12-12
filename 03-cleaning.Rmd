@@ -98,6 +98,7 @@ t_final
 directorRatings <- last100years %>%
     group_by(primaryName, startYear) %>%
     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
 directorRatings
 write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
 ```
@@ -107,8 +108,8 @@ write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.nam
 # dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
 # dRSub
 
-for(director in directorRatings$primaryName) {
-  dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
+for(director in directorRatings$fileName) {
+  dRSub <- directorRatings[which(directorRatings$fileName == director), ]
   filename = paste("sources_short/directors/",director,"_Ratings.csv")
   write.csv(dRSub, filename, row.names = FALSE)
 }
