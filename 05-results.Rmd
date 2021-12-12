@@ -31,3 +31,20 @@ plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_bo
 ```{r}
 plot3
 ```
+
+```{r}
+plot4 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
+```
+
+```{r}
+plot4
+```
+
+```{r}
+plot5 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+plot5
+```
+```
