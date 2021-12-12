@@ -64,7 +64,7 @@
       d3.select("#xaxis").call(xAxis);
       d3.select("#yaxis").call(yAxis);
       
-      d3.select("svg")
+/*      d3.select("svg")
   		      .selectAll("circle")
   		      .data(data)
   		      .enter()
@@ -72,11 +72,11 @@
   		      .attr("cx", d => xScale(d.startYear))
   		      .attr("cy", d => yScale(d.weightedRating))
   		      .attr("r", "3")
-  		      .attr("fill", "purple");
+  		      .attr("fill", "purple");*/
       
       
       
-      let directorOptions = [...new Set(data.map(d => d.primaryName))]; 
+      let directorOptions = [...new Set(data.map(d => d.fileName))]; 
       
       // add the options to the button
       d3.select("#selectButton")
@@ -98,21 +98,28 @@
         
       d3.select("#selectButton").on('change', function() {
           file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/directors/" + this.value + "_Ratings.csv";
-          console.log(file)
-/*          d3.csv(file).then(function(data2) {
+          d3.csv(file).then(function(data2) {
             d3.select("svg")
     		      .selectAll("circle")
-    		      .data(data)
+    		      .data(data2)
     		      .enter()
     		      .append("circle")
     		      .attr("cx", d => xScale(d.startYear))
     		      .attr("cy", d => yScale(d.weightedRating))
-    		      .attr("r", "3")
-    		      .attr("fill", "black");
-		      })*/
+    		      .attr("r", "5")
+    		      .attr("fill", "purple")
+    		      .attr("class", "dot");
+		      
+            var dots = svg.selectAll('.dot')
+            .data(data2);
+
+            //exit
+            dots
+              .exit()
+              .remove();
+          })
+		      
       })
-      
-      //update("Alan J.W. Bell")
       
 		});
 		
