@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 sources
+sources_short/directors
+sources_short/last100years.csv
