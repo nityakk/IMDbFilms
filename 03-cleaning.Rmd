@@ -143,12 +143,14 @@ t_final
 ```
 
 ```{r}
+
 # directorRatings <- last20years %>%
 #     group_by(primaryName, startYear) %>%
 #     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
 # directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
 # #unique(directorRatings$primaryName)
 # write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
+
 ```
 
 ```{r}
@@ -157,9 +159,11 @@ t_final
 # dRSub
 #paste0(director,"_Rangints")
 
+
 # for(director in groupedDirec$fileName) {
 #   dRSub <- directorRatings[which(directorRatings$fileName == director), ]
 #   filename = paste0("sources_short/directors/",director,"_Ratings.csv")
 #   write.csv(dRSub, filename, row.names = FALSE)
 # }
+
 ```

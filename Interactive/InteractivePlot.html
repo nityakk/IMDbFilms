@@ -64,6 +64,7 @@
       d3.select("#xaxis").call(xAxis);
       d3.select("#yaxis").call(yAxis);
       
+
       /*d3.select("svg")
   		      .selectAll("circle")
   		      .data(data)
@@ -97,12 +98,13 @@
         .attr("chosen", function (d) { return d; }) // corresponding value returned by the button*/
         
       d3.select("#selectButton").on('change', function() {
+
           //file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/directors/" + this.value + "_Ratings.csv";
           //d3.csv(file)
           data
           .filter(function(s) {s.fileName == this.value})
           .then(function(data2) {
-            data2.filter
+
             d3.select("svg")
     		      .selectAll("circle")
     		      .data(data2)
