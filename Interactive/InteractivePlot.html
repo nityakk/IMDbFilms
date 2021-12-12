@@ -53,16 +53,9 @@
 		.call(yAxis);
 		
 		
-		
-/*  
-    var testdata = d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/directorRatings.csv")
-    
-    var nest = d3.set(testdata, function(d) {return d.directors});
-    console.log(nest);*/
-  
-  d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/directorRatings.csv").then(function(data) {
+  d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/last100years.csv").then(function(data) {
       
-      let directorOptions = [...new Set(data.map(d => d.directors))]; 
+      let directorOptions = [...new Set(data.map(d => d.primaryName))]; 
       
       // add the options to the button
       d3.select("#selectButton")
