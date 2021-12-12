@@ -103,15 +103,14 @@ write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.nam
 ```
 
 ```{r}
-# foreach::director
-# director <-  "Adam Feinsilver"
+# director <-  "Alan J.W. Bell"
 # dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
 # dRSub
 
-for(director in last100years$primaryName) {
+for(director in directorRatings$primaryName) {
   dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
-  filename = paste("sources_short/directors/", director, "_Ratings.csv")
-  write.csv(directorRatings, filename, row.names = FALSE)
+  filename = paste("sources_short/directors/",director,"_Ratings.csv")
+  write.csv(dRSub, filename, row.names = FALSE)
 }
 
 ```
