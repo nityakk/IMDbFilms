@@ -1,5 +1,41 @@
 # Results
 
+## Initial Exploration:
+```{r}
+basics_ratings_crew
+```   
+
+```{r}
+full_year <- basics_ratings_crew %>%
+  group_by(startYear) %>%
+  count()
+full_year
+```
+
+```{r}
+worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
+  geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+  theme(axis.line = element_line(color="gray22")) +
+  scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
+  scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
+worksovertime
+```
+
+```{r}
+full_votes <- basics_ratings_crew %>%
+  group_by(startYear) %>%
+  summarise(weightedVotes = sum(numVotes))
+full_votes
+```
+
+```{r}
+votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
+  geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+  theme(axis.line = element_line(color="gray22")) +
+  scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
+votesOvertime
+```
+
 ```{r}
 plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -18,6 +54,7 @@ plot2 <- ggplot(b_num_votes, aes(startYear)) +
     ylab("Log2(Count of Num of Votes)")
 ```
 
+Note: Maybe just until 2020?
 ```{r}
 plot2
 ```
@@ -26,6 +63,17 @@ plot2
 plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_boxplot() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
     scale_x_discrete(label = abbreviate)
+```
+
+Director writer pair - ridgeplot
+```{r}
+library(ggridges)
+
+
+# ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
+#   geom_density_ridges()
+  #theme_ridges()+
+  #theme(legend.position = "none")
 ```
 
 ```{r}
@@ -46,5 +94,4 @@ plot5 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), 
 
 ```{r}
 plot5
-```
 ```

@@ -101,6 +101,52 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<<<<<<< HEAD
+<p>Load data</p>
+<pre><code>##      nconst     primaryName birthYear deathYear
+## 1 nm0000001    Fred Astaire      1899      1987
+## 2 nm0000002   Lauren Bacall      1924      2014
+## 3 nm0000003 Brigitte Bardot      1934      &lt;NA&gt;
+## 4 nm0000004    John Belushi      1949      1982
+## 5 nm0000005  Ingmar Bergman      1918      2007
+## 6 nm0000006  Ingrid Bergman      1915      1982
+##                     primaryProfession                          knownForTitles
+## 1      soundtrack,actor,miscellaneous tt0053137,tt0031983,tt0072308,tt0050419
+## 2                  actress,soundtrack tt0117057,tt0071877,tt0038355,tt0037382
+## 3 actress,soundtrack,music_department tt0049189,tt0057345,tt0054452,tt0056404
+## 4             actor,soundtrack,writer tt0077975,tt0080455,tt0072562,tt0078723
+## 5               writer,director,actor tt0050976,tt0060827,tt0050986,tt0083922
+## 6         actress,soundtrack,producer tt0034583,tt0077711,tt0038109,tt0036855</code></pre>
+<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
+## 1 tt0000001     short             Carmencita             Carmencita       0
+## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
+## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
+## 4 tt0000004     short            Un bon bock            Un bon bock       0
+## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
+## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
+##   startYear endYear runtimeMinutes                   genres
+## 1      1894    &lt;NA&gt;              1        Documentary,Short
+## 2      1892    &lt;NA&gt;              5          Animation,Short
+## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance
+## 4      1892    &lt;NA&gt;             12          Animation,Short
+## 5      1893    &lt;NA&gt;              1             Comedy,Short
+## 6      1894    &lt;NA&gt;              1                    Short</code></pre>
+<pre><code>##      tconst directors writers
+## 1 tt0000001 nm0005690    &lt;NA&gt;
+## 2 tt0000002 nm0721526    &lt;NA&gt;
+## 3 tt0000003 nm0721526    &lt;NA&gt;
+## 4 tt0000004 nm0721526    &lt;NA&gt;
+## 5 tt0000005 nm0005690    &lt;NA&gt;
+## 6 tt0000006 nm0005690    &lt;NA&gt;</code></pre>
+<pre><code>##      tconst averageRating numVotes
+## 1 tt0000001           5.7     1841
+## 2 tt0000002           6.0      236
+## 3 tt0000003           6.5     1602
+## 4 tt0000004           6.0      153
+## 5 tt0000005           6.2     2421
+## 6 tt0000006           5.2      158</code></pre>
+=======
+>>>>>>> f8c0639dc326e8d0807194981eaa1575becbe20a
 <pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
 ## 1 tt0000001     short             Carmencita             Carmencita       0
 ## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
@@ -116,11 +162,19 @@
 ## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
 ## 6      1894    &lt;NA&gt;              1                    Short           5.2
 ##   numVotes
+<<<<<<< HEAD
+## 1     1841
+## 2      236
+## 3     1602
+## 4      153
+## 5     2421
+=======
 ## 1     1842
 ## 2      237
 ## 3     1604
 ## 4      154
 ## 5     2423
+>>>>>>> f8c0639dc326e8d0807194981eaa1575becbe20a
 ## 6      158</code></pre>
 <pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
 ## 1 tt0000001     short             Carmencita             Carmencita       0
@@ -137,6 +191,42 @@
 ## 5      1893    &lt;NA&gt;              1             Comedy,Short           6.2
 ## 6      1894    &lt;NA&gt;              1                    Short           5.2
 ##   numVotes directors writers
+<<<<<<< HEAD
+## 1     1841 nm0005690    &lt;NA&gt;
+## 2      236 nm0721526    &lt;NA&gt;
+## 3     1602 nm0721526    &lt;NA&gt;
+## 4      153 nm0721526    &lt;NA&gt;
+## 5     2421 nm0005690    &lt;NA&gt;
+## 6      158 nm0005690    &lt;NA&gt;</code></pre>
+<pre><code>##   directors    tconst titleType                      primaryTitle
+## 1 nm0000005 tt0064793     movie               The Passion of Anna
+## 2 nm0000005 tt0313247   tvMovie                       Backanterna
+## 3 nm0000005 tt2297774 tvEpisode                        TÃ¥redalen
+## 4 nm0000005 tt0090955     movie The Making of Fanny and Alexander
+## 5 nm0000005 tt7781442 tvEpisode         Familjen Ekdahl firar jul
+## 6 nm0000005 tt0050502   tvMovie             Mr. Sleeman Is Coming
+##                  originalTitle isAdult startYear endYear runtimeMinutes
+## 1                   En passion       0      1969    &lt;NA&gt;            101
+## 2                  Backanterna       0      1993    &lt;NA&gt;            140
+## 3                   TÃ¥redalen       0      1973    &lt;NA&gt;             49
+## 4 Dokument Fanny och Alexander       0      1984    &lt;NA&gt;            110
+## 5    Familjen Ekdahl firar jul       0      1983    &lt;NA&gt;             96
+## 6          Herr Sleeman kommer       0      1957    &lt;NA&gt;             43
+##        genres averageRating numVotes                       writers
+## 1       Drama           7.7     9229                     nm0000005
+## 2       Music           6.4       61 nm0259344,nm0262381,nm0831588
+## 3       Drama           8.7      296                     nm0000005
+## 4 Documentary           7.5      913                     nm0000005
+## 5       Drama           8.7      169                     nm0000005
+## 6       Drama           6.2      163                     nm0074790
+##      primaryName birthYear deathYear     primaryProfession
+## 1 Ingmar Bergman      1918      2007 writer,director,actor
+## 2 Ingmar Bergman      1918      2007 writer,director,actor
+## 3 Ingmar Bergman      1918      2007 writer,director,actor
+## 4 Ingmar Bergman      1918      2007 writer,director,actor
+## 5 Ingmar Bergman      1918      2007 writer,director,actor
+## 6 Ingmar Bergman      1918      2007 writer,director,actor
+=======
 ## 1     1842 nm0005690    &lt;NA&gt;
 ## 2      237 nm0721526    &lt;NA&gt;
 ## 3     1604 nm0721526    &lt;NA&gt;
@@ -171,6 +261,7 @@
 ## 4      1918      2007 writer,director,actor
 ## 5      1918      2007 writer,director,actor
 ## 6      1918      2007 writer,director,actor
+>>>>>>> f8c0639dc326e8d0807194981eaa1575becbe20a
 ##                            knownForTitles
 ## 1 tt0083922,tt0060827,tt0050976,tt0050986
 ## 2 tt0083922,tt0060827,tt0050976,tt0050986

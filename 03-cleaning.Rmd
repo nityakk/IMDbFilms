@@ -6,6 +6,7 @@ library(tidyverse)
 library(patchwork)
 library(reshape2)
 library(dplyr)
+library(ggplot2)
 ```
 
 ```{r}
@@ -58,9 +59,11 @@ t2 <- byDirectors %>%
     summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
 ```
 
+
 ```{r}
 #4(A)
 df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
+df1 <- byDirectors[!is.na(basics_ratings_crew$writers),]
 df1 <- df1[!is.na(df1$directors),]
 
 df1$director_writer_pair <- paste(df1$directors,"-", df1$writers)
@@ -88,4 +91,49 @@ new_filter <- filter(new_df3_filter, n >= 5)
 
 #t_final <- merge(tttt, tt, by = 'director_writer_pair')
 #t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
+```
+
+```{r}
+last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
+last20years
+write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
+```
+
+```{r}
+last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
+last100years
+write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
+```
+
+
+```{r}
+tttt <- last100years %>%
+    group_by(director_writer_pair, primaryName, writers) %>%
+    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+tttt
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
+t_final
+```
+
+```{r}
+directorRatings <- last20years %>%
+    group_by(primaryName, startYear) %>%
+    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
+unique(directorRatings$primaryName)
+write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
+```
+
+```{r}
+#director <-  "Alan J.W. Bell"
+# dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
+# dRSub
+#paste0(director,"_Rangints")
+
+for(director in directorRatings$fileName) {
+  dRSub <- directorRatings[which(directorRatings$fileName == director), ]
+  filename = paste0("sources_short/directors/",director,"_Ratings.csv")
+  write.csv(dRSub, filename, row.names = FALSE)
+}
 ```
