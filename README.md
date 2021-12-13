@@ -1,10 +1,10 @@
-# Analysis of various films on IMDb
+# Film Industry Trend Exploration
 
-This project attempts to answer questions about movie titles found in the IMDb Database. Specifically:
+This project attempts to answer questions about video medias such as movies, TV series, shorts etc. found in the IMDb Database. Specifically:
 
-1. Over the time period given in the dataset, did more adult titles start releasing? Are the number of votes for adult titles greater than the number of votes for non-adult titles?
-2. How does average ratings per number of votes vary for different works by the same director?
-3. What is the correlation between the 1st, 2nd, and 3rd primary professions of the individuals in the names table?
+1. Did the number of releases of titles that contained adult content started increasing with the progressing years? Further, is there relation or trend in the proportion of votes received by adult titles versus non-adult titles over the given period of years? <br/>
+2. What is the distribution of the average ratings for different genres? Furthermore, for the highet rated genre, how does its average ratings vary from one title type to another?<br/>
+3. For top 10 pairs of directors and writers who have worked most of the time with each other, how does the weighted average rating for different title types that they have produced? Moreover, for the director-writer pairs who have worked more than 5 times together and have produced content with a weighted average rating of 10, what is the trend in the distribution of number of votes that they received for their different title types such as videos, TV series, shorts, and others.
 
 
 
