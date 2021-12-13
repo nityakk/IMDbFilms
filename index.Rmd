@@ -1,5 +1,5 @@
 --- 
-title: "Analysis of various films on IMDb"
+title: "Film Industry Trend Exploration"
 author: "Nitya Krishna Kumar, Binny Naik"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -7,3 +7,13 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+The film, TV, and media industry has always been in talks among the user sector for one reason or the other. Since years, this industry has provided the society with variety of media content be it in form of TV series, movies, or short videos. These content are meant to not only entertain the user base but also educate them through releasing the video content of different genres such as Comedy, Crime, Suspense, Education to name a few. It is specifically noteworthy that such content knows no barrier and allows the users to watch any movie/video/TV series in different languages produced basically to target groups of people that belongs to specific regions. While the users enjoys and consumes these contents at anytime and anywhere through any platform they desire, it is undeniably appreciated that it is possible only through the hard work and passion of many crew members behind it, for instance, the directors and writers of the video content. It is extremely important for these people to learn and understand how does their users respond to the content that they produce. The most obvious way they can know this is through the ratings and number of votes they receive from the people that watch their films, series, and so on. Apart from this, the ratings of any movie, show, or other such content can help to study any kind of trend that prevails in this industry.<br/><br/>
+
+The goal of our project is to work around similar objectives and study several trends that can be observed in the film entertainment sector. For this purpose we have utilized the [IMDb Datasets](https://www.imdb.com/interfaces/) collected from the IMDb official website. We have implemented several visualizations in form statics as well as interactive charts to explore different relationships or trends present in the dataset. We will perform the exploratory data visualization and analysis to find answers to the following questions:<br/>
+1. Did the number of releases of titles that contained adult content started increasing with the progressing years? Further, is there relation or trend in the proportion of votes received by adult titles versus non-adult titles over the given period of years? <br/>
+2. What is the distribution of the average ratings for different genres? Furthermore, for the highet rated genre, how does its average ratings vary from one title type to another?<br/>
+3. For top 10 pairs of directors and writers who have worked most of the time with each other, how does the weighted average rating for different title types that they have produced? Moreover, for the director-writer pairs who have worked more than 5 times together and have produced content with a weighted average rating of 10, what is the trend in the distribution of number of votes that they received for their different title types such as videos, TV series, shorts, and others.<br/><br/>
+
+In the following chapters, we will address the above questions through carrying out detailed visualization and analysis tasks.<br/><br/>
+
+For more details on the code portion of this project, please [click here](https://github.com/nityakk/IMDbFilms).

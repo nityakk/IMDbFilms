@@ -1,5 +1,8 @@
 # Data transformation
 
+We are working around three dataset in total, that is, titles.basics, title.crew, title.ratings. Therefore, it was very necessary to transformation the individual overall datasets by merging different datasets, adding new columns or removing the ones that were not needed or that had any NULL values.<br/><br/>
+
+Below, we describe the transformations that we incorporated which were necessary to accomplish the results of different questions.<br/><br/>
 
 ```{r}
 library(tidyverse)
@@ -7,11 +10,36 @@ library(patchwork)
 library(reshape2)
 library(dplyr)
 library(ggplot2)
+library(ggridges)
+```
+
+## Transformations to study distribution trends in Adult v/s Non-Adult titles
+
+<br/>This question basically addresses two objectives.<br/>
+- The first part studies the trend of number of adult title releases with the change of time.<br/>
+- The second part studies the proportion of votes distribution of adult versus non-adult titles over the given period of time.<br/>
+For this question, we primarily use the title.basics and title.ratings dataset. Therefore, we will initially prepare a new auxiliary dataframe which contains transformed version of these datasets.<br/>
+
+### Adult title releases trends
+
+<br/> In this part of the first objective question we wish to observe that with progressing years, did the film industry started making more adults, or less adults, or was the number of releases constant. The following steps show a detailed explanation on how we transformed the data step by step:<br/>
+- Among all the columns available in the title.basics dataset, we are only interested in using the 'startYear' and 'isAdult' columns to achieve the first part of the first objective question. Thus, we dropped the other available columns in the data which were unnecessary for our exploration, likewise, 'primaryTitle', 'originalTitle', 'endYear', 'runtimeMinutes' and formed a new auxiliary dataframe named 'basics_ratings'.<br/>
+- Further, as mentioned earlier, we need the necessary information('startYear' and 'isAdult') from title.basics, which basically is the basics_ratings dataframe, and title.ratings data combined in one auxiliary dataframe. So, we merge the title.ratings dataset with the basics_ratings dataframe and use to address both first and second part of the first objective question.<br/>
+-Moreover, we analyzed that there were missing values in the 'isAdult' and 'startYear' columns. As we are going to explore that with the progress of year does the number of adult movies released had any trend or not, so we need to remove the start years values that have NULL. Also, we are summing up the total number of adult titles released per year, therefore, it is necessary to delete the rows that have NA values for isAdult. Thus, we dropped the rows which either contained NULL values for startYear or NULL values for isAdult.<br/>
+- After cleaning the data by adding, removing and merging the columns, the next step is to group similar start years together and calculate the total number of adult titles that were released in that particular year. For this grouping operation to execute, we converted the datatype of both 'startYear ' and 'isAdult' columns to numeric. Once the datatype was transformed in the desired format, we grouped similar years together based on two different conditions:<br/>
+  -Grouped same years and calculated the sum of the isAdult column which gave the total number of         adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
+  -Grouped same years and counted the number of rows of the isAdult column which gave the total number    of titles released in a particular in a particular year irrespective of adult or non-adult. We        assigned this to another new temporary dataframe.<br/>
+Finally, we merged the above two temporary dataframes into one by the grouped start years.<br/>
+- As the last step, we calculated the proportion of the adult titles released per start year. This percent would then be used to plot it against their respective start years and study the trend.<br/><br/>
+
+
+```{r}
+drops <- c("primaryTitle","originalTitle","endYear", "runtimeMinutes")
+basics_ratings <- basics[ , !(names(basics) %in% drops)]
 ```
 
 ```{r}
-basics_ratings <- merge(basics, ratings, by="tconst")
-basics_ratings <- basics_ratings[-c(3,4,7,8)]
+basics_ratings <- merge(basics_ratings, ratings, by="tconst")
 basics_ratings
 ```
 
@@ -26,6 +54,7 @@ basics_ratings_crew
 ```
 
 ```{r}
+
 expDirecs <- basics_ratings_crew %>%
   group_by(directors) %>%
   count()
@@ -45,17 +74,21 @@ sum(is.na(basics_ratings$isAdult))
 basics_ratings <- basics_ratings[,c(3,4,6,7)]
 basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
 basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
+
+basics_ratings <- basics_ratings %>% drop_na(isAdult)
 basics_ratings <- basics_ratings %>% drop_na(startYear)
 ```
 
 ```{r}
+basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
+basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
 b1 <- basics_ratings %>% group_by(startYear) %>% summarise(isAdult = sum(isAdult))
-b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n()) %>% mutate(freq = round(cnt / sum(cnt), 3)) %>% arrange(desc(freq))
-b2 <- b2[,c(1,2)]
+b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n())
 b_final <- merge(b1, b2, by="startYear")
 b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
 ```
 
+### Ratings distribution of non-adult vs adult titles
 ```{r}
 b_0 <- filter(basics_ratings, isAdult == 0)
 b_1 <- filter(basics_ratings, isAdult == 1)
@@ -69,6 +102,14 @@ b_num_votes[is.na(b_num_votes)] <- 0
 b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
 b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 ```
+
+<br/><br/>
+In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
+- First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
+- Further, we merged the above two temporary dataframes together into one based on similar start years and calculated the sum of the number of votes that were received by non adult and adult titles respectively. These two sums were basically created as two different new columns.<br/>
+- Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
+- Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
+
 
 ```{r}
 # 2(A)
@@ -137,12 +178,10 @@ for(type in unique(groupedDirec_complete$titleType)) {
 }
 ```
 
-
-
+## Transformations to study the performance of different director-writer pairs
 ```{r}
 #3(A)
 df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
-df1 <- byDirectors[!is.na(basics_ratings_crew$writers),]
 df1 <- df1[!is.na(df1$directors),]
 
 df1$director_writer_pair <- paste(df1$directors,"-", df1$writers)
@@ -151,7 +190,6 @@ ttt <- c(tt[1:10,1])
 df2 <- subset(df1, director_writer_pair %in% ttt)
 
 #3(B)
-df1$runtimeMinutes <- as.numeric(df1$runtimeMinutes)
 temp1 <- group_by(df1, director_writer_pair, titleType, genres)
 temp2 <- summarise(temp1, totalVotes = sum(numVotes))
 df3 <- summarise(temp1, weightedRating = sum(averageRating * numVotes) / sum(numVotes))
@@ -160,8 +198,25 @@ temp3 <- df3 %>% right_join(temp2, by=c("director_writer_pair","titleType", "gen
 
 df3_filtered <- filter(temp3, weightedRating == 10)
 new_df3_filter <- merge(df3_filtered, tt, by = 'director_writer_pair')
-new_filter <- filter(new_df3_filter, n >= 5)
+new_filter <- filter(new_df3_filter, n > 5)
 ```
+<br/>The question basically addresses two problems<br/>
+- The first part studies the top 10 director - writer pairs based on the number of times they worked together. Further, this will help to know the distribution of averageRating for different pairs of director-writer.<br/>
+- The second part studies that out of all the director writer pairs having averageRating of 10 what is the distribution of the numVotes for those particular pairs faceted by titleType. <br/>
+
+<br/><br/>
+For addressing the first question mentioned above we need to perform the following transformations:<br/>
+- First, we filtered out the rows from the basics_ratings_crew dataset that had NA for writers and directors. We wanted to study the different director writer pairs so it was important that the dataset had both the values.<br/>
+- Further, for making the pair we used the paste function for concatenating the director column with writer column to form new column named director_writer_pair.<br/>
+- Next as the total unique director writer pairs were approximately 600K so visualizing all of them was not possible. Therefore, we decided to pick top 10 pairs based on the number of times they worked together. So we calculated the count of all the pairs and then selected the top 10. <br/> 
+- Further we filtered the original dataset with the top 10 director writer pairs.<br/>
+
+<br/><br/>
+For addressing the second question mentioned above we need to perform the following transformations:<br/>
+- First, we used the dataset created for the above question which contained the director writer pairs. Furthermore, we group_by the data by "director_writer_pair", "titleType", and "genres" and then we summarised the data by calculating the total number of Votes<br/>
+- Further,  we summarised the same grouped data for calculating the weightedRating which is calculated by taking the sum of averageRating * numVotes divided by total numVotes.<br/>
+- Further we then joined both the grouped data to get the weightedRating as well as total numVotes for a particular director_writer_pair.  <br/> 
+- Finally, wew filtered the data by weightedRating inorder to get only the pairs having weightedRating equal to 10. We then merged this filtered data with the data having the count of number of times a partcular pair worked together. The final dataset had total of 783 pairs who had averageRating of 10 so to further filter the data we studied the distribution of the number of times the pair worked together and found that out of 783, 692 pairs only worked with each other once or twice and therefore we further narrowed the data to only consider the pairs who have worked atleast 5 times with each other.<br/>
 
 ```{r}
 tttt <- df1 %>%
@@ -216,4 +271,5 @@ write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.nam
 #    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
 #    write.csv(dRSub, filename, row.names = FALSE)
 #  }
+
 ```
