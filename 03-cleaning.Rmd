@@ -25,6 +25,8 @@ byDirectors
 ```
 
 ```{r}
+basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
+sum(is.na(basics_ratings$isAdult))
 basics_ratings <- basics_ratings[,c(5,6,10,11)]
 basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
 basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
@@ -111,12 +113,12 @@ new_filter <- filter(new_df3_filter, n >= 5)
 ```
 
 ```{r}
-#tttt <- df1 %>%
-#    group_by(director_writer_pair) %>%
-#    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
+tttt <- df1 %>%
+    group_by(director_writer_pair) %>%
+    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
 
-#t_final <- merge(tttt, tt, by = 'director_writer_pair')
-#t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
 ```
 
 ```{r}
@@ -143,27 +145,23 @@ t_final
 ```
 
 ```{r}
-
-# directorRatings <- last20years %>%
-#     group_by(primaryName, startYear) %>%
-#     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-# directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
-# #unique(directorRatings$primaryName)
-# write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
-
+directorRatings <- last20years %>%
+     group_by(primaryName, startYear) %>%
+     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
+unique(directorRatings$primaryName)
+write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
 ```
 
 ```{r}
-#director <-  "Alan J.W. Bell"
-# dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
-# dRSub
-#paste0(director,"_Rangints")
+director <-  "Alan J.W. Bell"
+dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
+dRSub
+paste0(director,"_Rangints")
 
-
-# for(director in groupedDirec$fileName) {
-#   dRSub <- directorRatings[which(directorRatings$fileName == director), ]
-#   filename = paste0("sources_short/directors/",director,"_Ratings.csv")
-#   write.csv(dRSub, filename, row.names = FALSE)
-# }
-
+for(director in directorRatings$fileName) {
+   dRSub <- directorRatings[which(directorRatings$fileName == director), ]
+   filename = paste0("sources_short/directors/",director,"_Ratings.csv")
+   write.csv(dRSub, filename, row.names = FALSE)
+ }
 ```
