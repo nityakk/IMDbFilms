@@ -16,13 +16,19 @@ Specifically, we plan to merge and use the following datasets:
 ```{r}
 names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 names[names == "\\N"] <- NA
+```
 
+```{r}
 basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 basics[basics == "\\N"] <- NA
+```
 
+```{r}
 crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 crew[crew == "\\N"] <- NA
+```
 
+```{r}
 ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 ratings[ratings == "\\N"] <- NA
 ```

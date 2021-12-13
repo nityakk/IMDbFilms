@@ -120,14 +120,9 @@ missing_plots <- function(data, percent = FALSE) {
 }
 ```
 
-Raw Data
+
 ```{r}
 missing_plots(names, percent = TRUE)
-```
-
-Processed Grouped Director Data
-```{r}
-missing_plots(groupedDirec, percent = FALSE)
 ```
 <br/><br/> 
 The above graph denotes the missing values in the 'names' dataset that we have used. The 'names' dataset includes the following information:<br/>
@@ -147,7 +142,7 @@ Analysis:<br/>
 5. There are more number of rows that has missing values for both, that is, death year as well as birth year compared to having missing values for individual columns. Moreover, the percentage of rows that has only death year or birth year as missing values is also less than the percentage of rows that has death year, birth year, and knownForTitles together missing.<br/>
 6. Interestingly, there are very less percentage of rows that has only knownForTitle as the missing values, that is, almost < 1%. This column is always seen missing in a significant proportion with death year and birth year both. At cases where knownForTitles is missing with either death year or birth year, its percentage is also observed to be < 1%.<br/>
 
-We derived the above insights on the missing values of the 'names' dataset. However, it is to be noted that we are using the 'names' dataset primarily to study the correlation between the primary professions of different person and we do not have any missing values for that column.
+We derived the above insights on the missing values of the 'names' dataset. However, it is to be noted that we are using the 'names' dataset primarily to access the primary name of different directors and writers. Moreover, the primary name column does not have any missing values. Therefore, we do not have to handle any missing values in this dataset.<br/>
 
 ```{r}
 missing_plots(basics, percent = TRUE)

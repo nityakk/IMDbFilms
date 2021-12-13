@@ -43,6 +43,13 @@ plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line()
 ```{r}
 plot1 
 ```
+1. The graph above shows an interesting trend on the proportion of titles that were released and were adult with increasing year. In the late 1800s it was observed that no adult titles were released at all.<br/>
+2. However, the trend changed in the early 1900s where the number of releases for adult titles started increasing. There were a few rising spikes observed in some of the years between 1905 to 1930; at for example, 1907, 1909, 1914, 1920, and 1924. The highest proportion achieved in the early 1900s was peaked at 1% of the total movie releases of the year 1924.<br/>
+3. Further, this unstable rise in the proportion of releases of adult titles started declining constantly and immediately became 0% for year between 1930 and 1947. After a few very less proportionate spikes until 1968, the proportion of releases started increasing linearly till 1971 and peaked at ~3.3% in 1971.<br/>
+4. After 1971, there was a considerable increased proportion of adult title releases in the late 1900s till 1995. However, this increase was quite abrupt as, that is, after decreasing for a year, the trend was witnessed to increase again and reach a new peak at ~4.5% in 1976. Next, after decreasing again for a few years till 1982, it again saw a significant increase till 1984 and reached its maximum peak over the given years at around 6.5%<br/>
+5. Ultimately, the trend was cumulatively observed to decrease at approximately 0% in 2020.<br/><br/>
+
+The results overall demonstrates that with progressing years, the proportio of adult movies increased though abruptly.<br/><br/>
 
 ```{r}
 plot2 <- ggplot(b_num_votes, aes(startYear)) + 
@@ -54,10 +61,19 @@ plot2 <- ggplot(b_num_votes, aes(startYear)) +
     ylab("Log2(Count of Num of Votes)")
 ```
 
-Note: Maybe just until 2020?
 ```{r}
 plot2
 ```
+<br/>
+We have plotted the above graph to comparatively study the proportion of votes received by non adult and adult titles over the given period of time in the dataset.<br/>
+Note that we have used the log() function to calculate and represent the number(proportion) of votes for adult and non adult titles. It is because both of the titles has received number of votes in very separate ranges. Thus, to scale them in a visualizable range we used the log function.<br/>
+1. The trend for the number of votes received by the adult titles is observed clearly to be similar to the trend observed in the proportion of adult title releases over the same given period of time. That is, adult titles experienced abrupt rises in the number of votes in the early 1900s as compared to 0 number of votes in the late 1800s. In the early 1900s, the number of votes peaked at ~2150 in 1929.<br/>
+2. Further, it experienced a considerable decrease in the number of votes it received to 0 till 1950 and rised till 128 in 1950.<br/>
+3. Eventually, the number of votes that adult titles received started increasing very significantly and reached a peak at ~138,000 in 1995. After that, the trend was of a decreasing one till 2020.<br/>
+4. Contrary to the adult titles, the non adult titles witnessed a clear cumulative increasing trend on the number of votes it received over the given period of time from 1875 till 2020. This linear increase was quite abrupt experiencing minimal declines in the number of votes over the years, however, the overall trend for the number of votes received by non adult titles was increasing.<br/>
+5.The non adult titles touched a minimum number of votes in 1881 with only 64 number of votes but it was still more than the proportion of votes received by adult titles which was 0. Moreover, it is noteworthy that no adult titles were released around that period.<br/>
+6. The non adult movies experienced a peak at ~33554432 proportion of votes in 2011 compared to only ~8192 proportion of votes for adult titles.<br/>
+7. Moreover, the general trend studied for the weighted average rating distribution of adult titles versus non adult titles can interpreted as one where the proportion of votes for non adult titles was always more than the proportion of votes received by adult titles in any given year.<br/>
 
 ```{r}
 plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_boxplot() + 
@@ -65,7 +81,6 @@ plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_bo
     scale_x_discrete(label = abbreviate)
 ```
 
-Director writer pair - ridgeplot
 ```{r}
 library(ggridges)
 
