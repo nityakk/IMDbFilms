@@ -2,39 +2,41 @@
 
 ## Initial Exploration:
 ```{r}
-basics_ratings_crew
+# basics_ratings_crew
 ```   
 
 ```{r}
-full_year <- basics_ratings_crew %>%
-  group_by(startYear) %>%
-  count()
-full_year
+# full_year <- basics_ratings_crew %>%
+#   group_by(startYear) %>%
+#   count()
+# full_year
 ```
 
 ```{r}
-worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
-  geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-  theme(axis.line = element_line(color="gray22")) +
-  scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
-  scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
-worksovertime
+# worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
+#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+#   theme(axis.line = element_line(color="gray22")) +
+#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
+#   scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
+# worksovertime
 ```
 
 ```{r}
-full_votes <- basics_ratings_crew %>%
-  group_by(startYear) %>%
-  summarise(weightedVotes = sum(numVotes))
-full_votes
+# full_votes <- basics_ratings_crew %>%
+#   group_by(startYear) %>%
+#   summarise(weightedVotes = sum(numVotes))
+# full_votes
 ```
 
 ```{r}
-votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
-  geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-  theme(axis.line = element_line(color="gray22")) +
-  scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
-votesOvertime
+# votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
+#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+#   theme(axis.line = element_line(color="gray22")) +
+#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
+# votesOvertime
 ```
+
+## Question 1 - Adult works
 
 ```{r}
 plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -65,33 +67,69 @@ plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_bo
     scale_x_discrete(label = abbreviate)
 ```
 
-Director writer pair - ridgeplot
-```{r}
-library(ggridges)
-
-
-# ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
-#   geom_density_ridges()
-  #theme_ridges()+
-  #theme(legend.position = "none")
-```
-
 ```{r}
 plot3
 ```
 
-```{r}
-plot4 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
-```
+## Question 2 - How does average ratings per number of votes vary for differnt genres?
 
-```{r}
+-cleveland dot plot
+```{r Cleveland Plot, fig.height=20, fig.width=10}
+plot4 <- ggplot(cleveland, aes(x = mean, y = fct_reorder(genres, mean), color = titleType)) +
+  geom_point() +
+  ggtitle("Weighted Ratings per Genre") +
+  ylab("") +
+  theme_linedraw()
+
 plot4
 ```
 
+From above:
+- Many of the the highest ratings are of the Drama genre
+
+
+Looking at just the Drama genre
+
+
+- parcoord
+```{r Parcoord}
+library(parcoords)
+#groupedDirec_complete[sample(1:nrow(groupedDirec_complete),1000), c(2:5)]
+parcoords(
+  groupedDirec_complete[,c(2:5)],#[sample(1:nrow(groupedDirec_complete),1000), c(2:5)], 
+  rownames = F, 
+  brushMode = "2D-strums", 
+  reorderable = T, 
+  queue = T, 
+  color = list(
+    # discrete or categorical column
+    colorScale = "scaleOrdinal",
+    colorBy = "titleType",
+    colorScheme = "schemeCategory10"),
+  withD3 = TRUE,
+  alpha = 0.5,
+  height = 1000,
+  width = 1000
+)
+
+```
+- highest ratings is mostly tvEpisode
+
+
+## Question 4 - Director writer pair - ridgeplot
 ```{r}
-plot5 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+library(ggridges)
+plot5 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
 ```
 
 ```{r}
 plot5
+```
+
+```{r}
+plot6 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+plot6
 ```

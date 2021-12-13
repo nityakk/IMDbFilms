@@ -129,11 +129,6 @@ missing_plots(ratings, percent = TRUE)
 ```
 
 
-Processed Grouped Director Data
-```{r}
-missing_plots(groupedDirec, percent = FALSE)
-```
-
 
 <br/><br/> 
 We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>

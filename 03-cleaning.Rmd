@@ -25,6 +25,20 @@ byDirectors
 ```
 
 ```{r}
+expDirecs <- byDirectors %>%
+  group_by(directors) %>%
+  count()
+expDirecs
+length(expDirecs$directors)
+
+expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
+expDirecs2 <- unique(expDirecs2$directors)
+length(expDirecs2)
+```
+
+
+
+```{r}
 basics_ratings <- basics_ratings[,c(5,6,10,11)]
 basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
 basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
@@ -54,22 +68,37 @@ b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 ```
 
 ```{r}
-# 178999 unique directors
-# 10 unique title types
-groupedDirec <- byDirectors %>%
-    group_by(directors, primaryName, titleType, startYear) %>%
-    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
-groupedDirec
-write.csv(last100years_GroupedDirecs,"sources_short/GroupedDirecs.csv", row.names = FALSE)
+# 2(A)
+byDirectors1 <- subset(byDirectors, directors %in% expDirecs2)
+byDirectors1 <- byDirectors1[which(strtoi(byDirectors1$startYear) >= '2010'), ]
 
-# 143 years
-# 178983 unique directors
-# 10 unique title types
+groupedDirec <- byDirectors4 %>%
+  group_by(directors, titleType, genres, numVotes) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+
 groupedDirec_complete <- na.omit(groupedDirec)
-length(unique(groupedDirec_complete$titleType))
-groupedDirec_complete
-write.csv(last100years_GroupedDirecs,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
+
+cleveland <- groupedDirec_complete %>% 
+  ungroup() %>%
+  group_by(titleType, genres) %>%
+  summarize(mean = mean(weightedRating))
+
+    #toppercent <- max(byDirectors2$numVotes)*0.1
+    #byDirectors3 <- byDirectors2[which(byDirectors2$numVotes >= 0), ]
+
+# 2(B)
+byDirectors2 <- byDirectors1[grepl("Drama", byDirectors3[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
+
+groupedDirec2 <- byDirectors2 %>%
+  group_by(directors, titleType, genres, numVotes) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+groupedDirec_complete2 <- na.omit(groupedDirec)
+
+# For Interactive
+#write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
+#write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
 ```
+
 ```{r}
 # type = "movie"
 # dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
