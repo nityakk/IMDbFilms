@@ -38,8 +38,6 @@ The potential columns that we will use from this datatset are titleType, isAdult
 
 The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/>
 
-
-
 [title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
 This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
 1. tcnst (string) - alphanumeric unique identifier of the title<br/>
@@ -57,8 +55,6 @@ crew
 We will make use of all the columns from this dataset to address the question 3 for our project.<br/><br/>
 
 The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/>
-
-
 
 [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
 This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>

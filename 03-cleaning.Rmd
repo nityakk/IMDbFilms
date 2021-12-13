@@ -54,7 +54,6 @@ basics_ratings_crew
 ```
 
 ```{r}
-
 expDirecs <- basics_ratings_crew %>%
   group_by(directors) %>%
   count()
@@ -66,15 +65,7 @@ expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
 length(expDirecs2)
 ```
 
-
-
 ```{r}
-basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
-sum(is.na(basics_ratings$isAdult))
-basics_ratings <- basics_ratings[,c(3,4,6,7)]
-basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
-basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
-
 basics_ratings <- basics_ratings %>% drop_na(isAdult)
 basics_ratings <- basics_ratings %>% drop_na(startYear)
 ```
@@ -102,7 +93,6 @@ b_num_votes[is.na(b_num_votes)] <- 0
 b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
 b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 ```
-
 <br/><br/>
 In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
 - First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
@@ -122,7 +112,6 @@ groupedDirec <- byDirectors1 %>%
 
 groupedDirec_complete <- na.omit(groupedDirec)
 groupedDirec_complete
-
 
 genres <- subset(groupedDirec_complete, select = c(genres))
 genres <- genres[!grepl(",", genres[["genres"]]), ]
@@ -271,5 +260,4 @@ write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.nam
 #    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
 #    write.csv(dRSub, filename, row.names = FALSE)
 #  }
-
 ```
