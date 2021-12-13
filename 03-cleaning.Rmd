@@ -11,6 +11,8 @@ library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(ggridges)
+library(parcoords)
+library(ggrepel)
 ```
 
 ## Transformations to study distribution trends in Adult v/s Non-Adult titles
@@ -27,7 +29,7 @@ For this question, we primarily use the title.basics and title.ratings dataset. 
 - Further, as mentioned earlier, we need the necessary information('startYear' and 'isAdult') from title.basics, which basically is the basics_ratings dataframe, and title.ratings data combined in one auxiliary dataframe. So, we merge the title.ratings dataset with the basics_ratings dataframe and use to address both first and second part of the first objective question.<br/>
 -Moreover, we analyzed that there were missing values in the 'isAdult' and 'startYear' columns. As we are going to explore that with the progress of year does the number of adult movies released had any trend or not, so we need to remove the start years values that have NULL. Also, we are summing up the total number of adult titles released per year, therefore, it is necessary to delete the rows that have NA values for isAdult. Thus, we dropped the rows which either contained NULL values for startYear or NULL values for isAdult.<br/>
 - After cleaning the data by adding, removing and merging the columns, the next step is to group similar start years together and calculate the total number of adult titles that were released in that particular year. For this grouping operation to execute, we converted the datatype of both 'startYear ' and 'isAdult' columns to numeric. Once the datatype was transformed in the desired format, we grouped similar years together based on two different conditions:<br/>
-  -Grouped same years and calculated the sum of the isAdult column which gave the total number of         adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
+  -Grouped same years and calculated the sum of the isAdult column which gave the total number of adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
   -Grouped same years and counted the number of rows of the isAdult column which gave the total number    of titles released in a particular in a particular year irrespective of adult or non-adult. We        assigned this to another new temporary dataframe.<br/>
 Finally, we merged the above two temporary dataframes into one by the grouped start years.<br/>
 - As the last step, we calculated the proportion of the adult titles released per start year. This percent would then be used to plot it against their respective start years and study the trend.<br/><br/>
@@ -83,7 +85,6 @@ b_num_votes[is.na(b_num_votes)] <- 0
 b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
 b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 ```
-
 <br/><br/>
 In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
 - First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
@@ -102,6 +103,7 @@ expDirecs <- basics_ratings_crew %>%
 expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
 expDirecs2
 ```
+
 
 ```{r}
 # 2(A)
@@ -180,8 +182,6 @@ Our transformations are as follows:
 - First we filtered out all of the titles that were not created by experienced directors. The remaining titles were grouped by title type, and genre. A new column was added for weighted ratings (ratings weighted by number of votes) and total number of votes. Any potential rows with missing values were dropped.
 - To see how different genres compare with each other, we first obtained all unique genres. Many of the rows in the genre column had comma separated values. However, there were some rows that had singular genre names. It can be noted that a list of all singular genre names represents the unique genre names. For each unique genre name, we obtained the total number of times the genre appears (within both singular and comma separated row values) and the average rating of all of the works within that genre. We also grouped this dataset based on title type to see what the distribution across title types looks like.
 - Due to the large size of the data, it is difficult to view trends within each genre. Therefore, we decided to specifically look at the most popular genre. After visualizing the comparison of different genres (seen in Chapter 5.2), we concluded that the most popular genre is "Drama". Therefore, we subset our previous dataset of works by experienced directors by works that have "Drama" as at least one of the genre types. This was again grouped as earlier (grouped by title type, and genre, with the addition of total votes and weighted averages).
-- 
-
 
 
 ## Transformations to study the performance of different director-writer pairs
