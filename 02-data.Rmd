@@ -1,22 +1,22 @@
 # Data sources
 
-We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.
+We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.<br/><br/>
 
-Specifically, we plan to merge and use the following datasets:
+Among all the available datasets on the above link, we collected and used three datasets for our project: title.basics.tsv.gz, title.crew.tsv.gz, and title.ratings.tsv.gz. Moreover, we have also merged and manipulated these datasets based on our requirements to address the said objectives. We Each team member of our was responsible to collect the data. We simply downloaded it from the said link and then unzipped it to be accessed for this project. <br/>
 
-*   [name.basics.tsv.gz](https://datasets.imdbws.com/name.basics.tsv.gz)
-    +   This dataset gives us a list of all individuals listed in IMDb. This dataset will help us answer question 3 as it contains a comma separated list of the top 3 primary professions for each individual.
-*   [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
-    +   This dataset will provide us with basic information about the content such as type of content (movie, TV show, etc), title, genre, start year and end year, as well as runtime. This dataset will help us answer question 1 as it also contains a column indicating whether the title is adult rated or not.
-*   [title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
-    +   This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.
-*   [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
-    +   This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.
+We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/>
 
-```{r}
-names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-names[names == "\\N"] <- NA
-```
+## [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
+This dataset provides the basic information about different contents as displayed below:<br/>
+1. tconst (string) - alphanumeric unique identifier of the title<br/>
+2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
+3. prmrT (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release<br/>
+4. orgnT (string) - original title, in the original language<br/>
+5. isAdl (boolean) - 0: non-adult title; 1: adult title<br/>
+6. strtY (YYYY) – represents the release year of a title. In the case of TV Series, it is the series start year<br/>
+7. endYr (YYYY) – TV Series end year. ‘\N’ for all other title types<br/>
+8. rntmM – primary runtime of the title, in minutes<br/>
+9. genrs (string array) – includes up to three genres associated with the title<br/>
 
 ```{r}
 basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
@@ -24,9 +24,40 @@ basics[basics == "\\N"] <- NA
 ```
 
 ```{r}
+head(basics)
+```
+
+The potential columns that we will use from this datatset are titleType, isAdult, startYear, and genres of different contents. These information will help us answer all the objective questions that we have formulated.<br/><br/>
+
+The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/>
+
+
+
+[title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
+This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. drctr (array of nconsts) - director(s) of the given title<br/>
+3. wrtrs (array of nconsts) – writer(s) of the given title<br/>
+
+```{r}
 crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 crew[crew == "\\N"] <- NA
 ```
+
+```{r}
+head(crew)
+```
+We will make use of all the columns from this dataset to address the question 3 for our project.<br/><br/>
+
+The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/>
+
+
+
+[title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
+This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. avrgR – weighted average of all the individual user ratings<br/>
+3. nmVts - number of votes the title has received<br/>
 
 ```{r}
 ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
@@ -34,17 +65,6 @@ ratings[ratings == "\\N"] <- NA
 ```
 
 ```{r}
-head(names)
-```
-
-```{r}
-head(basics)
-```
-
-```{r}
-head(crew)
-```
-
-```{r}
 head(ratings)
 ```
+Potentially, we will utilize all the columns of this datatset to answer all the 3 questions of our project. The variable type of the columns in this dataset is character, double, and integer respecively for tconst, averageRating, and numVotes variables. There are 1191702, that is, 1.1 million rows and 3 columns in the ratings dataset.
