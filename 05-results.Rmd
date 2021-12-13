@@ -82,7 +82,7 @@ plot3 <- ggplot(df2, aes(x = director_writer_pair, y = averageRating)) + geom_bo
 ```
 
 ```{r}
-library(ggridges)
+
 
 
 # ggplot(t_final, aes(x = weightedRating, y = directors, fill = weightedRating))+
@@ -96,12 +96,21 @@ plot3
 ```
 
 ```{r}
-plot4 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
+plot4 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
 ```
 
 ```{r}
 plot4
 ```
+
+<br/> We have ploted the above grah to visualize the averageRating distribution of top 10 director_writer_pairs based on the number of times they worked together.
+1. We have filled the ridge plot with the titleType to get the bifurcation of averageRating based on titleType. <br/>
+2. As we can see from the above graph, the pair "n43-n" has the highest mean of averageRating which is approximately 9.5 ratings that too for tvEpisodes. Moreover, the standard deviation of the averageRating is also less compared to other director writer pairs. <br/>
+3. For titleType movie we can see the pair "n59-n" has the highest mean of the averageRating. <br/>
+4. For the titeType short, there are few pairs that have worked upon the short movie, from the graph we can see that the pair “n59-n” has averageRating spread till 9.8 approximately while the averageRating for the tittleType short has the mean of averageRating around 6 to 7 ratings. <br/>
+5. For the titleType tvSeries there are 6 pairs that have worked for that particular titleType. Out of all the pairs, the pair “n57-n” and “n44-n” seem to have a high distribution of averageRating but the pair “n44-n” seems to be more successful for tvSeries compared to “n57-n” as the data is spreaded till 9.5 averageRatings.<br/>
+6. For the titleType video there are 3 pairs in total that have worked on it. Out of all the pairs, the pair “n59-n” and “n30-n” seem to have similar distribution of averageRating where the pair “n59-n” being on the higher side.<br/>
+
 
 ```{r}
 plot5 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
@@ -110,3 +119,13 @@ plot5 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), 
 ```{r}
 plot5
 ```
+<br/> We have plotted the above graph to visualize the top 10 director writer pair having averageRating equal to 10. <br/>
+1. For the titleType short we can see clearly that the pair “n336-n” has the highest number of votes in the averageRating equal to 10. Although, all the pairs have received the averageRating 10 but the most likely pair for the titleType short is “n336-n” and then followed by “n64-n”. <br/>
+2. For the titleType tvEpisode we can see that there are plenty of pairs that have worked together for a tvEpisode. Out of all the pairs, we observe that “n37-n” has the highest number of votes , approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar likening between the audience. <br/>
+3. For the titleType tvMiniSeries there are hardly pairs of director writer that have worked together except for 1 that is the pair “n113-n”. <br/>
+4. Interestingly, for titleType tvSeries we can only see one pair that is “n113-n”. The reason for this might be either there are very few tvSeries that have averageRating equal to 10 or else less director writer pair have made tvSeries compared to other titleTypes. <br/>
+5. Similarly for the titleType tvShort there is only 1 pair that has worked together to make a tvShort and that pair is “n336-n”. <br/>
+6.  titleType tvSpecial also has only 1 pair of director writers that have worked together. The pair “n18-n” is the pair that has approximately 20 numbers of Votes. <br/>
+7. For the titleType video there are a few pairs of director_writer that have worked together. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100. <br/>
+
+In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, tvShort and tvSpecial there are only 1 pair of director_writer who have an averageRating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director_writer_pairs that have averageRating 10 and have worked for more than 5 times together. Surprisingly the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have averageRating of 10 but the pair might have worked for only once or twice or second there could be no movies that have averageRating of 10. <br/>
