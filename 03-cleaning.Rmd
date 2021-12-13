@@ -45,28 +45,9 @@ basics_ratings
 
 ```{r}
 basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
+basics_ratings_crew <- basics_ratings_crew[!is.na(basics_ratings_crew$directors) & !is.na(basics_ratings_crew$startYear), ]
 basics_ratings_crew
 ```
-
-```{r}
-# byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
-# byDirectors
-```
-
-```{r}
-
-expDirecs <- basics_ratings_crew %>%
-  group_by(directors) %>%
-  count()
-expDirecs
-length(expDirecs$directors)
-
-expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
-# expDirecs2 <- unique(expDirecs2$directors)
-length(expDirecs2)
-```
-
-
 
 ```{r}
 basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
@@ -110,73 +91,98 @@ In this part of the first objective question, we are basically studying that did
 - Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
 - Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
 
+## Transformations to study the distributions of genre
+<br/><br/>
+Our second objective question studies how different genres vary in terms of votes, title type, and ratings. We would like to know which genres tend to recieve the most attention and how the type of work has an affect on ratings even within the most popular genre. As the dataset is very large, we decided to subset the dataset based on works done by experience directors. We have defined experience as those directors who have completed at least 20 works. By subsetting this way, we are also looking at top works within the dataset. The limitation with subsetting in this manner is that we may be losing data on works created by directors who are experienced but do not show up in the dataset at least 20 times.
+
+```{r}
+expDirecs <- basics_ratings_crew %>%
+  group_by(directors) %>%
+  count()
+expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
+expDirecs2
+```
 
 ```{r}
 # 2(A)
-byDirectors1 <- subset(byDirectors, directors %in% expDirecs2)
-byDirectors1 <- byDirectors1[which(strtoi(byDirectors1$startYear) >= '2010'), ]
+byGenre1 <- subset(basics_ratings_crew, basics_ratings_crew$directors %in% expDirecs2$directors)
 
-groupedDirec <- byDirectors1 %>%
-  group_by(directors, titleType, genres, numVotes) %>%
-  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+groupedGenre <- byGenre1 %>%
+  group_by(titleType, genres) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
-groupedDirec_complete <- na.omit(groupedDirec)
-groupedDirec_complete
+groupedGenre_complete <- na.omit(groupedGenre)
+groupedGenre_complete
+```
 
 
-genres <- subset(groupedDirec_complete, select = c(genres))
+```{r}
+genres <- subset(groupedGenre_complete, select = c(genres))
 genres <- genres[!grepl(",", genres[["genres"]]), ]
 genres <- unique(genres)
 genreRatings <- data.frame(matrix(ncol = 3, nrow = 0))
 colnames(genreRatings) <- c('genre', 'count', 'weight')
 
-genreRatings
 for(genre in genres$genres) {
   if(genre != ""){
-    temp <- groupedDirec_complete[grepl(genre, groupedDirec_complete[["genres"]]), ]
-    num <- length(temp$directors)
+    temp <- groupedGenre_complete[grepl(genre, groupedGenre_complete[["genres"]]), ]
+    num <- length(temp$weightedRating)
     weight <- mean(temp$weightedRating)
     #print(c(genre, num, weight))
     genreRatings[nrow(genreRatings)+1,] = c(genre, num, weight)
   }
 }
+genreRatings
+```
 
-    #toppercent <- max(byDirectors2$numVotes)*0.1
-    #byDirectors3 <- byDirectors2[which(byDirectors2$numVotes >= 0), ]
+```{r}
+# 2(B)
+types <- unique(groupedGenre_complete$titleType)
+genrewtype <- data.frame(matrix(ncol = 4, nrow = 0))
+colnames(genrewtype) <- c('genre', 'type', 'count', 'weight')
 
-# 2(B,C)
-byDirectors2 <- byDirectors1[grepl("Drama", byDirectors1[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
-groupedDirec2 <- byDirectors2 %>%
-  group_by(directors, titleType, genres, numVotes) %>%
-  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-
-groupedDirec_complete2 <- na.omit(groupedDirec2)
-groupedDirec_complete2
-
-cleveland <- groupedDirec_complete2 %>% 
-  ungroup() %>%
-  group_by(titleType, genres) %>%
-  summarize(mean = mean(weightedRating))
-cleveland
-
-# For Interactive
-write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
-write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
+for(genre in genres$genres) {
+  if(genre != ""){
+    temp <- groupedGenre_complete[grepl(genre, groupedGenre_complete[["genres"]]), ]
+    for(type in types) {
+      temp2 <- temp[grepl(type, temp[["titleType"]]), ]
+      num <- length(temp2$weightedRating)
+      weight <- mean(temp2$weightedRating)
+      genrewtype[nrow(genrewtype)+1,] = c(genre, type, num, weight)
+    }
+  }
+}
+genrewtype
 ```
 
 
 ```{r}
-# type = "movie"
-# dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
-# dRSub
+# 2(C,D)
+byGenre2 <- byGenre1[grepl("Drama", byGenre1[["genres"]]), ]
+groupedGenre2 <- byGenre2 %>%
+  group_by(titleType, genres) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
-
-for(type in unique(groupedDirec_complete$titleType)) {
-  dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
-  filename = paste0("sources_short/titletypes/",type,".csv")
-  write.csv(dRSub, filename, row.names = FALSE)
-}
+groupedGenre_complete2 <- na.omit(groupedGenre2)
+groupedGenre_complete2
 ```
+
+```{r}
+# cleveland <- groupedGenre_complete2 %>% 
+#   ungroup() %>%
+#   group_by(titleType, genres) %>%
+#   summarize(mean = mean(weightedRating))
+# cleveland
+```
+
+<br/><br/>
+Our transformations are as follows:
+- First we filtered out all of the titles that were not created by experienced directors. The remaining titles were grouped by title type, and genre. A new column was added for weighted ratings (ratings weighted by number of votes) and total number of votes. Any potential rows with missing values were dropped.
+- To see how different genres compare with each other, we first obtained all unique genres. Many of the rows in the genre column had comma separated values. However, there were some rows that had singular genre names. It can be noted that a list of all singular genre names represents the unique genre names. For each unique genre name, we obtained the total number of times the genre appears (within both singular and comma separated row values) and the average rating of all of the works within that genre. We also grouped this dataset based on title type to see what the distribution across title types looks like.
+- Due to the large size of the data, it is difficult to view trends within each genre. Therefore, we decided to specifically look at the most popular genre. After visualizing the comparison of different genres (seen in Chapter 5.2), we concluded that the most popular genre is "Drama". Therefore, we subset our previous dataset of works by experienced directors by works that have "Drama" as at least one of the genre types. This was again grouped as earlier (grouped by title type, and genre, with the addition of total votes and weighted averages).
+- 
+
+
 
 ## Transformations to study the performance of different director-writer pairs
 ```{r}
@@ -227,22 +233,10 @@ t_final <- merge(tttt, tt, by = 'director_writer_pair')
 t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
 ```
 
-```{r}
-# last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
-# last20years
-# write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
-```
-
-```{r}
-# last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
-# last100years
-# write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
-```
-
 
 ```{r}
 tttt <- df1 %>%
-    group_by(director_writer_pair, primaryName, writers) %>%
+    group_by(director_writer_pair, directors, writers) %>%
     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
 tttt
 t_final <- merge(tttt, tt, by = 'director_writer_pair')
@@ -250,26 +244,26 @@ t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
 t_final
 ```
 
+### Interactive Plot
+
 ```{r}
-directorRatings <- df1 %>%
-     group_by(primaryName, startYear) %>%
-     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
-directorRatings
-#unique(directorRatings$primaryName)
-write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
+write.csv(groupedGenre,"sources_short/groupedGenres.csv", row.names = FALSE)
+write.csv(groupedGenre_complete,"sources_short/groupedGenres_complete.csv", row.names = FALSE)
+```
+
+
+```{r}
+for(type in unique(groupedGenre_complete$titleType)) {
+  dRSub <- groupedGenre_complete[which(groupedGenre_complete$titleType == type), ]
+  filename = paste0("sources_short/titletypes/",type,".csv")
+  write.csv(dRSub, filename, row.names = FALSE)
+}
 ```
 
 ```{r}
-# director <-  "Alan J.W. Bell"
-# dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
-# dRSub
-# paste0(director,"_Rangints")
-# 
-# for(director in directorRatings$fileName) {
-#    dRSub <- directorRatings[which(directorRatings$fileName == director), ]
-#    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
-#    write.csv(dRSub, filename, row.names = FALSE)
-#  }
-
+directorRatings <- df1 %>%
+     group_by(directors, startYear) %>%
+     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings
+write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
 ```

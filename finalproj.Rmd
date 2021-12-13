@@ -1,0 +1,796 @@
+--- 
+title: "Film Industry Trend Exploration"
+author: "Nitya Krishna Kumar, Binny Naik"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+The film, TV, and media industry has always been in talks among the user sector for one reason or the other. Since years, this industry has provided the society with variety of media content be it in form of TV series, movies, or short videos. These content are meant to not only entertain the user base but also educate them through releasing the video content of different genres such as Comedy, Crime, Suspense, Education to name a few. It is specifically noteworthy that such content knows no barrier and allows the users to watch any movie/video/TV series in different languages produced basically to target groups of people that belongs to specific regions. While the users enjoys and consumes these contents at anytime and anywhere through any platform they desire, it is undeniably appreciated that it is possible only through the hard work and passion of many crew members behind it, for instance, the directors and writers of the video content. It is extremely important for these people to learn and understand how does their users respond to the content that they produce. The most obvious way they can know this is through the ratings and number of votes they receive from the people that watch their films, series, and so on. Apart from this, the ratings of any movie, show, or other such content can help to study any kind of trend that prevails in this industry.<br/><br/>
+
+The goal of our project is to work around similar objectives and study several trends that can be observed in the film entertainment sector. For this purpose we have utilized the [IMDb Datasets](https://www.imdb.com/interfaces/) collected from the IMDb official website. We have implemented several visualizations in form statics as well as interactive charts to explore different relationships or trends present in the dataset. We will perform the exploratory data visualization and analysis to find answers to the following questions:<br/>
+1. Did the number of releases of titles that contained adult content started increasing with the progressing years? Further, is there relation or trend in the proportion of votes received by adult titles versus non-adult titles over the given period of years? <br/>
+2. What is the distribution of the average ratings for different genres? Furthermore, for the highet rated genre, how does its average ratings vary from one title type to another?<br/>
+3. For top 10 pairs of directors and writers who have worked most of the time with each other, how does the weighted average rating for different title types that they have produced? Moreover, for the director-writer pairs who have worked more than 5 times together and have produced content with a weighted average rating of 10, what is the trend in the distribution of number of votes that they received for their different title types such as videos, TV series, shorts, and others.<br/><br/>
+
+In the following chapters, we will address the above questions through carrying out detailed visualization and analysis tasks.<br/><br/>
+
+For more details on the code portion of this project, please [click here](https://github.com/nityakk/IMDbFilms).
+
+<!--chapter:end:index.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data sources
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+
+We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.
+
+Among all the available datasets on the above link, we collected and used three datasets for our project: title.basics.tsv.gz, title.crew.tsv.gz, and title.ratings.tsv.gz. Moreover, we have also merged and manipulated these datasets based on our requirements to address the said objectives. We Each team member of our was responsible to collect the data. We simply downloaded it from the said link and then unzipped it to be accessed for this project. <br/>
+
+We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/>
+
+
+## [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
+This dataset provides the basic information about different contents as displayed below:<br/>
+1. tconst (string) - alphanumeric unique identifier of the title<br/>
+2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
+3. prmrT (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release<br/>
+4. orgnT (string) - original title, in the original language<br/>
+5. isAdl (boolean) - 0: non-adult title; 1: adult title<br/>
+6. strtY (YYYY) – represents the release year of a title. In the case of TV Series, it is the series start year<br/>
+7. endYr (YYYY) – TV Series end year. ‘\N’ for all other title types<br/>
+8. rntmM – primary runtime of the title, in minutes<br/>
+9. genrs (string array) – includes up to three genres associated with the title<br/>
+
+```{r}
+basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics[basics == "\\N"] <- NA
+```
+
+```{r}
+basics
+```
+
+The potential columns that we will use from this datatset are titleType, isAdult, startYear, and genres of different contents. These information will help us answer all the objective questions that we have formulated.<br/><br/>
+
+The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/>
+
+
+
+[title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
+This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. drctr (array of nconsts) - director(s) of the given title<br/>
+3. wrtrs (array of nconsts) – writer(s) of the given title<br/>
+
+```{r}
+crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew[crew == "\\N"] <- NA
+```
+
+```{r}
+crew
+```
+We will make use of all the columns from this dataset to address the question 3 for our project.<br/><br/>
+
+The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/>
+
+
+
+[title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
+This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. avrgR – weighted average of all the individual user ratings<br/>
+3. nmVts - number of votes the title has received<br/>
+
+```{r}
+ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings[ratings == "\\N"] <- NA
+```
+
+```{r}
+ratings
+```
+
+Potentially, we will utilize all the columns of this datatset to answer all the 3 questions of our project. The variable type of the columns in this dataset is character, double, and integer respecively for tconst, averageRating, and numVotes variables. There are 1191702, that is, 1.1 million rows and 3 columns in the ratings dataset.
+
+<!--chapter:end:02-data.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data transformation
+
+We are working around three dataset in total, that is, titles.basics, title.crew, title.ratings. Therefore, it was very necessary to transformation the individual overall datasets by merging different datasets, adding new columns or removing the ones that were not needed or that had any NULL values.<br/><br/>
+
+Below, we describe the transformations that we incorporated which were necessary to accomplish the results of different questions.<br/><br/>
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(reshape2)
+library(dplyr)
+library(ggplot2)
+library(ggridges)
+```
+
+## Transformations to study distribution trends in Adult v/s Non-Adult titles
+
+<br/>This question basically addresses two objectives.<br/>
+- The first part studies the trend of number of adult title releases with the change of time.<br/>
+- The second part studies the proportion of votes distribution of adult versus non-adult titles over the given period of time.<br/>
+For this question, we primarily use the title.basics and title.ratings dataset. Therefore, we will initially prepare a new auxiliary dataframe which contains transformed version of these datasets.<br/>
+
+### Adult title releases trends
+
+<br/> In this part of the first objective question we wish to observe that with progressing years, did the film industry started making more adults, or less adults, or was the number of releases constant. The following steps show a detailed explanation on how we transformed the data step by step:<br/>
+- Among all the columns available in the title.basics dataset, we are only interested in using the 'startYear' and 'isAdult' columns to achieve the first part of the first objective question. Thus, we dropped the other available columns in the data which were unnecessary for our exploration, likewise, 'primaryTitle', 'originalTitle', 'endYear', 'runtimeMinutes' and formed a new auxiliary dataframe named 'basics_ratings'.<br/>
+- Further, as mentioned earlier, we need the necessary information('startYear' and 'isAdult') from title.basics, which basically is the basics_ratings dataframe, and title.ratings data combined in one auxiliary dataframe. So, we merge the title.ratings dataset with the basics_ratings dataframe and use to address both first and second part of the first objective question.<br/>
+-Moreover, we analyzed that there were missing values in the 'isAdult' and 'startYear' columns. As we are going to explore that with the progress of year does the number of adult movies released had any trend or not, so we need to remove the start years values that have NULL. Also, we are summing up the total number of adult titles released per year, therefore, it is necessary to delete the rows that have NA values for isAdult. Thus, we dropped the rows which either contained NULL values for startYear or NULL values for isAdult.<br/>
+- After cleaning the data by adding, removing and merging the columns, the next step is to group similar start years together and calculate the total number of adult titles that were released in that particular year. For this grouping operation to execute, we converted the datatype of both 'startYear ' and 'isAdult' columns to numeric. Once the datatype was transformed in the desired format, we grouped similar years together based on two different conditions:<br/>
+  -Grouped same years and calculated the sum of the isAdult column which gave the total number of         adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
+  -Grouped same years and counted the number of rows of the isAdult column which gave the total number    of titles released in a particular in a particular year irrespective of adult or non-adult. We        assigned this to another new temporary dataframe.<br/>
+Finally, we merged the above two temporary dataframes into one by the grouped start years.<br/>
+- As the last step, we calculated the proportion of the adult titles released per start year. This percent would then be used to plot it against their respective start years and study the trend.<br/><br/>
+
+
+```{r}
+drops <- c("primaryTitle","originalTitle","endYear", "runtimeMinutes")
+basics_ratings <- basics[ , !(names(basics) %in% drops)]
+```
+
+```{r}
+basics_ratings <- merge(basics_ratings, ratings, by="tconst")
+basics_ratings
+```
+
+```{r}
+basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
+basics_ratings_crew <- basics_ratings_crew[!is.na(basics_ratings_crew$directors) & !is.na(basics_ratings_crew$startYear), ]
+basics_ratings_crew
+```
+
+```{r}
+# byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
+byDirectors
+```
+
+```{r}
+expDirecs <- basics_ratings_crew %>%
+  group_by(directors) %>%
+  count()
+expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
+expDirecs2
+```
+
+
+
+```{r}
+basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
+sum(is.na(basics_ratings$isAdult))
+basics_ratings <- basics_ratings[,c(3,4,6,7)]
+basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
+basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
+
+basics_ratings <- basics_ratings %>% drop_na(isAdult)
+basics_ratings <- basics_ratings %>% drop_na(startYear)
+```
+
+```{r}
+basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
+basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
+b1 <- basics_ratings %>% group_by(startYear) %>% summarise(isAdult = sum(isAdult))
+b2 <- basics_ratings %>% group_by(startYear) %>% summarise(cnt = n())
+b_final <- merge(b1, b2, by="startYear")
+b_final$adult_proportion <- (b_final$isAdult / b_final$cnt) * 100
+```
+
+### Ratings distribution of non-adult vs adult titles
+```{r}
+b_0 <- filter(basics_ratings, isAdult == 0)
+b_1 <- filter(basics_ratings, isAdult == 1)
+
+b_0_0 <- b_0 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
+b_1_1 <- b_1 %>% group_by(startYear) %>% summarise(numVotes = sum(numVotes))
+
+b_num_votes <- merge(b_0_0, b_1_1, by = 'startYear', all = TRUE)
+b_num_votes[is.na(b_num_votes)] <- 0
+
+b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
+b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
+```
+
+<br/><br/>
+In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
+- First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
+- Further, we merged the above two temporary dataframes together into one based on similar start years and calculated the sum of the number of votes that were received by non adult and adult titles respectively. These two sums were basically created as two different new columns.<br/>
+- Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
+- Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
+
+
+```{r}
+# 2(A)
+byDirectors1 <- subset(basics_ratings_crew, basics_ratings_crew$directors %in% expDirecs2$directors)
+byDirectors1 <- byDirectors1[which(strtoi(byDirectors1$startYear) >= '2010'), ]
+
+groupedDirec <- byDirectors1 %>%
+  group_by(directors, titleType, genres, numVotes) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+
+groupedDirec_complete <- na.omit(groupedDirec)
+groupedDirec_complete
+
+
+genres <- subset(groupedDirec_complete, select = c(genres))
+genres <- genres[!grepl(",", genres[["genres"]]), ]
+genres <- unique(genres)
+genreRatings <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(genreRatings) <- c('genre', 'count', 'weight')
+
+genreRatings
+for(genre in genres$genres) {
+  if(genre != ""){
+    temp <- groupedDirec_complete[grepl(genre, groupedDirec_complete[["genres"]]), ]
+    num <- length(temp$directors)
+    weight <- mean(temp$weightedRating)
+    #print(c(genre, num, weight))
+    genreRatings[nrow(genreRatings)+1,] = c(genre, num, weight)
+  }
+}
+
+    #toppercent <- max(byDirectors2$numVotes)*0.1
+    #byDirectors3 <- byDirectors2[which(byDirectors2$numVotes >= 0), ]
+
+# 2(B,C)
+byDirectors2 <- byDirectors1[grepl("Drama", byDirectors1[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
+groupedDirec2 <- byDirectors2 %>%
+  group_by(directors, titleType, genres, numVotes) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+
+groupedDirec_complete2 <- na.omit(groupedDirec2)
+groupedDirec_complete2
+
+cleveland <- groupedDirec_complete2 %>% 
+  ungroup() %>%
+  group_by(titleType, genres) %>%
+  summarize(mean = mean(weightedRating))
+cleveland
+
+# For Interactive
+write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
+write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
+```
+
+
+```{r}
+# type = "movie"
+# dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
+# dRSub
+
+
+for(type in unique(groupedDirec_complete$titleType)) {
+  dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
+  filename = paste0("sources_short/titletypes/",type,".csv")
+  write.csv(dRSub, filename, row.names = FALSE)
+}
+```
+
+## Transformations to study the performance of different director-writer pairs
+```{r}
+#3(A)
+df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
+df1 <- df1[!is.na(df1$directors),]
+
+df1$director_writer_pair <- paste(df1$directors,"-", df1$writers)
+tt <- df1 %>% count(director_writer_pair, sort = TRUE)
+ttt <- c(tt[1:10,1])
+df2 <- subset(df1, director_writer_pair %in% ttt)
+
+#3(B)
+temp1 <- group_by(df1, director_writer_pair, titleType, genres)
+temp2 <- summarise(temp1, totalVotes = sum(numVotes))
+df3 <- summarise(temp1, weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+
+temp3 <- df3 %>% right_join(temp2, by=c("director_writer_pair","titleType", "genres"))
+
+df3_filtered <- filter(temp3, weightedRating == 10)
+new_df3_filter <- merge(df3_filtered, tt, by = 'director_writer_pair')
+new_filter <- filter(new_df3_filter, n > 5)
+```
+<br/>The question basically addresses two problems<br/>
+- The first part studies the top 10 director - writer pairs based on the number of times they worked together. Further, this will help to know the distribution of averageRating for different pairs of director-writer.<br/>
+- The second part studies that out of all the director writer pairs having averageRating of 10 what is the distribution of the numVotes for those particular pairs faceted by titleType. <br/>
+
+<br/><br/>
+For addressing the first question mentioned above we need to perform the following transformations:<br/>
+- First, we filtered out the rows from the basics_ratings_crew dataset that had NA for writers and directors. We wanted to study the different director writer pairs so it was important that the dataset had both the values.<br/>
+- Further, for making the pair we used the paste function for concatenating the director column with writer column to form new column named director_writer_pair.<br/>
+- Next as the total unique director writer pairs were approximately 600K so visualizing all of them was not possible. Therefore, we decided to pick top 10 pairs based on the number of times they worked together. So we calculated the count of all the pairs and then selected the top 10. <br/> 
+- Further we filtered the original dataset with the top 10 director writer pairs.<br/>
+
+<br/><br/>
+For addressing the second question mentioned above we need to perform the following transformations:<br/>
+- First, we used the dataset created for the above question which contained the director writer pairs. Furthermore, we group_by the data by "director_writer_pair", "titleType", and "genres" and then we summarised the data by calculating the total number of Votes<br/>
+- Further,  we summarised the same grouped data for calculating the weightedRating which is calculated by taking the sum of averageRating * numVotes divided by total numVotes.<br/>
+- Further we then joined both the grouped data to get the weightedRating as well as total numVotes for a particular director_writer_pair.  <br/> 
+- Finally, wew filtered the data by weightedRating inorder to get only the pairs having weightedRating equal to 10. We then merged this filtered data with the data having the count of number of times a partcular pair worked together. The final dataset had total of 783 pairs who had averageRating of 10 so to further filter the data we studied the distribution of the number of times the pair worked together and found that out of 783, 692 pairs only worked with each other once or twice and therefore we further narrowed the data to only consider the pairs who have worked atleast 5 times with each other.<br/>
+
+```{r}
+tttt <- df1 %>%
+    group_by(director_writer_pair) %>%
+    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
+
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
+```
+
+```{r}
+# last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
+# last20years
+# write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
+```
+
+```{r}
+# last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
+# last100years
+# write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
+```
+
+
+```{r}
+tttt <- df1 %>%
+    group_by(director_writer_pair, directors, writers) %>%
+    summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+tttt
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
+t_final
+```
+
+```{r}
+directorRatings <- df1 %>%
+     group_by(directors, startYear) %>%
+     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+#directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
+directorRatings
+#unique(directorRatings$primaryName)
+write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
+```
+
+```{r}
+# director <-  "Alan J.W. Bell"
+# dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
+# dRSub
+# paste0(director,"_Rangints")
+# 
+# for(director in directorRatings$fileName) {
+#    dRSub <- directorRatings[which(directorRatings$fileName == director), ]
+#    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
+#    write.csv(dRSub, filename, row.names = FALSE)
+#  }
+
+```
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Missing values
+
+```{r}
+# cp = 0 for counts, 1 for percents
+missing_plots <- function(data, percent = FALSE) {
+  
+  # Get missing patterns
+  missing_patterns <- data.frame(is.na(data)) %>%
+    group_by_all() %>%
+    count(name = "count", sort = TRUE) %>%
+    ungroup()
+  
+ # missing_patterns
+  new_missing_patterns <- as.matrix(
+    missing_patterns[1:(length(missing_patterns)-1)])
+  melted <- melt(new_missing_patterns)
+  a <- apply(missing_patterns[1:(length(missing_patterns)-1)], 
+             1, function(y)length(y[y == TRUE]))
+  a_x <- which(a == 0)
+  
+  # missing_patterns2
+  missing_patterns2 <- missing_patterns[1:(length(missing_patterns)-1)]
+  
+  missing_patterns2 <- missing_patterns2 %>% 
+      rownames_to_column("id") %>% 
+      gather(key, value, -id) %>% 
+      mutate(missing = ifelse(value == 1, "yes", "no"))
+  
+  missing_patterns2 <- missing_patterns2 %>% 
+    mutate(missing2 = ifelse(missing == "yes", 2, 1))
+  
+  missing_patterns3 <- missing_patterns2 %>% 
+      mutate(missing2 = ifelse(id == a_x, 0, missing2))
+
+  #Plot Upper Side
+  freq <- c()
+  value <- unique(melted$Var2)
+  
+  if (length(apply(new_missing_patterns, 2, function(y) which(y == TRUE))) == 0){
+    freq <- rep(0, length(value))
+  } else {
+    for (i in apply(new_missing_patterns, 2, function(y) which(y == TRUE))){
+      sum <- 0
+      for (j in i){
+        sum <- sum + missing_patterns$count[j]
+        
+      }
+      freq <- c(freq, sum)
+    }
+  }
+  
+  if (percent) {
+    total = sum(missing_patterns$count)
+    freq <- (freq/total)*100
+    
+    demo <- data.frame(value, freq)
+    col <- ggplot(demo, aes(x = reorder(value, -freq), freq)) +
+      geom_bar(stat = 'identity', fill = "blue", alpha = 0.6) +
+      scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
+      ylim(0, 100) +
+      xlab("") +
+      ylab("% rows missing:") +
+      theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
+    
+  } else {
+    demo <- data.frame(value, freq)
+    col <- ggplot(demo, aes(x = reorder(value, -freq), freq)) +
+      geom_bar(stat = 'identity', fill = "blue", alpha = 0.6) +
+      scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
+      xlab("") +
+      ylab("num rows missing:") +
+      theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
+  } 
+  
+  temp_x <- length(unique(missing_patterns3$key)) / 2 + 0.5
+  temp_y <- nrow(missing_patterns) - a_x + 1
+  
+  temp_f = levels((reorder(value, -freq)))
+  missing_patterns3$key <- fct_relevel(missing_patterns3$key, temp_f)
+
+  # main plot
+  main <- ggplot(missing_patterns3, aes(x = key, y = fct_rev(fct_reorder(id,as.integer(id))), fill = as.factor(missing2))) +
+    geom_tile(color="white", alpha = 0.8) +
+    scale_x_discrete(label=function(x) abbreviate(x, minlength = 5)) +
+    scale_fill_manual(values=c("gray60","gray80","mediumpurple1")) +
+    xlab("variable") +
+    ylab("missing pattern") +
+    annotate("text",x = temp_x, y = temp_y, label= "complete cases", fontface = 1, color="black") +
+    theme(legend.position="none", axis.line = element_line(colour = "black"))
+
+  # Plot Right Side
+  A_x <- length(unique((melted$Var1)))
+  area.color <- replicate(A_x, "blue")
+  area.color[a_x] <- "darkblue"
+  
+  if (percent) {
+    total = sum(missing_patterns$count)
+    rowy <- (missing_patterns$count/total)*100
+    
+    row <- ggplot(missing_patterns, aes(x = unique(melted$Var1), y = rowy)) +
+      geom_bar(stat = "identity", fill = area.color, alpha = 0.5) +
+      coord_flip() +
+      scale_x_reverse(breaks = seq(0,A_x,1)) +
+      ylim(0, 100) +
+      xlab("") +
+      ylab("% rows") +
+      theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
+  } else {
+    row <- ggplot(missing_patterns, aes(x = unique(melted$Var1), y = count)) +
+      geom_bar(stat = "identity", fill = area.color, alpha = 0.5) +
+      coord_flip() +
+      scale_x_reverse(breaks = seq(0,A_x,1)) +
+      xlab("") +
+      ylab("row count") +
+      theme(panel.border = element_rect(color = "black", fill = NA, size = 0.5))
+  }
+
+  final_plot <- col + plot_spacer() + main + row + plot_layout(ncol = 2,widths = c(5, 1),heights = c(1, 3))
+  final_plot
+}
+```
+
+
+```{r}
+missing_plots(basics, percent = TRUE)
+```
+<br/><br/>
+We studied the percentage of missing values in the 'title.basics.tsv.gz' through the graph plotted above.<br/>
+
+Analysis:<br/><br/>
+1. It is observed that out of all the total rows, almost ~99% of row are there which does not have the value for the end year of the title. This is followed by ~74% rows where runtime in minutes of the title is not available. Moreover, there are only ~12% and 5% rows respectively that does not contain the values for the start year and genre of the corresponding title.<br/>
+3. Very insignificant percentage of missing values are observed for columns that provides information if the title is adult or not, what is the primary title name, and original title name.<br/>
+4. Interestingly, there are no missing values for title type and the alphanumeric constant of the title.<br/>  
+4.Among all the rows that has missing values, majority of the rows has missing values for both end year as well as runtime of the title combined. This constitutes for ~56% rows.<br/> 
+5.Moreover, there are 25% rows which has solely end year missing values, whereas ~12% rows where end year is missing along with runtime and start year of the title. There are minimal percentage of rows which witnesses complete cases, that is, only around 1% of rows has no missing values in them.<br/><br/>
+
+From this dataset, we have utilized the information about the start year of title, title type, and whether the title is adult or not. Therefore, to handle the missing values of the start year, we have dropped the rows where there were no start year mentioned. Further, to handle the rows with missing values for isAdult or not, we again dropped those rows from the dataset. This detailed information about this transformation is explained in the 'Data Transforamtion' chapter. Finally, as there are no missing values for the title type column thus we do not have to worry about it.<br/>
+
+```{r}
+missing_plots(crew, percent = TRUE)
+```
+<br/><br/>The graph above manifests the percentage of missing data in the 'title.crew.tsv.gz' dataset.<br/>
+
+Analysis:<br/><br/>
+1. It is observed from the top-most graph that approximately 50% of the total rows in the dataset has missing values for the writers and 40% of the total rows of the dataset contains missing values for the directors. However, the the alphanumeric identifier is present for all the rows irrespective if the writer or director is missing or not.<br/>
+2. The main graph reveals that there are 4 different patterns in the data, likewise, the rows where: <br/>
+i) only directors are missing,<br/>
+ii) only writers are missing,<br/>
+iii) both writer and directors are missing<br/>
+iv) there are no missing values<br/><br/>
+
+It is noted from the right-most graph that the percentage of rows where both director and writers are missing is significantly more than the percentage of rows where only director or only writer is missing.<br/>
+3. It is interpreted that out of the 50% of the rows where writers are missing, there ~37% of the rows where the writers values are missing along with some directors values. Whereas there are only ~13% rows where solely writers are missing. Similarly, out of the 40% of the rows where directors values are missing, there are ~37% rows where the directors are missing along with the writers while only ~3% rows where solely directors values are missing.<br/>
+4. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/>
+
+We have made use of the 'title.crew.tsv.gz' dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, "NA" values and then utilized the two columns. The detail about this transformation is explained in the 'Data Transformation' chapter.<br/>
+```{r}
+missing_plots(ratings, percent = TRUE)
+```
+<br/><br/>
+The above graph reveals the information about missing values in the 'title.ratings.tsv.gz'. This dataset contains the following information:<br/>
+
+Analysis:<br/>
+1. It is clearly seen that there are no values missing in the 'title.ratings.tsv.gz' dataset. There is only 1 pattern found, that is, all the columns of the dataset have complete and consistent values. Therefore, we have 100% complete cases for the average ratings and number of votes for all the titles given in the dataset and there are no missing patterns.<br/><br/>
+
+We are utilizing the 'title.ratings.tsv.gz' majorly to answer all of our objective questions. It is thus observed that we do not have to worry about any missing patterns for this datatset as there are none.<br/>
+
+<!--chapter:end:04-missing.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Results
+
+## Initial Exploration:
+```{r}
+# basics_ratings_crew
+```   
+
+```{r}
+# full_year <- basics_ratings_crew %>%
+#   group_by(startYear) %>%
+#   count()
+# full_year
+```
+
+```{r}
+# worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
+#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+#   theme(axis.line = element_line(color="gray22")) +
+#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
+#   scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
+# worksovertime
+```
+
+```{r}
+# full_votes <- basics_ratings_crew %>%
+#   group_by(startYear) %>%
+#   summarise(weightedVotes = sum(numVotes))
+# full_votes
+```
+
+```{r}
+# votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
+#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
+#   theme(axis.line = element_line(color="gray22")) +
+#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
+# votesOvertime
+```
+
+## Adult Works
+
+```{r}
+plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r}
+plot1 
+```
+1. The graph above shows an interesting trend on the proportion of titles that were released and were adult with increasing year. In the late 1800s it was observed that no adult titles were released at all.<br/>
+2. However, the trend changed in the early 1900s where the number of releases for adult titles started increasing. There were a few rising spikes observed in some of the years between 1905 to 1930; at for example, 1907, 1909, 1914, 1920, and 1924. The highest proportion achieved in the early 1900s was peaked at 1% of the total movie releases of the year 1924.<br/>
+3. Further, this unstable rise in the proportion of releases of adult titles started declining constantly and immediately became 0% for year between 1930 and 1947. After a few very less proportionate spikes until 1968, the proportion of releases started increasing linearly till 1971 and peaked at ~3.3% in 1971.<br/>
+4. After 1971, there was a considerable increased proportion of adult title releases in the late 1900s till 1995. However, this increase was quite abrupt as, that is, after decreasing for a year, the trend was witnessed to increase again and reach a new peak at ~4.5% in 1976. Next, after decreasing again for a few years till 1982, it again saw a significant increase till 1984 and reached its maximum peak over the given years at around 6.5%<br/>
+5. Ultimately, the trend was cumulatively observed to decrease at approximately 0% in 2020.<br/><br/>
+
+The results overall demonstrates that with progressing years, the proportio of adult movies increased though abruptly.<br/><br/>
+
+```{r}
+plot2 <- ggplot(b_num_votes, aes(startYear)) + 
+    geom_line(aes(y = numVotes.x, colour = "non_Adult")) + 
+    geom_line(aes(y = numVotes.y, colour = "Adult")) + 
+    scale_y_continuous(trans='log2') + 
+    scale_x_continuous(breaks = seq(1800, 2021, 5)) + 
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+    ylab("Log2(Count of Num of Votes)")
+```
+
+```{r}
+plot2
+```
+<br/>
+We have plotted the above graph to comparatively study the proportion of votes received by non adult and adult titles over the given period of time in the dataset.<br/>
+Note that we have used the log() function to calculate and represent the number(proportion) of votes for adult and non adult titles. It is because both of the titles has received number of votes in very separate ranges. Thus, to scale them in a visualizable range we used the log function.<br/>
+1. The trend for the number of votes received by the adult titles is observed clearly to be similar to the trend observed in the proportion of adult title releases over the same given period of time. That is, adult titles experienced abrupt rises in the number of votes in the early 1900s as compared to 0 number of votes in the late 1800s. In the early 1900s, the number of votes peaked at ~2150 in 1929.<br/>
+2. Further, it experienced a considerable decrease in the number of votes it received to 0 till 1950 and rised till 128 in 1950.<br/>
+3. Eventually, the number of votes that adult titles received started increasing very significantly and reached a peak at ~138,000 in 1995. After that, the trend was of a decreasing one till 2020.<br/>
+4. Contrary to the adult titles, the non adult titles witnessed a clear cumulative increasing trend on the number of votes it received over the given period of time from 1875 till 2020. This linear increase was quite abrupt experiencing minimal declines in the number of votes over the years, however, the overall trend for the number of votes received by non adult titles was increasing.<br/>
+5.The non adult titles touched a minimum number of votes in 1881 with only 64 number of votes but it was still more than the proportion of votes received by adult titles which was 0. Moreover, it is noteworthy that no adult titles were released around that period.<br/>
+6. The non adult movies experienced a peak at ~33554432 proportion of votes in 2011 compared to only ~8192 proportion of votes for adult titles.<br/>
+7. Moreover, the general trend studied for the weighted average rating distribution of adult titles versus non adult titles can interpreted as one where the proportion of votes for non adult titles was always more than the proportion of votes received by adult titles in any given year.<br/>
+
+
+## Variation of Average Ratings amongst genres
+
+```{r}
+
+library(ggrepel)
+
+plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, options(scipen=999)))) +
+  geom_point() +
+  ggtitle("Weighted Ratings and Number of Works per Genre") +
+  geom_text_repel(aes(label=genre), size=3)+#, vjust = -1)+
+  scale_x_continuous(name = "Weighted Ratings") +
+  scale_y_continuous(name = "# of Works", breaks = seq(0,150000, 20000))
+
+plot3
+```
+
+
+-cleveland dot plot
+```{r Cleveland Plot, fig.height=30, fig.width=10}
+plot4 <- ggplot(cleveland, aes(x = mean, y = fct_reorder(genres, mean), color = titleType)) +
+  geom_point() +
+  ggtitle("Weighted Ratings per Genre") +
+  ylab("") +
+  theme_linedraw()
+
+plot4
+```
+
+```{r}
+# ggplot(cleveland, aes(x = genres, y = mean, color = mean)) +
+#   geom_point(size = 1.5) +
+#   facet_wrap(~titleType) + 
+#   scale_x_discrete()
+```
+
+
+From above:
+- Many of the the highest ratings are of the Drama genre
+
+
+Looking at just the Drama genre
+
+
+- parcoord
+```{r Parcoord}
+library(parcoords)
+
+plot5 <- parcoords(
+  groupedDirec_complete[,c(2:5)],#[sample(1:nrow(groupedDirec_complete),1000), c(2:5)], 
+  rownames = F, 
+  brushMode = "2D-strums", 
+  reorderable = T, 
+  queue = T, 
+  color = list(
+    # discrete or categorical column
+    colorScale = "scaleOrdinal",
+    colorBy = "titleType",
+    colorScheme = "schemeCategory10"),
+  withD3 = TRUE,
+  alpha = 0.5,
+  height = 1000,
+  width = 1000
+)
+
+plot5
+```
+- highest ratings is mostly tvEpisode
+
+
+## Best Director-Writer Pairings
+```{r}
+library(ggridges)
+plot6 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
+```
+
+```{r}
+plot6
+```
+
+<br/> We have ploted the above graph to visualize the averageRating distribution of top 10 director_writer_pairs based on the number of times they worked together.
+1. We have filled the ridge plot with the titleType to get the bifurcation of averageRating based on titleType. <br/>
+2. As we can see from the above graph, the pair "n43-n" has the highest mean of averageRating which is approximately 9.5 ratings that too for tvEpisodes. Moreover, the standard deviation of the averageRating is also less compared to other director writer pairs. <br/>
+3. For titleType movie we can see the pair "n59-n" has the highest mean of the averageRating. <br/>
+4. For the titeType short, there are few pairs that have worked upon the short movie, from the graph we can see that the pair “n59-n” has averageRating spread till 9.8 approximately while the averageRating for the tittleType short has the mean of averageRating around 6 to 7 ratings. <br/>
+5. For the titleType tvSeries there are 6 pairs that have worked for that particular titleType. Out of all the pairs, the pair “n57-n” and “n44-n” seem to have a high distribution of averageRating but the pair “n44-n” seems to be more successful for tvSeries compared to “n57-n” as the data is spreaded till 9.5 averageRatings.<br/>
+6. For the titleType video there are 3 pairs in total that have worked on it. Out of all the pairs, the pair “n59-n” and “n30-n” seem to have similar distribution of averageRating where the pair “n59-n” being on the higher side.<br/>
+
+
+```{r}
+plot7 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+plot7
+```
+
+<br/> We have plotted the above graph to visualize the top 10 director writer pair having averageRating equal to 10. <br/>
+1. For the titleType short we can see clearly that the pair “n336-n” has the highest number of votes in the averageRating equal to 10. Although, all the pairs have received the averageRating 10 but the most likely pair for the titleType short is “n336-n” and then followed by “n64-n”. <br/>
+2. For the titleType tvEpisode we can see that there are plenty of pairs that have worked together for a tvEpisode. Out of all the pairs, we observe that “n37-n” has the highest number of votes , approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar likening between the audience. <br/>
+3. For the titleType tvMiniSeries there are hardly pairs of director writer that have worked together except for 1 that is the pair “n113-n”. <br/>
+4. Interestingly, for titleType tvSeries we can only see one pair that is “n113-n”. The reason for this might be either there are very few tvSeries that have averageRating equal to 10 or else less director writer pair have made tvSeries compared to other titleTypes. <br/>
+5. Similarly for the titleType tvShort there is only 1 pair that has worked together to make a tvShort and that pair is “n336-n”. <br/>
+6.  titleType tvSpecial also has only 1 pair of director writers that have worked together. The pair “n18-n” is the pair that has approximately 20 numbers of Votes. <br/>
+7. For the titleType video there are a few pairs of director_writer that have worked together. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100. <br/>
+
+In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, tvShort and tvSpecial there are only 1 pair of director_writer who have an averageRating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director_writer_pairs that have averageRating 10 and have worked for more than 5 times together. Surprisingly the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have averageRating of 10 but the pair might have worked for only once or twice or second there could be no movies that have averageRating of 10. <br/>
+
+<!--chapter:end:05-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+
+<iframe src="Interactive/InteractivePlot.html" width="400" height="300"></iframe>
+
+<!--chapter:end:06-interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+

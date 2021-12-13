@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Data sources | Analysis of various films on IMDb</title>
-  <meta name="description" content="Chapter 2 Data sources | Analysis of various films on IMDb" />
+  <title>Chapter 2 Data sources | Film Industry Trend Exploration</title>
+  <meta name="description" content="Chapter 2 Data sources | Film Industry Trend Exploration" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Data sources | Analysis of various films on IMDb" />
+  <meta property="og:title" content="Chapter 2 Data sources | Film Industry Trend Exploration" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Data sources | Analysis of various films on IMDb" />
+  <meta name="twitter:title" content="Chapter 2 Data sources | Film Industry Trend Exploration" />
   
   
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
 
 
-<meta name="date" content="2021-12-11" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,8 +53,76 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -74,10 +142,27 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#title.basics.tsv.gz"><i class="fa fa-check"></i><b>2.1</b> <span>title.basics.tsv.gz</span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#transformations-to-study-distribution-trends-in-adult-vs-non-adult-titles"><i class="fa fa-check"></i><b>3.1</b> Transformations to study distribution trends in Adult v/s Non-Adult titles</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#adult-title-releases-trends"><i class="fa fa-check"></i><b>3.1.1</b> Adult title releases trends</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#ratings-distribution-of-non-adult-vs-adult-titles"><i class="fa fa-check"></i><b>3.1.2</b> Ratings distribution of non-adult vs adult titles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#transformations-to-study-the-performance-of-different-director-writer-pairs"><i class="fa fa-check"></i><b>3.2</b> Transformations to study the performance of different director-writer pairs</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#initial-exploration"><i class="fa fa-check"></i><b>5.1</b> Initial Exploration:</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#question-1---adult-works"><i class="fa fa-check"></i><b>5.2</b> Question 1 - Adult works</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#question-2---how-does-average-ratings-per-number-of-votes-vary-for-differnt-genres"><i class="fa fa-check"></i><b>5.3</b> Question 2 - How does average ratings per number of votes vary for differnt genres?</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#question-4---director-writer-pair---ridgeplot"><i class="fa fa-check"></i><b>5.4</b> Question 4 - Director writer pair - ridgeplot</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -91,7 +176,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis of various films on IMDb</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Film Industry Trend Exploration</a>
           </h1>
         </div>
 
@@ -102,68 +187,941 @@
 <div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
 <p>We will be using the <a href="https://www.imdb.com/interfaces/">IMDb Datasets</a> for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.</p>
-<p>Specifically, we plan to merge and use the following datasets:</p>
-<ul>
-<li><a href="https://datasets.imdbws.com/name.basics.tsv.gz">name.basics.tsv.gz</a>
-<ul>
-<li>This dataset gives us a list of all individuals listed in IMDb. This dataset will help us answer question 3 as it contains a comma separated list of the top 3 primary professions for each individual.</li>
-</ul></li>
-<li><a href="https://datasets.imdbws.com/title.basics.tsv.gz">title.basics.tsv.gz</a>
-<ul>
-<li>This dataset will provide us with basic information about the content such as type of content (movie, TV show, etc), title, genre, start year and end year, as well as runtime. This dataset will help us answer question 1 as it also contains a column indicating whether the title is adult rated or not.</li>
-</ul></li>
-<li><a href="https://datasets.imdbws.com/title.crew.tsv.gz">title.crew.tsv.gz</a>
-<ul>
-<li>This dataset gives us information on directors and writers for each title. This will be helpful for answering question 2 as it can be joined with title.ratings.</li>
-</ul></li>
-<li><a href="https://datasets.imdbws.com/title.ratings.tsv.gz">title.ratings.tsv.gz</a>
-<ul>
-<li>This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.</li>
-</ul></li>
-</ul>
-<pre><code>##      nconst     primaryName birthYear deathYear
-## 1 nm0000001    Fred Astaire      1899      1987
-## 2 nm0000002   Lauren Bacall      1924      2014
-## 3 nm0000003 Brigitte Bardot      1934      &lt;NA&gt;
-## 4 nm0000004    John Belushi      1949      1982
-## 5 nm0000005  Ingmar Bergman      1918      2007
-## 6 nm0000006  Ingrid Bergman      1915      1982
-##                     primaryProfession                          knownForTitles
-## 1      soundtrack,actor,miscellaneous tt0053137,tt0050419,tt0072308,tt0031983
-## 2                  actress,soundtrack tt0037382,tt0117057,tt0038355,tt0071877
-## 3 actress,soundtrack,music_department tt0056404,tt0054452,tt0057345,tt0049189
-## 4             actor,soundtrack,writer tt0077975,tt0072562,tt0080455,tt0078723
-## 5               writer,director,actor tt0083922,tt0060827,tt0050976,tt0050986
-## 6         actress,soundtrack,producer tt0077711,tt0034583,tt0036855,tt0038109</code></pre>
-<pre><code>##      tconst titleType           primaryTitle          originalTitle isAdult
-## 1 tt0000001     short             Carmencita             Carmencita       0
-## 2 tt0000002     short Le clown et ses chiens Le clown et ses chiens       0
-## 3 tt0000003     short         Pauvre Pierrot         Pauvre Pierrot       0
-## 4 tt0000004     short            Un bon bock            Un bon bock       0
-## 5 tt0000005     short       Blacksmith Scene       Blacksmith Scene       0
-## 6 tt0000006     short      Chinese Opium Den      Chinese Opium Den       0
-##   startYear endYear runtimeMinutes                   genres
-## 1      1894    &lt;NA&gt;              1        Documentary,Short
-## 2      1892    &lt;NA&gt;              5          Animation,Short
-## 3      1892    &lt;NA&gt;              4 Animation,Comedy,Romance
-## 4      1892    &lt;NA&gt;             12          Animation,Short
-## 5      1893    &lt;NA&gt;              1             Comedy,Short
-## 6      1894    &lt;NA&gt;              1                    Short</code></pre>
-<pre><code>##      tconst directors writers
-## 1 tt0000001 nm0005690    &lt;NA&gt;
-## 2 tt0000002 nm0721526    &lt;NA&gt;
-## 3 tt0000003 nm0721526    &lt;NA&gt;
-## 4 tt0000004 nm0721526    &lt;NA&gt;
-## 5 tt0000005 nm0005690    &lt;NA&gt;
-## 6 tt0000006 nm0005690    &lt;NA&gt;</code></pre>
-<pre><code>##      tconst averageRating numVotes
-## 1 tt0000001           5.7     1842
-## 2 tt0000002           6.0      237
-## 3 tt0000003           6.5     1604
-## 4 tt0000004           6.0      154
-## 5 tt0000005           6.2     2423
-## 6 tt0000006           5.2      158</code></pre>
+<p>Among all the available datasets on the above link, we collected and used three datasets for our project: title.basics.tsv.gz, title.crew.tsv.gz, and title.ratings.tsv.gz. Moreover, we have also merged and manipulated these datasets based on our requirements to address the said objectives. We Each team member of our was responsible to collect the data. We simply downloaded it from the said link and then unzipped it to be accessed for this project. <br/></p>
+<p>We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/></p>
+<div id="title.basics.tsv.gz" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> <a href="https://datasets.imdbws.com/title.basics.tsv.gz">title.basics.tsv.gz</a></h2>
+<p>This dataset provides the basic information about different contents as displayed below:<br/>
+1. tconst (string) - alphanumeric unique identifier of the title<br/>
+2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
+3. prmrT (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release<br/>
+4. orgnT (string) - original title, in the original language<br/>
+5. isAdl (boolean) - 0: non-adult title; 1: adult title<br/>
+6. strtY (YYYY) – represents the release year of a title. In the case of TV Series, it is the series start year<br/>
+7. endYr (YYYY) – TV Series end year. ‘’ for all other title types<br/>
+8. rntmM – primary runtime of the title, in minutes<br/>
+9. genrs (string array) – includes up to three genres associated with the title<br/></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-sources.html#cb1-1" aria-hidden="true" tabindex="-1"></a>basics <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&#39;sources/title.basics.tsv&#39;</span>, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\t</span><span class="st">&#39;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>, <span class="at">na.strings =</span> <span class="st">&quot;NA&quot;</span>)</span>
+<span id="cb1-2"><a href="data-sources.html#cb1-2" aria-hidden="true" tabindex="-1"></a>basics[basics <span class="sc">==</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">N&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="data-sources.html#cb2-1" aria-hidden="true" tabindex="-1"></a>basics</span></code></pre></div>
+<pre><code>##        tconst titleType                                                 primaryTitle
+## 1   tt0000001     short                                                   Carmencita
+## 2   tt0000002     short                                       Le clown et ses chiens
+## 3   tt0000003     short                                               Pauvre Pierrot
+## 4   tt0000004     short                                                  Un bon bock
+## 5   tt0000005     short                                             Blacksmith Scene
+## 6   tt0000006     short                                            Chinese Opium Den
+## 7   tt0000007     short                  Corbett and Courtney Before the Kinetograph
+## 8   tt0000008     short                       Edison Kinetoscopic Record of a Sneeze
+## 9   tt0000009     short                                                   Miss Jerry
+## 10  tt0000010     short                                          Leaving the Factory
+## 11  tt0000011     short                                      Akrobatisches Potpourri
+## 12  tt0000012     short                                       The Arrival of a Train
+## 13  tt0000013     short                  The Photographical Congress Arrives in Lyon
+## 14  tt0000014     short                                          The Waterer Watered
+## 15  tt0000015     short                                          Autour d&#39;une cabine
+## 16  tt0000016     short                                        Boat Leaving the Port
+## 17  tt0000017     short                                     Italienischer Bauerntanz
+## 18  tt0000018     short                                        Das boxende KÃ¤nguruh
+## 19  tt0000019     short                                             The Clown Barber
+## 20  tt0000020     short                                               The Derby 1895
+## 21  tt0000022     short                                             Blacksmith Scene
+## 22  tt0000023     short                                                      The Sea
+## 23  tt0000024     short                                    Opening of the Kiel Canal
+## 24  tt0000025     short                The Oxford and Cambridge University Boat Race
+## 25  tt0000026     short                               The Messers. LumiÃ¨re at Cards
+## 26  tt0000027     short                                   Cordeliers&#39; Square in Lyon
+## 27  tt0000028     short                                         Fishing for Goldfish
+## 28  tt0000029     short                                                  Baby&#39;s Meal
+## 29  tt0000030     short                                           Rough Sea at Dover
+## 30  tt0000031     short                                          Jumping the Blanket
+## 31  tt0000032     short                                       Die SerpentintÃ¤nzerin
+## 32  tt0000033     short                                           Horse Trick Riders
+## 33  tt0000034     short                        ArrivÃ©e d&#39;un train gare de Vincennes
+## 34  tt0000035     short                                         Watering the Flowers
+## 35  tt0000036     short                                             Awakening of Rip
+## 36  tt0000037     short                                                  Sea Bathing
+## 37  tt0000038     short                                                The Ball Game
+## 38  tt0000039     short                                            Barnet Horse Fair
+## 39  tt0000040     short                          Barque sortant du port de Trouville
+## 40  tt0000041     short                                            Bataille de neige
+## 41  tt0000042     short                                   Bateau-mouche sur la Seine
+## 42  tt0000043     short                                           Batteuse Ã  vapeur
+## 43  tt0000044     short                                                   Le bivouac
+## 44  tt0000045     short                                           Les blanchisseuses
+## 45  tt0000046     short                                             Bois de Boulogne
+## 46  tt0000047     short                                       Boulevard des Italiens
+## 47  tt0000048     short                                          The Boxing Kangaroo
+## 48  tt0000049     short                              Boxing Match; or, Glove Contest
+## 49  tt0000050     short                                          BÃ©bÃ© et fillettes
+## 50  tt0000051     short                                      The Bohemian Encampment
+## 51  tt0000052     short                                             Carga de rurales
+## 52  tt0000053     short A Chegada do Comboio Inaugural Ã  EstaÃ§Ã£o Central do Porto
+## 53  tt0000054     short                                             A Merry-Go-Round
+## 54  tt0000055     short                                               Le chiffonnier
+## 55  tt0000056     short                       Uma Corrida de Touros no Campo Pequeno
+## 56  tt0000057     short                        CortÃ¨ge de tzar allant Ã  Versailles
+## 57  tt0000058     short                         CortÃ¨ge de tzar au Bois de Boulogne
+## 58  tt0000059     short                               Coronation of a Village Maiden
+## 59  tt0000060     short                                              Dancing Darkies
+## 60  tt0000061     short                                                Dancing Girls
+## 61  tt0000062     short                                             Danse serpentine
+## 62  tt0000063     short                                          Dessinateur express
+## 63  tt0000064     short                                     Dessinateur: Chamberlain
+## 64  tt0000065     short                                  Dessinateur: Reine Victoria
+## 65  tt0000066     short                                     Dessinateur: Von Bismark
+## 66  tt0000067     short                    Conjurer Making Ten Hats in Sixty Seconds
+## 67  tt0000068     short                                           Unloading the Boat
+## 68  tt0000069     short                                                Post No Bills
+## 69  tt0000070     short                                         Demolition of a Wall
+## 70  tt0000071     short                                  Automobiles Starting a Race
+## 71  tt0000072     short                      Officers of French Army Leaving Service
+## 72  tt0000073     short                                Effets de mer sur les rochers
+## 73  tt0000074     short                                  Enfants jouant sur la plage
+## 74  tt0000075     short       The Conjuring of a Woman at the House of Robert Houdin
+## 75  tt0000076     short                                    Exit of Rip and the Dwarf
+## 76  tt0000077     short                                    Le fakir, mystÃ¨re indien
+## 77  tt0000078     short                                   Feira de Gado na Corujeira
+## 78  tt0000079     short                                         La gare Saint-Lazare
+## 79  tt0000080     short                                           Grandes manoeuvres
+## 80  tt0000081     short                                   Towing a Boat on the River
+## 81  tt0000082     short                                                  A Hard Wash
+## 82  tt0000083     short                                               Les indiscrets
+## 83  tt0000084     short                                                 Les ivrognes
+## 84  tt0000085     short                                       Gardener Burning Weeds
+## 85  tt0000086     short                        Beach and Pier at Trouville, 1st part
+## 86  tt0000087     short                        Beach and Pier at Trouville, 2nd part
+## 87  tt0000088     short                                                   Market Day
+## 88  tt0000089     short                                 Leaving Jerusalem by Railway
+## 89  tt0000090     short                                 LibÃ©ration des territoriaux
+## 90  tt0000091     short                                       The House of the Devil
+## 91  tt0000092     short                             MarÃ©e montante sur Brise-Larmes
+## 92  tt0000093     short                                                    Melbourne
+## 93  tt0000094     short                                                 Miss de Vere
+## 94  tt0000095     short                                         The Mysterious Paper
+## 95  tt0000096     short                                         Place Saint-Augustin
+## 96  tt0000097     short                                Place de l&#39;OpÃ©ra, First View
+## 97  tt0000098     short                               Place de l&#39;OpÃ©ra, Second View
+## 98  tt0000099     short                                         Place de la Bastille
+## 99  tt0000100     short                                         Place de la Concorde
+## 100 tt0000101     short                                 Place du thÃ©Ã¢tre franÃ§ais
+## 101 tt0000102     short                              The Beach at Villiers in a Gale
+## 102 tt0000103     short                                     Smarter than the Teacher
+## 103 tt0000104     short                                             Pompiers Ã  Lyon
+## 104 tt0000105     short                                      The Docks at Marseilles
+## 105 tt0000106     short                                       Retour au cantonnement
+## 106 tt0000107     short                                     Naval Review at Cherburg
+## 107 tt0000108     short                                    Rip Leaving Sleepy Hollow
+## 108 tt0000109     short                                        Rip Meeting the Dwarf
+## 109 tt0000110     short                                Rip Passing Over the Mountain
+## 110 tt0000111     short                                                  Rip&#39;s Toast
+## 111 tt0000112     short                                        Rip&#39;s Toast to Hudson
+##                                                    originalTitle isAdult startYear endYear runtimeMinutes                   genres
+## 1                                                     Carmencita       0      1894    &lt;NA&gt;              1        Documentary,Short
+## 2                                         Le clown et ses chiens       0      1892    &lt;NA&gt;              5          Animation,Short
+## 3                                                 Pauvre Pierrot       0      1892    &lt;NA&gt;              4 Animation,Comedy,Romance
+## 4                                                    Un bon bock       0      1892    &lt;NA&gt;             12          Animation,Short
+## 5                                               Blacksmith Scene       0      1893    &lt;NA&gt;              1             Comedy,Short
+## 6                                              Chinese Opium Den       0      1894    &lt;NA&gt;              1                    Short
+## 7                    Corbett and Courtney Before the Kinetograph       0      1894    &lt;NA&gt;              1              Short,Sport
+## 8                         Edison Kinetoscopic Record of a Sneeze       0      1894    &lt;NA&gt;              1        Documentary,Short
+## 9                                                     Miss Jerry       0      1894    &lt;NA&gt;             40            Romance,Short
+## 10                         La sortie de l&#39;usine LumiÃ¨re Ã  Lyon       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 11                                       Akrobatisches Potpourri       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 12                            L&#39;arrivÃ©e d&#39;un train Ã  La Ciotat       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 13          Le dÃ©barquement du congrÃ¨s de photographie Ã  Lyon       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 14                                            L&#39;arroseur arrosÃ©       0      1895    &lt;NA&gt;              1             Comedy,Short
+## 15                                           Autour d&#39;une cabine       0      1894    &lt;NA&gt;              2          Animation,Short
+## 16                                        Barque sortant du port       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 17                                      Italienischer Bauerntanz       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 18                                         Das boxende KÃ¤nguruh       0      1895    &lt;NA&gt;              1                    Short
+## 19                                              The Clown Barber       0      1898    &lt;NA&gt;           &lt;NA&gt;             Comedy,Short
+## 20                                                The Derby 1895       0      1895    &lt;NA&gt;              1  Documentary,Short,Sport
+## 21                                                 Les forgerons       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 22                                               Baignade en mer       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 23                                     Opening of the Kiel Canal       0      1895    &lt;NA&gt;           &lt;NA&gt;               News,Short
+## 24                 The Oxford and Cambridge University Boat Race       0      1895    &lt;NA&gt;           &lt;NA&gt;         News,Short,Sport
+## 25                                             Partie d&#39;Ã©cartÃ©       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 26                                  Place des Cordeliers Ã  Lyon       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 27                                 La pÃªche aux poissons rouges       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 28                                               Repas de bÃ©bÃ©       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 29                                            Rough Sea at Dover       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 30                                      Le saut Ã  la couverture       0      1895    &lt;NA&gt;              1        Documentary,Short
+## 31                                        Die SerpentintÃ¤nzerin       0      1895    &lt;NA&gt;              1                    Short
+## 32                                                    La voltige       0      1895    &lt;NA&gt;              1 Comedy,Documentary,Short
+## 33                         ArrivÃ©e d&#39;un train gare de Vincennes       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 34                                                    L&#39;arroseur       0      1896    &lt;NA&gt;              1             Comedy,Short
+## 35                                              Awakening of Rip       0      1896    &lt;NA&gt;              0              Drama,Short
+## 36                                               Baignade en mer       0      1896    &lt;NA&gt;              1                    Short
+## 37                                                 The Ball Game       0      1898    &lt;NA&gt;           &lt;NA&gt;  Documentary,Short,Sport
+## 38                                             Barnet Horse Fair       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 39                           Barque sortant du port de Trouville       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 40                                             Bataille de neige       0      1897    &lt;NA&gt;              1 Comedy,Documentary,Short
+## 41                                    Bateau-mouche sur la Seine       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 42                                            Batteuse Ã  vapeur       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 43                                                    Le bivouac       0      1896    &lt;NA&gt;              1                    Short
+## 44                                            Les blanchisseuses       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 45                                              Bois de Boulogne       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 46                                        Boulevard des Italiens       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 47                                           The Boxing Kangaroo       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 48                               Boxing Match; or, Glove Contest       0      1896    &lt;NA&gt;           &lt;NA&gt;              Short,Sport
+## 49                                           BÃ©bÃ© et fillettes       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 50                                       Campement de bohÃ©miens       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 51                                              Carga de rurales       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 52  A Chegada do Comboio Inaugural Ã  EstaÃ§Ã£o Central do Porto       0      1897    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 53                                           Les chevaux de bois       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 54                                                Le chiffonnier       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 55                        Uma Corrida de Touros no Campo Pequeno       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 56                         CortÃ¨ge de tzar allant Ã  Versailles       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 57                          CortÃ¨ge de tzar au Bois de Boulogne       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 58                                   Couronnement de la rosiÃ¨re       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 59                                               Dancing Darkies       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 60                                                 Dancing Girls       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 61                                              Danse serpentine       0      1896    &lt;NA&gt;              1                    Short
+## 62                                           Dessinateur express       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 63                                      Dessinateur: Chamberlain       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 64                                   Dessinateur: Reine Victoria       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 65                                      Dessinateur: Von Bismark       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 66                                   Dix chapeaux en 60 secondes       0      1896    &lt;NA&gt;           &lt;NA&gt;            Fantasy,Short
+## 67                                      DÃ©chargement de bateaux       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 68                                           DÃ©fense d&#39;afficher       0      1896    &lt;NA&gt;              1                    Short
+## 69                                          DÃ©molition d&#39;un mur       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 70                                       DÃ©part des automobiles       0      1896    &lt;NA&gt;           &lt;NA&gt;              Short,Sport
+## 71                                         DÃ©part des officiers       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 72                                 Effets de mer sur les rochers       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 73                                   Enfants jouant sur la plage       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 74              Escamotage d&#39;une dame au thÃ©Ã¢tre Robert Houdin       0      1896    &lt;NA&gt;              1             Horror,Short
+## 75                                     Exit of Rip and the Dwarf       0      1896    &lt;NA&gt;              1              Drama,Short
+## 76                                     Le fakir, mystÃ¨re indien       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 77                                    Feira de Gado na Corujeira       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 78                                          La gare Saint-Lazare       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 79                                            Grandes manoeuvres       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 80                                        Les haleurs de bateaux       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 81                                                   A Hard Wash       0      1896    &lt;NA&gt;           &lt;NA&gt;             Comedy,Short
+## 82                                                Les indiscrets       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 83                                                  Les ivrognes       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 84                                 Jardinier brÃ»lant des herbes       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 85                     JetÃ©e et plage de Trouville (1er partie)       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 86                      JetÃ©e et plage de Trouville (2e partie)       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 87                                  Jour de marchÃ© Ã  Trouville       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 88                        DÃ©part de JÃ©rusalem en chemin de fer       0      1897    &lt;NA&gt;              1        Documentary,Short
+## 89                                  LibÃ©ration des territoriaux       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 90                                           Le manoir du diable       0      1896    &lt;NA&gt;              3             Horror,Short
+## 91                              MarÃ©e montante sur Brise-Larmes       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 92                                                     Melbourne       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 93                                                  Miss de Vere       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 94                                             Le papier protÃ©e       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 95                                          Place Saint-Augustin       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 96                                 Place de l&#39;OpÃ©ra, 1er aspect       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 97                                  Place de l&#39;OpÃ©ra, 2e aspect       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 98                                          Place de la Bastille       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 99                                          Place de la Concorde       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 100                                 Place du thÃ©Ã¢tre franÃ§ais       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 101                             Plage de Villiers par gros temps       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 102                                     Plus fort que le maÃ®tre       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 103                                             Pompiers Ã  Lyon       0      1896    &lt;NA&gt;              1        Documentary,Short
+## 104                                       Les quais Ã  Marseille       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 105                                       Retour au cantonnement       0      1896    &lt;NA&gt;           &lt;NA&gt;                    Short
+## 106                                    Revue navale Ã  Cherbourg       0      1896    &lt;NA&gt;           &lt;NA&gt;        Documentary,Short
+## 107                                    Rip Leaving Sleepy Hollow       0      1896    &lt;NA&gt;              1              Drama,Short
+## 108                                        Rip Meeting the Dwarf       0      1896    &lt;NA&gt;              1            Fantasy,Short
+## 109                                Rip Passing Over the Mountain       0      1896    &lt;NA&gt;              1            Fantasy,Short
+## 110                                                  Rip&#39;s Toast       0      1896    &lt;NA&gt;              1              Drama,Short
+## 111                                        Rip&#39;s Toast to Hudson       0      1896    &lt;NA&gt;              1            Fantasy,Short
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 8456789 rows ]</code></pre>
+<p>The potential columns that we will use from this datatset are titleType, isAdult, startYear, and genres of different contents. These information will help us answer all the objective questions that we have formulated.<br/><br/></p>
+<p>The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/></p>
+<p><a href="https://datasets.imdbws.com/title.crew.tsv.gz">title.crew.tsv.gz</a>
+This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. drctr (array of nconsts) - director(s) of the given title<br/>
+3. wrtrs (array of nconsts) – writer(s) of the given title<br/></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="data-sources.html#cb4-1" aria-hidden="true" tabindex="-1"></a>crew <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&#39;sources/title.crew.tsv&#39;</span>, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\t</span><span class="st">&#39;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>, <span class="at">na.strings =</span> <span class="st">&quot;NA&quot;</span>)</span>
+<span id="cb4-2"><a href="data-sources.html#cb4-2" aria-hidden="true" tabindex="-1"></a>crew[crew <span class="sc">==</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">N&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="data-sources.html#cb5-1" aria-hidden="true" tabindex="-1"></a>crew</span></code></pre></div>
+<pre><code>##        tconst                     directors             writers
+## 1   tt0000001                     nm0005690                &lt;NA&gt;
+## 2   tt0000002                     nm0721526                &lt;NA&gt;
+## 3   tt0000003                     nm0721526                &lt;NA&gt;
+## 4   tt0000004                     nm0721526                &lt;NA&gt;
+## 5   tt0000005                     nm0005690                &lt;NA&gt;
+## 6   tt0000006                     nm0005690                &lt;NA&gt;
+## 7   tt0000007           nm0374658,nm0005690                &lt;NA&gt;
+## 8   tt0000008                     nm0005690                &lt;NA&gt;
+## 9   tt0000009                     nm0085156           nm0085156
+## 10  tt0000010                     nm0525910                &lt;NA&gt;
+## 11  tt0000011                     nm0804434                &lt;NA&gt;
+## 12  tt0000012           nm0525910,nm0525908                &lt;NA&gt;
+## 13  tt0000013                     nm0525910                &lt;NA&gt;
+## 14  tt0000014                     nm0525910                &lt;NA&gt;
+## 15  tt0000015                     nm0721526                &lt;NA&gt;
+## 16  tt0000016                     nm0525910                &lt;NA&gt;
+## 17  tt0000017           nm1587194,nm0804434                &lt;NA&gt;
+## 18  tt0000018                     nm0804434                &lt;NA&gt;
+## 19  tt0000019                     nm0932055                &lt;NA&gt;
+## 20  tt0000020                     nm0010291                &lt;NA&gt;
+## 21  tt0000022                     nm0525910                &lt;NA&gt;
+## 22  tt0000023                     nm0525910                &lt;NA&gt;
+## 23  tt0000024                     nm0010291                &lt;NA&gt;
+## 24  tt0000025                     nm0010291                &lt;NA&gt;
+## 25  tt0000026                     nm0525910                &lt;NA&gt;
+## 26  tt0000027                     nm0525910                &lt;NA&gt;
+## 27  tt0000028                     nm0525910                &lt;NA&gt;
+## 28  tt0000029                     nm0525910                &lt;NA&gt;
+## 29  tt0000030           nm0666972,nm0010291                &lt;NA&gt;
+## 30  tt0000031                     nm0525910                &lt;NA&gt;
+## 31  tt0000032                     nm0804434                &lt;NA&gt;
+## 32  tt0000033                     nm0525910                &lt;NA&gt;
+## 33  tt0000034                     nm0617588                &lt;NA&gt;
+## 34  tt0000035                     nm0617588                &lt;NA&gt;
+## 35  tt0000036                     nm0005690           nm0410331
+## 36  tt0000037                     nm0617588                &lt;NA&gt;
+## 37  tt0000038                     nm0374658                &lt;NA&gt;
+## 38  tt0000039                          &lt;NA&gt;                &lt;NA&gt;
+## 39  tt0000040                     nm0617588                &lt;NA&gt;
+## 40  tt0000041                     nm0525910                &lt;NA&gt;
+## 41  tt0000042                     nm0617588                &lt;NA&gt;
+## 42  tt0000043                     nm0617588                &lt;NA&gt;
+## 43  tt0000044                     nm0617588                &lt;NA&gt;
+## 44  tt0000045                     nm0617588                &lt;NA&gt;
+## 45  tt0000046                     nm0617588                &lt;NA&gt;
+## 46  tt0000047                     nm0617588                &lt;NA&gt;
+## 47  tt0000048                     nm0010291                &lt;NA&gt;
+## 48  tt0000049                     nm0010291                &lt;NA&gt;
+## 49  tt0000050                     nm0617588                &lt;NA&gt;
+## 50  tt0000051                     nm0617588                &lt;NA&gt;
+## 51  tt0000052                     nm0895515                &lt;NA&gt;
+## 52  tt0000053                     nm0684607                &lt;NA&gt;
+## 53  tt0000054                     nm0617588                &lt;NA&gt;
+## 54  tt0000055                     nm0617588                &lt;NA&gt;
+## 55  tt0000056                     nm0795060                &lt;NA&gt;
+## 56  tt0000057                     nm0617588                &lt;NA&gt;
+## 57  tt0000058                     nm0617588                &lt;NA&gt;
+## 58  tt0000059                     nm0617588                &lt;NA&gt;
+## 59  tt0000060                     nm0005690                &lt;NA&gt;
+## 60  tt0000061                     nm0010291                &lt;NA&gt;
+## 61  tt0000062                     nm0617588                &lt;NA&gt;
+## 62  tt0000063                     nm0617588                &lt;NA&gt;
+## 63  tt0000064                     nm0617588                &lt;NA&gt;
+## 64  tt0000065                     nm0617588                &lt;NA&gt;
+## 65  tt0000066                     nm0617588                &lt;NA&gt;
+## 66  tt0000067                     nm0617588                &lt;NA&gt;
+## 67  tt0000068                     nm0617588                &lt;NA&gt;
+## 68  tt0000069                     nm0617588                &lt;NA&gt;
+## 69  tt0000070                     nm0525910                &lt;NA&gt;
+## 70  tt0000071                     nm0617588                &lt;NA&gt;
+## 71  tt0000072                     nm0617588                &lt;NA&gt;
+## 72  tt0000073                     nm0617588                &lt;NA&gt;
+## 73  tt0000074                     nm0617588                &lt;NA&gt;
+## 74  tt0000075                     nm0617588                &lt;NA&gt;
+## 75  tt0000076                     nm0005690           nm0410331
+## 76  tt0000077                     nm0617588                &lt;NA&gt;
+## 77  tt0000078                     nm0234288                &lt;NA&gt;
+## 78  tt0000079                     nm0617588                &lt;NA&gt;
+## 79  tt0000080                     nm0617588                &lt;NA&gt;
+## 80  tt0000081                     nm0617588                &lt;NA&gt;
+## 81  tt0000082                     nm0005690                &lt;NA&gt;
+## 82  tt0000083                     nm0617588                &lt;NA&gt;
+## 83  tt0000084                     nm0617588                &lt;NA&gt;
+## 84  tt0000085                     nm0617588                &lt;NA&gt;
+## 85  tt0000086                     nm0617588                &lt;NA&gt;
+## 86  tt0000087                     nm0617588                &lt;NA&gt;
+## 87  tt0000088                     nm0617588                &lt;NA&gt;
+## 88  tt0000089           nm0525908,nm0698645                &lt;NA&gt;
+## 89  tt0000090                     nm0617588                &lt;NA&gt;
+## 90  tt0000091                     nm0617588           nm0617588
+## 91  tt0000092                     nm0617588                &lt;NA&gt;
+## 92  tt0000093           nm0525908,nm0525910                &lt;NA&gt;
+## 93  tt0000094                     nm0617588                &lt;NA&gt;
+## 94  tt0000095                     nm0617588                &lt;NA&gt;
+## 95  tt0000096                     nm0617588                &lt;NA&gt;
+## 96  tt0000097                     nm0617588                &lt;NA&gt;
+## 97  tt0000098                     nm0617588                &lt;NA&gt;
+## 98  tt0000099                     nm0617588                &lt;NA&gt;
+## 99  tt0000100                     nm0617588                &lt;NA&gt;
+## 100 tt0000101                     nm0617588                &lt;NA&gt;
+## 101 tt0000102                     nm0617588                &lt;NA&gt;
+## 102 tt0000103                     nm0617588                &lt;NA&gt;
+## 103 tt0000104                          &lt;NA&gt;                &lt;NA&gt;
+## 104 tt0000105                     nm0617588                &lt;NA&gt;
+## 105 tt0000106                     nm0617588                &lt;NA&gt;
+## 106 tt0000107                     nm0617588                &lt;NA&gt;
+## 107 tt0000108                     nm0005690           nm0410331
+## 108 tt0000109                     nm0005690           nm0410331
+## 109 tt0000110                     nm0005690           nm0410331
+## 110 tt0000111                     nm0005690           nm0410331
+## 111 tt0000112                     nm0005690           nm0410331
+## 112 tt0000113                     nm0005690           nm0410331
+## 113 tt0000114                     nm0617588                &lt;NA&gt;
+## 114 tt0000115                     nm0617588                &lt;NA&gt;
+## 115 tt0000116                     nm0617588                &lt;NA&gt;
+## 116 tt0000117                     nm0234288                &lt;NA&gt;
+## 117 tt0000118                     nm0617588                &lt;NA&gt;
+## 118 tt0000119                     nm0617588                &lt;NA&gt;
+## 119 tt0000120                     nm0617588                &lt;NA&gt;
+## 120 tt0000121                     nm0609678                &lt;NA&gt;
+## 121 tt0000122                     nm0617588                &lt;NA&gt;
+## 122 tt0000123                     nm0617588                &lt;NA&gt;
+## 123 tt0000124                     nm0617588                &lt;NA&gt;
+## 124 tt0000125                          &lt;NA&gt;                &lt;NA&gt;
+## 125 tt0000126                     nm0617588                &lt;NA&gt;
+## 126 tt0000127                     nm0617588                &lt;NA&gt;
+## 127 tt0000128                     nm0617588                &lt;NA&gt;
+## 128 tt0000129                     nm0617588                &lt;NA&gt;
+## 129 tt0000130                     nm0617588                &lt;NA&gt;
+## 130 tt0000131                     nm0617588                &lt;NA&gt;
+## 131 tt0000132                     nm0617588           nm0617588
+## 132 tt0000133                     nm0617588                &lt;NA&gt;
+## 133 tt0000134                          &lt;NA&gt;                &lt;NA&gt;
+## 134 tt0000135                     nm0005690                &lt;NA&gt;
+## 135 tt0000137                     nm0349785                &lt;NA&gt;
+## 136 tt0000138                     nm0617588           nm0617588
+## 137 tt0000139                     nm0349785                &lt;NA&gt;
+## 138 tt0000140                     nm0349785                &lt;NA&gt;
+## 139 tt0000141                     nm0349785                &lt;NA&gt;
+## 140 tt0000142                     nm0924920                &lt;NA&gt;
+## 141 tt0000143                     nm0349785                &lt;NA&gt;
+## 142 tt0000144                     nm0349785                &lt;NA&gt;
+## 143 tt0000145                     nm0349785                &lt;NA&gt;
+## 144 tt0000146                     nm0349785                &lt;NA&gt;
+## 145 tt0000147                     nm0714557                &lt;NA&gt;
+## 146 tt0000148                     nm0349785                &lt;NA&gt;
+## 147 tt0000149                     nm0617588                &lt;NA&gt;
+## 148 tt0000150                     nm0349785                &lt;NA&gt;
+## 149 tt0000151                     nm0617588                &lt;NA&gt;
+## 150 tt0000152                     nm0617588                &lt;NA&gt;
+## 151 tt0000153                     nm0808310                &lt;NA&gt;
+## 152 tt0000154                     nm0010291                &lt;NA&gt;
+## 153 tt0000155                     nm0617588                &lt;NA&gt;
+## 154 tt0000156                     nm0617588                &lt;NA&gt;
+## 155 tt0000157                     nm0349785                &lt;NA&gt;
+## 156 tt0000158                     nm0349785                &lt;NA&gt;
+## 157 tt0000159                     nm0617588                &lt;NA&gt;
+## 158 tt0000160                     nm0095816                &lt;NA&gt;
+## 159 tt0000161                     nm0349785                &lt;NA&gt;
+## 160 tt0000162                     nm0698645                &lt;NA&gt;
+## 161 tt0000163                     nm0349785                &lt;NA&gt;
+## 162 tt0000164                     nm0349785                &lt;NA&gt;
+## 163 tt0000165                     nm0005717           nm0005717
+## 164 tt0000166                     nm0005717                &lt;NA&gt;
+## 165 tt0000167                     nm0422809                &lt;NA&gt;
+## 166 tt0000168                     nm0005717                &lt;NA&gt;
+## 167 tt0000169                     nm0698645                &lt;NA&gt;
+## 168 tt0000170                     nm0666972                &lt;NA&gt;
+## 169 tt0000171                     nm0349785                &lt;NA&gt;
+## 170 tt0000172                     nm0808310                &lt;NA&gt;
+## 171 tt0000173                     nm0085865                &lt;NA&gt;
+## 172 tt0000174                     nm0471818           nm0841389
+## 173 tt0000175                     nm0795060                &lt;NA&gt;
+## 174 tt0000176                          &lt;NA&gt;                &lt;NA&gt;
+## 175 tt0000177                     nm0085865                &lt;NA&gt;
+## 176 tt0000178                     nm0692105                &lt;NA&gt;
+## 177 tt0000179                     nm0617588                &lt;NA&gt;
+## 178 tt0000180                     nm0349785                &lt;NA&gt;
+## 179 tt0000181                     nm0808310           nm0674518
+## 180 tt0000182                     nm0666972                &lt;NA&gt;
+## 181 tt0000183                     nm0808310           nm0241416
+## 182 tt0000184                     nm0924920                &lt;NA&gt;
+## 183 tt0000185                     nm0349785                &lt;NA&gt;
+## 184 tt0000186                     nm0617588                &lt;NA&gt;
+## 185 tt0000187                     nm0349785                &lt;NA&gt;
+## 186 tt0000188                     nm0666972                &lt;NA&gt;
+## 187 tt0000189                     nm0005717           nm0005717
+## 188 tt0000190                     nm0471818           nm0841389
+## 189 tt0000191                     nm0349785                &lt;NA&gt;
+## 190 tt0000192                     nm0924920           nm0238900
+## 191 tt0000193                     nm0349785                &lt;NA&gt;
+## 192 tt0000194                     nm0378408                &lt;NA&gt;
+## 193 tt0000195                     nm0349785                &lt;NA&gt;
+## 194 tt0000196                     nm0808310           nm0324473
+## 195 tt0000197                     nm0349785                &lt;NA&gt;
+## 196 tt0000198                     nm0349785                &lt;NA&gt;
+## 197 tt0000199                          &lt;NA&gt;                &lt;NA&gt;
+## 198 tt0000200                          &lt;NA&gt;                &lt;NA&gt;
+## 199 tt0000201                     nm0005690                &lt;NA&gt;
+## 200 tt0000202                     nm0349785                &lt;NA&gt;
+## 201 tt0000203                     nm0349785                &lt;NA&gt;
+## 202 tt0000204                     nm0349785                &lt;NA&gt;
+## 203 tt0000205                     nm0349785                &lt;NA&gt;
+## 204 tt0000206                     nm0005717                &lt;NA&gt;
+## 205 tt0000207                          &lt;NA&gt;                &lt;NA&gt;
+## 206 tt0000208                     nm0808310                &lt;NA&gt;
+## 207 tt0000209                     nm0808310                &lt;NA&gt;
+## 208 tt0000210                     nm0617588                &lt;NA&gt;
+## 209 tt0000211                     nm0617588           nm0617588
+## 210 tt0000212                     nm0795060                &lt;NA&gt;
+## 211 tt0000213                     nm0349785                &lt;NA&gt;
+## 212 tt0000214                     nm0085865                &lt;NA&gt;
+## 213 tt0000215                     nm0471818           nm0841389
+## 214 tt0000216                     nm0005717                &lt;NA&gt;
+## 215 tt0000217                     nm0808310                &lt;NA&gt;
+## 216 tt0000218                     nm0617588           nm0617588
+## 217 tt0000219                     nm0808310                &lt;NA&gt;
+## 218 tt0000220                          &lt;NA&gt;                &lt;NA&gt;
+## 219 tt0000221                     nm0182052                &lt;NA&gt;
+## 220 tt0000222                     nm0349785                &lt;NA&gt;
+## 221 tt0000223                     nm0349785                &lt;NA&gt;
+## 222 tt0000224                          &lt;NA&gt;                &lt;NA&gt;
+## 223 tt0000225                          &lt;NA&gt;           nm0207305
+## 224 tt0000226                          &lt;NA&gt;                &lt;NA&gt;
+## 225 tt0000227                     nm4427898                &lt;NA&gt;
+## 226 tt0000228                     nm0349785                &lt;NA&gt;
+## 227 tt0000229                          &lt;NA&gt;           nm0857203
+## 228 tt0000230                     nm0617588           nm0674518
+## 229 tt0000231                     nm0795060                &lt;NA&gt;
+## 230 tt0000232                     nm0349785                &lt;NA&gt;
+## 231 tt0000233                     nm0005717           nm0005717
+## 232 tt0000234                     nm0617588                &lt;NA&gt;
+## 233 tt0000235                     nm0617588           nm0353584
+## 234 tt0000236                     nm0349785                &lt;NA&gt;
+## 235 tt0000237                     nm0349785                &lt;NA&gt;
+## 236 tt0000238                     nm0349785                &lt;NA&gt;
+## 237 tt0000239                     nm0349785                &lt;NA&gt;
+## 238 tt0000240                          &lt;NA&gt;                &lt;NA&gt;
+## 239 tt0000241                     nm0349785                &lt;NA&gt;
+## 240 tt0000242                     nm0617588           nm0617588
+## 241 tt0000243                     nm0349785                &lt;NA&gt;
+## 242 tt0000244                     nm0349785                &lt;NA&gt;
+## 243 tt0000245                          &lt;NA&gt;                &lt;NA&gt;
+## 244 tt0000246                     nm0617588                &lt;NA&gt;
+## 245 tt0000247 nm2156608,nm0005690,nm0002504 nm0000636,nm0002504
+## 246 tt0000248                     nm0808310                &lt;NA&gt;
+## 247 tt0000249                     nm0808310                &lt;NA&gt;
+## 248 tt0000250                     nm0005717                &lt;NA&gt;
+## 249 tt0000251                     nm0177862                &lt;NA&gt;
+## 250 tt0000252                     nm0349785                &lt;NA&gt;
+## 251 tt0000253                     nm0095816                &lt;NA&gt;
+## 252 tt0000254                     nm0349785                &lt;NA&gt;
+## 253 tt0000255                     nm0349785                &lt;NA&gt;
+## 254 tt0000256                          &lt;NA&gt;                &lt;NA&gt;
+## 255 tt0000257                     nm0349785                &lt;NA&gt;
+## 256 tt0000258                     nm0349785                &lt;NA&gt;
+## 257 tt0000259                     nm0349785                &lt;NA&gt;
+## 258 tt0000260                     nm0349785                &lt;NA&gt;
+## 259 tt0000261                     nm0617588                &lt;NA&gt;
+## 260 tt0000262                     nm0349785                &lt;NA&gt;
+## 261 tt0000263                          &lt;NA&gt;                &lt;NA&gt;
+## 262 tt0000264                     nm0617588                &lt;NA&gt;
+## 263 tt0000265                          &lt;NA&gt;                &lt;NA&gt;
+## 264 tt0000266                          &lt;NA&gt;                &lt;NA&gt;
+## 265 tt0000267                     nm0349785                &lt;NA&gt;
+## 266 tt0000268                     nm0349785                &lt;NA&gt;
+## 267 tt0000269                     nm0666972                &lt;NA&gt;
+## 268 tt0000270                     nm0349785                &lt;NA&gt;
+## 269 tt0000271                     nm0349785                &lt;NA&gt;
+## 270 tt0000272                     nm0808310                &lt;NA&gt;
+## 271 tt0000273                     nm0932055           nm0932055
+## 272 tt0000274                     nm0349785                &lt;NA&gt;
+## 273 tt0000275                     nm0349785                &lt;NA&gt;
+## 274 tt0000276                     nm0349785                &lt;NA&gt;
+## 275 tt0000277                     nm0349785                &lt;NA&gt;
+## 276 tt0000278                          &lt;NA&gt;                &lt;NA&gt;
+## 277 tt0000279                          &lt;NA&gt;                &lt;NA&gt;
+## 278 tt0000280                          &lt;NA&gt;                &lt;NA&gt;
+## 279 tt0000281                          &lt;NA&gt;                &lt;NA&gt;
+## 280 tt0000282                     nm0349785                &lt;NA&gt;
+## 281 tt0000283                     nm0349785                &lt;NA&gt;
+## 282 tt0000284                     nm0349785                &lt;NA&gt;
+## 283 tt0000285                     nm0095816                &lt;NA&gt;
+## 284 tt0000286                     nm0349785                &lt;NA&gt;
+## 285 tt0000287           nm0807236,nm0085865                &lt;NA&gt;
+## 286 tt0000288                     nm0349785                &lt;NA&gt;
+## 287 tt0000289                     nm0349785                &lt;NA&gt;
+## 288 tt0000290                     nm0349785                &lt;NA&gt;
+## 289 tt0000291                     nm0349785                &lt;NA&gt;
+## 290 tt0000292                     nm0349785                &lt;NA&gt;
+## 291 tt0000293                     nm0349785                &lt;NA&gt;
+## 292 tt0000294                     nm0349785                &lt;NA&gt;
+## 293 tt0000295                     nm0349785                &lt;NA&gt;
+## 294 tt0000296                     nm0349785                &lt;NA&gt;
+## 295 tt0000297                     nm0349785                &lt;NA&gt;
+## 296 tt0000298                     nm0349785                &lt;NA&gt;
+## 297 tt0000299                     nm0349785                &lt;NA&gt;
+## 298 tt0000300                     nm0085865                &lt;NA&gt;
+## 299 tt0000301                     nm0692105           nm0324473
+## 300 tt0000302                     nm0349785                &lt;NA&gt;
+## 301 tt0000303                     nm0349785                &lt;NA&gt;
+## 302 tt0000304                     nm0808310                &lt;NA&gt;
+## 303 tt0000305                     nm0349785                &lt;NA&gt;
+## 304 tt0000306                     nm0561109           nm0000636
+## 305 tt0000307                     nm0085865           nm1112850
+## 306 tt0000308                     nm0808310                &lt;NA&gt;
+## 307 tt0000309                     nm0378408                &lt;NA&gt;
+## 308 tt0000310                          &lt;NA&gt;                &lt;NA&gt;
+## 309 tt0000312                     nm0349785                &lt;NA&gt;
+## 310 tt0000313                     nm0808310                &lt;NA&gt;
+## 311 tt0000314                     nm0349785                &lt;NA&gt;
+## 312 tt0000315                     nm0349785                &lt;NA&gt;
+## 313 tt0000316                     nm0349785                &lt;NA&gt;
+## 314 tt0000317                     nm0349785                &lt;NA&gt;
+## 315 tt0000318                     nm0804434           nm0804433
+## 316 tt0000319                     nm0793094                &lt;NA&gt;
+## 317 tt0000320                     nm0349785                &lt;NA&gt;
+## 318 tt0000321                     nm0692105                &lt;NA&gt;
+## 319 tt0000322                     nm0005717                &lt;NA&gt;
+## 320 tt0000323                     nm0349785                &lt;NA&gt;
+## 321 tt0000324                     nm0349785                &lt;NA&gt;
+## 322 tt0000325                     nm0349785                &lt;NA&gt;
+## 323 tt0000326                     nm0349785                &lt;NA&gt;
+## 324 tt0000327                     nm0349785                &lt;NA&gt;
+## 325 tt0000328                     nm0349785                &lt;NA&gt;
+## 326 tt0000329                     nm0349785                &lt;NA&gt;
+## 327 tt0000330                     nm0349785                &lt;NA&gt;
+## 328 tt0000331                     nm0349785                &lt;NA&gt;
+## 329 tt0000332                     nm0349785                &lt;NA&gt;
+## 330 tt0000333                     nm0349785                &lt;NA&gt;
+## 331 tt0000334                     nm0349785                &lt;NA&gt;
+## 332 tt0000335           nm0675140,nm0095714                &lt;NA&gt;
+## 333 tt0000336                     nm0349785                &lt;NA&gt;
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 8456567 rows ]</code></pre>
+<p>We will make use of all the columns from this dataset to address the question 3 for our project.<br/><br/></p>
+<p>The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/></p>
+<p><a href="https://datasets.imdbws.com/title.ratings.tsv.gz">title.ratings.tsv.gz</a>
+This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. avrgR – weighted average of all the individual user ratings<br/>
+3. nmVts - number of votes the title has received<br/></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="data-sources.html#cb7-1" aria-hidden="true" tabindex="-1"></a>ratings <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&#39;sources/title.ratings.tsv&#39;</span>, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\t</span><span class="st">&#39;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>, <span class="at">na.strings =</span> <span class="st">&quot;NA&quot;</span>)</span>
+<span id="cb7-2"><a href="data-sources.html#cb7-2" aria-hidden="true" tabindex="-1"></a>ratings[ratings <span class="sc">==</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">N&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data-sources.html#cb8-1" aria-hidden="true" tabindex="-1"></a>ratings</span></code></pre></div>
+<pre><code>##        tconst averageRating numVotes
+## 1   tt0000001           5.7     1841
+## 2   tt0000002           6.0      236
+## 3   tt0000003           6.5     1602
+## 4   tt0000004           6.0      153
+## 5   tt0000005           6.2     2421
+## 6   tt0000006           5.2      158
+## 7   tt0000007           5.4      757
+## 8   tt0000008           5.5     1987
+## 9   tt0000009           5.9      191
+## 10  tt0000010           6.9     6628
+## 11  tt0000011           5.2      333
+## 12  tt0000012           7.5    11362
+## 13  tt0000013           5.8     1754
+## 14  tt0000014           7.1     5104
+## 15  tt0000015           6.2      964
+## 16  tt0000016           5.9     1352
+## 17  tt0000017           4.6      296
+## 18  tt0000018           5.3      545
+## 19  tt0000019           5.3       29
+## 20  tt0000020           5.0      319
+## 21  tt0000022           5.1     1006
+## 22  tt0000023           5.7     1313
+## 23  tt0000024           4.4       83
+## 24  tt0000025           4.3       39
+## 25  tt0000026           5.7     1436
+## 26  tt0000027           5.6     1057
+## 27  tt0000028           5.2      977
+## 28  tt0000029           6.0     3132
+## 29  tt0000030           5.2      779
+## 30  tt0000031           5.5      937
+## 31  tt0000032           5.1      384
+## 32  tt0000033           5.6      949
+## 33  tt0000034           5.1      182
+## 34  tt0000035           5.5       75
+## 35  tt0000036           4.4      571
+## 36  tt0000037           4.5       58
+## 37  tt0000038           4.2      188
+## 38  tt0000039           3.6       24
+## 39  tt0000040           4.4       60
+## 40  tt0000041           6.7     1680
+## 41  tt0000042           4.2       35
+## 42  tt0000043           3.6       30
+## 43  tt0000044           4.2       40
+## 44  tt0000045           4.0       30
+## 45  tt0000046           4.1       32
+## 46  tt0000047           3.7       32
+## 47  tt0000048           4.8      169
+## 48  tt0000049           5.2       44
+## 49  tt0000050           4.3       32
+## 50  tt0000051           3.8       32
+## 51  tt0000052           4.4       85
+## 52  tt0000053           2.8       16
+## 53  tt0000054           4.9       32
+## 54  tt0000055           3.8       28
+## 55  tt0000056           3.2       20
+## 56  tt0000057           4.3       31
+## 57  tt0000058           4.3       30
+## 58  tt0000059           3.6       25
+## 59  tt0000060           7.7       82
+## 60  tt0000061           4.1       22
+## 61  tt0000062           6.4      184
+## 62  tt0000063           3.5       25
+## 63  tt0000064           3.3       26
+## 64  tt0000065           3.5       26
+## 65  tt0000066           3.4       26
+## 66  tt0000067           5.7       56
+## 67  tt0000068           3.7       28
+## 68  tt0000069           4.9      414
+## 69  tt0000070           6.5     2498
+## 70  tt0000071           3.5       27
+## 71  tt0000072           3.8       25
+## 72  tt0000073           3.6       28
+## 73  tt0000074           4.7       29
+## 74  tt0000075           6.3     1775
+## 75  tt0000076           4.5      505
+## 76  tt0000077           4.6       32
+## 77  tt0000078           3.9       68
+## 78  tt0000079           4.4       33
+## 79  tt0000080           4.1       29
+## 80  tt0000081           4.1       30
+## 81  tt0000082           4.8       46
+## 82  tt0000083           4.7       31
+## 83  tt0000084           4.5       28
+## 84  tt0000085           4.7       30
+## 85  tt0000086           4.2       31
+## 86  tt0000087           4.7       35
+## 87  tt0000088           4.3       30
+## 88  tt0000089           6.2      932
+## 89  tt0000090           4.0       29
+## 90  tt0000091           6.7     3260
+## 91  tt0000092           4.7       27
+## 92  tt0000093           4.8       89
+## 93  tt0000094           4.5       29
+## 94  tt0000095           4.8       32
+## 95  tt0000096           4.5       27
+## 96  tt0000097           5.0       32
+## 97  tt0000098           5.1       34
+## 98  tt0000099           4.6       30
+## 99  tt0000100           4.8       48
+## 100 tt0000101           4.7       26
+## 101 tt0000102           4.8       24
+## 102 tt0000103           5.4       25
+## 103 tt0000104           5.5      440
+## 104 tt0000105           5.0       27
+## 105 tt0000106           4.5       21
+## 106 tt0000107           5.2       26
+## 107 tt0000108           4.4      515
+## 108 tt0000109           4.5      499
+## 109 tt0000110           4.4      503
+## 110 tt0000111           4.5      515
+## 111 tt0000112           4.5      497
+## 112 tt0000113           4.4      522
+## 113 tt0000114           5.1       28
+## 114 tt0000115           4.8       32
+## 115 tt0000116           5.2       25
+## 116 tt0000117           5.2      151
+## 117 tt0000118           5.1       26
+## 118 tt0000119           5.4       48
+## 119 tt0000120           5.3       45
+## 120 tt0000121           4.4       68
+## 121 tt0000122           5.1       29
+## 122 tt0000123           5.8      114
+## 123 tt0000124           5.1       28
+## 124 tt0000125           4.7       13
+## 125 tt0000126           5.5       28
+## 126 tt0000127           4.5       24
+## 127 tt0000128           5.6       36
+## 128 tt0000129           6.5       48
+## 129 tt0000130           5.2       26
+## 130 tt0000131           5.8     1282
+## 131 tt0000132           5.1      990
+## 132 tt0000133           6.1       33
+## 133 tt0000134           4.6       17
+## 134 tt0000135           6.6       77
+## 135 tt0000137           4.8       27
+## 136 tt0000138           6.5     1030
+## 137 tt0000139           5.4       23
+## 138 tt0000140           5.0      265
+## 139 tt0000141           5.2       89
+## 140 tt0000142           4.7       28
+## 141 tt0000143           4.9      237
+## 142 tt0000144           5.2      282
+## 143 tt0000145           3.8       12
+## 144 tt0000146           5.1       25
+## 145 tt0000147           5.2      429
+## 146 tt0000148           3.7       13
+## 147 tt0000149           4.6       20
+## 148 tt0000150           5.4      152
+## 149 tt0000151           5.0       55
+## 150 tt0000152           6.1      225
+## 151 tt0000153           5.7      401
+## 152 tt0000154           4.1       12
+## 153 tt0000155           5.1       26
+## 154 tt0000156           4.0       21
+## 155 tt0000157           4.1       14
+## 156 tt0000158           3.4       14
+## 157 tt0000159           5.3      105
+## 158 tt0000160           5.3       26
+## 159 tt0000161           3.9       13
+## 160 tt0000162           5.4      443
+## 161 tt0000163           5.3       12
+## 162 tt0000164           5.0      280
+## 163 tt0000165           4.7      113
+## 164 tt0000166           4.2       15
+## 165 tt0000167           4.1      130
+## 166 tt0000168           3.4       15
+## 167 tt0000169           3.8       42
+## 168 tt0000170           5.2      228
+## 169 tt0000171           4.4       13
+## 170 tt0000172           6.1      819
+## 171 tt0000173           4.9       44
+## 172 tt0000174           4.7      122
+## 173 tt0000175           5.0      197
+## 174 tt0000176           5.0       10
+## 175 tt0000177           4.6      229
+## 176 tt0000178           5.2      155
+## 177 tt0000179           4.5       39
+## 178 tt0000181           6.9       56
+## 179 tt0000182           4.9      519
+## 180 tt0000183           6.1       34
+## 181 tt0000184           4.8      305
+## 182 tt0000186           4.2       21
+## 183 tt0000187           5.2       47
+## 184 tt0000188           4.0       11
+## 185 tt0000190           5.0      134
+## 186 tt0000192           4.5      177
+## 187 tt0000194           5.4       83
+## 188 tt0000196           5.2       26
+## 189 tt0000197           4.9       15
+## 190 tt0000198           4.9       16
+## 191 tt0000199           4.3       13
+## 192 tt0000204           5.7       13
+## 193 tt0000205           5.4       28
+## 194 tt0000206           5.0       12
+## 195 tt0000207           5.5       12
+## 196 tt0000208           5.7      529
+## 197 tt0000209           4.8       27
+## 198 tt0000210           5.1       28
+## 199 tt0000211           7.5     3894
+## 200 tt0000213           4.7      219
+## 201 tt0000214           4.4       88
+## 202 tt0000215           4.1      119
+## 203 tt0000218           5.9      590
+## 204 tt0000219           6.6       30
+## 205 tt0000222           4.6      213
+## 206 tt0000223           5.4       18
+## 207 tt0000225           5.2       35
+## 208 tt0000228           4.9      251
+## 209 tt0000229           4.5      102
+## 210 tt0000230           6.5     1528
+## 211 tt0000231           3.6       15
+## 212 tt0000233           6.0       10
+## 213 tt0000234           6.0       67
+## 214 tt0000235           6.2      797
+## 215 tt0000239           5.5      223
+## 216 tt0000240           4.4       85
+## 217 tt0000242           6.4     1101
+## 218 tt0000245           6.2       48
+## 219 tt0000246           6.4      991
+## 220 tt0000247           5.0      462
+## 221 tt0000248           6.1     1491
+## 222 tt0000251           5.4      121
+## 223 tt0000253           4.4       25
+## 224 tt0000256           4.6      160
+## 225 tt0000261           5.6       59
+## 226 tt0000264           5.7      407
+## 227 tt0000265           4.3      134
+## 228 tt0000269           4.8      122
+## 229 tt0000271           6.2       12
+## 230 tt0000272           5.6      780
+## 231 tt0000273           5.5      566
+## 232 tt0000274           5.6      226
+## 233 tt0000276           6.9       31
+## 234 tt0000277           6.2       57
+## 235 tt0000278           6.0       22
+## 236 tt0000279           4.1       23
+## 237 tt0000280           4.7       23
+## 238 tt0000281           5.0       22
+## 239 tt0000283           5.8       17
+## 240 tt0000284           5.3      213
+## 241 tt0000285           5.0       24
+## 242 tt0000286           5.7      220
+## 243 tt0000287           4.9      153
+## 244 tt0000288           5.3      186
+## 245 tt0000292           5.4       90
+## 246 tt0000296           5.8      236
+## 247 tt0000299           5.5      221
+## 248 tt0000300           6.9     1190
+## 249 tt0000301           4.4      378
+## 250 tt0000302           5.2      185
+## 251 tt0000304           6.0     1135
+## 252 tt0000306           5.4      220
+## 253 tt0000307           4.9       87
+## 254 tt0000308           5.5       87
+## 255 tt0000309           6.1      809
+## 256 tt0000310           7.3       34
+## 257 tt0000313           5.8      740
+## 258 tt0000318           5.3       11
+## 259 tt0000319           5.8      186
+## 260 tt0000321           4.8      211
+## 261 tt0000328           6.1       14
+## 262 tt0000335           6.1       55
+## 263 tt0000337           5.0      349
+## 264 tt0000340           4.9      288
+## 265 tt0000341           4.9      344
+## 266 tt0000346           4.8      211
+## 267 tt0000347           4.5      109
+## 268 tt0000349           5.4      121
+## 269 tt0000350           5.8      691
+## 270 tt0000352           5.7       44
+## 271 tt0000353           5.2      342
+## 272 tt0000355           6.1      663
+## 273 tt0000357           5.8      422
+## 274 tt0000358           6.2      666
+## 275 tt0000359           7.1     2783
+## 276 tt0000361           8.1       25
+## 277 tt0000363           6.3      143
+## 278 tt0000364           5.5      156
+## 279 tt0000368           6.2       22
+## 280 tt0000370           5.6      444
+## 281 tt0000373           6.4       73
+## 282 tt0000376           7.0       18
+## 283 tt0000377           6.1      113
+## 284 tt0000379           5.2       10
+## 285 tt0000380           7.2       27
+## 286 tt0000381           4.2       24
+## 287 tt0000384           5.8      250
+## 288 tt0000387           5.2      344
+## 289 tt0000388           5.1      119
+## 290 tt0000399           6.0      721
+## 291 tt0000400           6.4       16
+## 292 tt0000402           7.0       10
+## 293 tt0000406           5.4       44
+## 294 tt0000407           3.9       35
+## 295 tt0000409           5.1      209
+## 296 tt0000410           6.7      965
+## 297 tt0000412           4.1       25
+## 298 tt0000413           5.5      418
+## 299 tt0000414           5.4      723
+## 300 tt0000416           5.4      147
+## 301 tt0000417           8.2    47155
+## 302 tt0000420           6.3     2542
+## 303 tt0000422           6.0        9
+## 304 tt0000423           5.4      222
+## 305 tt0000425           5.4       25
+## 306 tt0000426           4.8       21
+## 307 tt0000430           5.9      665
+## 308 tt0000432           5.7      199
+## 309 tt0000436           6.2      489
+## 310 tt0000437           5.1      245
+## 311 tt0000439           7.3    18494
+## 312 tt0000440           5.4      211
+## 313 tt0000441           7.0       10
+## 314 tt0000442           4.8       77
+## 315 tt0000443           6.2       11
+## 316 tt0000446           6.3       25
+## 317 tt0000447           6.4     2326
+## 318 tt0000451           6.5      852
+## 319 tt0000452           4.6      106
+## 320 tt0000455           6.8     1773
+## 321 tt0000456           4.2       61
+## 322 tt0000459           4.6       72
+## 323 tt0000460           6.2       17
+## 324 tt0000464           4.7      419
+## 325 tt0000465           7.3     1472
+## 326 tt0000469           5.8      981
+## 327 tt0000471           5.1      473
+## 328 tt0000472           6.6       23
+## 329 tt0000479           5.3      372
+## 330 tt0000480           5.0      185
+## 331 tt0000487           7.0      487
+## 332 tt0000488           6.9      782
+## 333 tt0000491           4.0       62
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 1189942 rows ]</code></pre>
+<p>Potentially, we will utilize all the columns of this datatset to answer all the 3 questions of our project. The variable type of the columns in this dataset is character, double, and integer respecively for tconst, averageRating, and numVotes variables. There are 1191702, that is, 1.1 million rows and 3 columns in the ratings dataset.</p>
 
+</div>
 </div>
             </section>
 
