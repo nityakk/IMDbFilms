@@ -1,4 +1,4 @@
-# Analysis of various films on IMDb
+# Film Industry Trend Exploration
 
 This project attempts to answer questions about video medias such as movies, TV series, shorts etc. found in the IMDb Database. Specifically:
 
