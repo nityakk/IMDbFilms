@@ -11,6 +11,8 @@ library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(ggridges)
+library(parcoords)
+library(ggrepel)
 ```
 
 ## Transformations to study distribution trends in Adult v/s Non-Adult titles
@@ -99,7 +101,6 @@ In this part of the first objective question, we are basically studying that did
 - Further, we merged the above two temporary dataframes together into one based on similar start years and calculated the sum of the number of votes that were received by non adult and adult titles respectively. These two sums were basically created as two different new columns.<br/>
 - Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
 - Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
-
 
 ```{r}
 # 2(A)

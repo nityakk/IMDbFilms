@@ -81,9 +81,6 @@ Note that we have used the log() function to calculate and represent the number(
 ## Question 2 - How does average ratings per number of votes vary for differnt genres?
 
 ```{r}
-
-library(ggrepel)
-
 plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, options(scipen=999)))) +
   geom_point() +
   ggtitle("Weighted Ratings and Number of Works per Genre") +
@@ -123,8 +120,6 @@ Looking at just the Drama genre
 
 - parcoord
 ```{r Parcoord}
-library(parcoords)
-
 plot5 <- parcoords(
   groupedDirec_complete[,c(2:5)],#[sample(1:nrow(groupedDirec_complete),1000), c(2:5)], 
   rownames = F, 
@@ -147,9 +142,8 @@ plot5
 - highest ratings is mostly tvEpisode
 
 
-## Question 4 - Director writer pair - ridgeplot
+## Question 3 - Director writer pair - ridgeplot
 ```{r}
-library(ggridges)
 plot6 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
 ```
 
