@@ -1,5 +1,10 @@
 # Data sources
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
 We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our final group project. These datasets are updated on a daily basis. They are also quite dense and contain both categorical and continuous variables.
 
 Specifically, we plan to merge and use the following datasets:
@@ -14,8 +19,8 @@ Specifically, we plan to merge and use the following datasets:
     +   This gives us the average ratings as well as the number of votes for each title. As stated above, joined with title.crew, this dataset can help us answer question 2. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes.
 
 ```{r}
-names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
-names[names == "\\N"] <- NA
+# names <- read.csv(file = 'sources/name.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+# names[names == "\\N"] <- NA
 
 basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 basics[basics == "\\N"] <- NA
@@ -28,17 +33,17 @@ ratings[ratings == "\\N"] <- NA
 ```
 
 ```{r}
-head(names)
+#head(names)
 ```
 
 ```{r}
-head(basics)
+basics
 ```
 
 ```{r}
-head(crew)
+crew
 ```
 
 ```{r}
-head(ratings)
+ratings
 ```

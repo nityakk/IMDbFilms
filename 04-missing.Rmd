@@ -122,16 +122,12 @@ missing_plots <- function(data, percent = FALSE) {
 
 Raw Data
 ```{r}
-missing_plots(names, percent = TRUE)
-missing_plots(basics, percent = TRUE)
-missing_plots(crew, percent = TRUE)
-missing_plots(ratings, percent = TRUE)
+#missing_plots(names, percent = TRUE)
 ```
 
 
-
 <br/><br/> 
-We have plotted the graphs that denotes the missing values in the 'name' dataset that we have used. The 'name' dataset includes the following information:<br/>
+The above graph denotes the missing values in the 'names' dataset that we have used. The 'names' dataset includes the following information:<br/>
 1.nconst (string) - alphanumeric unique identifier of the name/person.<br/>
 2.primaryName (string)– name by which the person is most often credited.<br/>
 3.birthYear – in YYYY format.<br/>
@@ -139,7 +135,7 @@ We have plotted the graphs that denotes the missing values in the 'name' dataset
 5.primaryProfession (array of strings)– the top-3 professions of the person.<br/>
 6.knownForTitles (array of tconsts) – titles the person is known for.<br/>
 
-The first graph above shows the missing values counts whereas the second graph denotes the missing values by percentage.<br/>
+The graph above shows the missing values of different columns by percentage.<br/>
 Analysis:<br/>
 1. It is observed from the graphs above that the dataset has no missing values for the columns that denotes the person's detail such as the unique number used to identify them, the person's name and the person's profession. Thus, there is no inconsistency in the data that reveals information about the celebrities.<br/>
 2. The variable that is missing at maximum instances is the death year of the person followed the birth year. It is evident from the percentage plot as well which shows that death year is missing in almost 90% of the data while the birth year is missing in approximately 80% of the data.<br/>
@@ -147,3 +143,64 @@ Analysis:<br/>
 4. It is interpreted from the right side bar plot the proportion of rows having complete values is very less that is approximately 1%.<br/>
 5. There are more number of rows that has missing values for both, that is, death year as well as birth year compared to having missing values for individual columns. Moreover, the percentage of rows that has only death year or birth year as missing values is also less than the percentage of rows that has death year, birth year, and knownForTitles together missing.<br/>
 6. Interestingly, there are very less percentage of rows that has only knownForTitle as the missing values, that is, almost < 1%. This column is always seen missing in a significant proportion with death year and birth year both. At cases where knownForTitles is missing with either death year or birth year, its percentage is also observed to be < 1%.<br/>
+
+We derived the above insights on the missing values of the 'names' dataset. However, it is to be noted that we are using the 'names' dataset primarily to study the correlation between the primary professions of different person and we do not have any missing values for that column.
+
+```{r}
+missing_plots(basics, percent = TRUE)
+```
+<br/><br/>
+We studied the percentage of missing values in the 'title.basics.tsv.gz' through the graph plotted above. The 'title.basics.tsv.gz' dataset provides the following information:<br/>
+1. tconst (string) - alphanumeric unique identifier of the title<br/>
+2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
+3. prmrT (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release<br/>
+4. orgnT (string) - original title, in the original language<br/>
+5. isAdl (boolean) - 0: non-adult title; 1: adult title<br/>
+6. strtY (YYYY) – represents the release year of a title. In the case of TV Series, it is the series start year<br/>
+7. endYr (YYYY) – TV Series end year. ‘\N’ for all other title types<br/>
+8. rntmM – primary runtime of the title, in minutes<br/>
+9. genrs (string array) – includes up to three genres associated with the title<br/>
+
+Analysis:<br/><br/>
+1. It is observed that out of all the total rows, almost ~99% of row are there which does not have the value for the end year of the title. This is followed by ~74% rows where runtime in minutes of the title is not available. Moreover, there are only ~12% and 5% rows respectively that does not contain the values for the start year and genre of the corresponding title.<br/>
+3. Very insignificant percentage of missing values are observed for columns that provides information if the title is adult or not, what is the primary title name, and original title name.<br/>
+4. Interestingly, there are no missing values for title type and the alphanumeric constant of the title.<br/>  
+4.Among all the rows that has missing values, majority of the rows has missing values for both end year as well as runtime of the title combined. This constitutes for ~56% rows.<br/> 
+5.Moreover, there are 25% rows which has solely end year missing values, whereas ~12% rows where end year is missing along with runtime and start year of the title. There are minimal percentage of rows which witnesses complete cases, that is, only around 1% of rows has no missing values in them.<br/><br/>
+
+From this dataset, we have utilized the information about the start year of title, title type, and whether the title is adult or not. Therefore, to handle the missing values of the start year, we have dropped the rows where there were no start year mentioned. Further, to handle the rows with missing values for isAdult or not, we again dropped those rows from the dataset. This detailed information about this transformation is explained in the 'Data Transforamtion' chapter. Finally, as there are no missing values for the title type column thus we do not have to worry about it.<br/>
+
+```{r}
+missing_plots(crew, percent = TRUE)
+```
+<br/><br/>The graph above manifests the percentage of missing data in the 'title.crew.tsv.gz' dataset. We get the below-mentioned details from this dataset:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. drctr (array of nconsts) - director(s) of the given title<br/>
+3. wrtrs (array of nconsts) – writer(s) of the given title<br/>
+
+Analysis:<br/><br/>
+1. It is observed from the top-most graph that approximately 50% of the total rows in the dataset has missing values for the writers and 40% of the total rows of the dataset contains missing values for the directors. However, the the alphanumeric identifier is present for all the rows irrespective if the writer or director is missing or not.<br/>
+2. The main graph reveals that there are 4 different patterns in the data, likewise, the rows where: <br/>
+i) only directors are missing,<br/>
+ii) only writers are missing,<br/>
+iii) both writer and directors are missing<br/>
+iv) there are no missing values<br/><br/>
+
+It is noted from the right-most graph that the percentage of rows where both director and writers are missing is significantly more than the percentage of rows where only director or only writer is missing.<br/>
+3. It is interpreted that out of the 50% of the rows where writers are missing, there ~37% of the rows where the writers values are missing along with some directors values. Whereas there are only ~13% rows where solely writers are missing. Similarly, out of the 40% of the rows where directors values are missing, there are ~37% rows where the directors are missing along with the writers while only ~3% rows where solely directors values are missing.<br/>
+4. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/>
+
+We have made use of the 'title.crew.tsv.gz' dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, "NA" values and then utilized the two columns. The detail about this transformation is explained in the 'Data Transformation' chapter.<br/>
+```{r}
+missing_plots(ratings, percent = TRUE)
+```
+<br/><br/>
+The above graph reveals the information about missing values in the 'title.ratings.tsv.gz'. This dataset contains the following information:<br/>
+1. tcnst (string) - alphanumeric unique identifier of the title<br/>
+2. avrgR – weighted average of all the individual user ratings<br/>
+3. nmVts - number of votes the title has received<br/>
+
+Analysis:<br/>
+1. It is clearly seen that there are no values missing in the 'title.ratings.tsv.gz' dataset. There is only 1 pattern found, that is, all the columns of the dataset have complete and consistent values. Therefore, we have 100% complete cases for the average ratings and number of votes for all the titles given in the dataset and there are no missing patterns.<br/><br/>
+
+We are utilizing the 'title.ratings.tsv.gz' majorly to answer all of our objective questions. It is thus observed that we do not have to worry about any missing patterns for this datatset as there are none.<br/>

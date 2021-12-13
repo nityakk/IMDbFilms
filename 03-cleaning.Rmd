@@ -11,35 +11,38 @@ library(ggplot2)
 
 ```{r}
 basics_ratings <- merge(basics, ratings, by="tconst")
-head(basics_ratings)
+basics_ratings <- basics_ratings[-c(3,4,7,8)]
+basics_ratings
 ```
 
 ```{r}
 basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
-head(basics_ratings_crew)
+basics_ratings_crew
 ```
 
 ```{r}
-byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
-byDirectors
+# byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
+# byDirectors
 ```
 
 ```{r}
-expDirecs <- byDirectors %>%
+expDirecs <- basics_ratings_crew %>%
   group_by(directors) %>%
   count()
 expDirecs
 length(expDirecs$directors)
 
 expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
-expDirecs2 <- unique(expDirecs2$directors)
+# expDirecs2 <- unique(expDirecs2$directors)
 length(expDirecs2)
 ```
 
 
 
 ```{r}
-basics_ratings <- basics_ratings[,c(5,6,10,11)]
+basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
+sum(is.na(basics_ratings$isAdult))
+basics_ratings <- basics_ratings[,c(3,4,6,7)]
 basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
 basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
 basics_ratings <- basics_ratings %>% drop_na(startYear)
@@ -72,32 +75,54 @@ b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 byDirectors1 <- subset(byDirectors, directors %in% expDirecs2)
 byDirectors1 <- byDirectors1[which(strtoi(byDirectors1$startYear) >= '2010'), ]
 
-groupedDirec <- byDirectors4 %>%
+groupedDirec <- byDirectors1 %>%
   group_by(directors, titleType, genres, numVotes) %>%
   summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
 
 groupedDirec_complete <- na.omit(groupedDirec)
+groupedDirec_complete
 
-cleveland <- groupedDirec_complete %>% 
-  ungroup() %>%
-  group_by(titleType, genres) %>%
-  summarize(mean = mean(weightedRating))
+
+genres <- subset(groupedDirec_complete, select = c(genres))
+genres <- genres[!grepl(",", genres[["genres"]]), ]
+genres <- unique(genres)
+genreRatings <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(genreRatings) <- c('genre', 'count', 'weight')
+
+genreRatings
+for(genre in genres$genres) {
+  if(genre != ""){
+    temp <- groupedDirec_complete[grepl(genre, groupedDirec_complete[["genres"]]), ]
+    num <- length(temp$directors)
+    weight <- mean(temp$weightedRating)
+    #print(c(genre, num, weight))
+    genreRatings[nrow(genreRatings)+1,] = c(genre, num, weight)
+  }
+}
 
     #toppercent <- max(byDirectors2$numVotes)*0.1
     #byDirectors3 <- byDirectors2[which(byDirectors2$numVotes >= 0), ]
 
-# 2(B)
-byDirectors2 <- byDirectors1[grepl("Drama", byDirectors3[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
-
+# 2(B,C)
+byDirectors2 <- byDirectors1[grepl("Drama", byDirectors1[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
 groupedDirec2 <- byDirectors2 %>%
   group_by(directors, titleType, genres, numVotes) %>%
   summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-groupedDirec_complete2 <- na.omit(groupedDirec)
+
+groupedDirec_complete2 <- na.omit(groupedDirec2)
+groupedDirec_complete2
+
+cleveland <- groupedDirec_complete2 %>% 
+  ungroup() %>%
+  group_by(titleType, genres) %>%
+  summarize(mean = mean(weightedRating))
+cleveland
 
 # For Interactive
-#write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
-#write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
+write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
+write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
 ```
+
 
 ```{r}
 # type = "movie"
@@ -106,7 +131,6 @@ groupedDirec_complete2 <- na.omit(groupedDirec)
 
 
 for(type in unique(groupedDirec_complete$titleType)) {
-  print(type)
   dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
   filename = paste0("sources_short/titletypes/",type,".csv")
   write.csv(dRSub, filename, row.names = FALSE)
@@ -116,7 +140,7 @@ for(type in unique(groupedDirec_complete$titleType)) {
 
 
 ```{r}
-#4(A)
+#3(A)
 df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
 df1 <- byDirectors[!is.na(basics_ratings_crew$writers),]
 df1 <- df1[!is.na(df1$directors),]
@@ -126,7 +150,7 @@ tt <- df1 %>% count(director_writer_pair, sort = TRUE)
 ttt <- c(tt[1:10,1])
 df2 <- subset(df1, director_writer_pair %in% ttt)
 
-#4(B)
+#3(B)
 df1$runtimeMinutes <- as.numeric(df1$runtimeMinutes)
 temp1 <- group_by(df1, director_writer_pair, titleType, genres)
 temp2 <- summarise(temp1, totalVotes = sum(numVotes))
@@ -140,29 +164,29 @@ new_filter <- filter(new_df3_filter, n >= 5)
 ```
 
 ```{r}
-#tttt <- df1 %>%
-#    group_by(director_writer_pair) %>%
-#    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
+tttt <- df1 %>%
+    group_by(director_writer_pair) %>%
+    summarise(weigthedRating = sum(averageRating * numVotes) / sum(numVotes))
 
-#t_final <- merge(tttt, tt, by = 'director_writer_pair')
-#t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
+t_final <- merge(tttt, tt, by = 'director_writer_pair')
+t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
 ```
 
 ```{r}
-last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
-last20years
-write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
+# last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
+# last20years
+# write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
 ```
 
 ```{r}
-last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
-last100years
-write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
+# last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
+# last100years
+# write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
 ```
 
 
 ```{r}
-tttt <- last100years %>%
+tttt <- df1 %>%
     group_by(director_writer_pair, primaryName, writers) %>%
     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
 tttt
@@ -172,27 +196,24 @@ t_final
 ```
 
 ```{r}
-
-# directorRatings <- last20years %>%
-#     group_by(primaryName, startYear) %>%
-#     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-# directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
-# #unique(directorRatings$primaryName)
-# write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
-
+directorRatings <- df1 %>%
+     group_by(primaryName, startYear) %>%
+     summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
+directorRatings
+#unique(directorRatings$primaryName)
+write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
 ```
 
 ```{r}
-#director <-  "Alan J.W. Bell"
+# director <-  "Alan J.W. Bell"
 # dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
 # dRSub
-#paste0(director,"_Rangints")
-
-
-# for(director in groupedDirec$fileName) {
-#   dRSub <- directorRatings[which(directorRatings$fileName == director), ]
-#   filename = paste0("sources_short/directors/",director,"_Ratings.csv")
-#   write.csv(dRSub, filename, row.names = FALSE)
-# }
-
+# paste0(director,"_Rangints")
+# 
+# for(director in directorRatings$fileName) {
+#    dRSub <- directorRatings[which(directorRatings$fileName == director), ]
+#    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
+#    write.csv(dRSub, filename, row.names = FALSE)
+#  }
 ```

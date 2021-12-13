@@ -73,8 +73,23 @@ plot3
 
 ## Question 2 - How does average ratings per number of votes vary for differnt genres?
 
+```{r}
+
+library(ggrepel)
+
+ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, options(scipen=999)))) +
+  geom_point() +
+  ggtitle("Weighted Ratings and Number of Works per Genre") +
+  geom_text_repel(aes(label=genre), size=3)+#, vjust = -1)+
+  scale_x_continuous(name = "Weighted Ratings") +
+  scale_y_continuous(name = "# of Works", breaks = seq(0,150000, 20000))
+```
+
+
+
+
 -cleveland dot plot
-```{r Cleveland Plot, fig.height=20, fig.width=10}
+```{r Cleveland Plot, fig.height=30, fig.width=10}
 plot4 <- ggplot(cleveland, aes(x = mean, y = fct_reorder(genres, mean), color = titleType)) +
   geom_point() +
   ggtitle("Weighted Ratings per Genre") +
@@ -83,6 +98,14 @@ plot4 <- ggplot(cleveland, aes(x = mean, y = fct_reorder(genres, mean), color = 
 
 plot4
 ```
+
+```{r}
+ggplot(cleveland, aes(x = genres, y = mean, color = mean)) +
+  geom_point(size = 1.5) +
+  facet_wrap(~titleType) + 
+  scale_x_discrete()
+```
+
 
 From above:
 - Many of the the highest ratings are of the Drama genre
@@ -94,8 +117,8 @@ Looking at just the Drama genre
 - parcoord
 ```{r Parcoord}
 library(parcoords)
-#groupedDirec_complete[sample(1:nrow(groupedDirec_complete),1000), c(2:5)]
-parcoords(
+
+plot5 <- parcoords(
   groupedDirec_complete[,c(2:5)],#[sample(1:nrow(groupedDirec_complete),1000), c(2:5)], 
   rownames = F, 
   brushMode = "2D-strums", 
@@ -112,6 +135,7 @@ parcoords(
   width = 1000
 )
 
+plot5
 ```
 - highest ratings is mostly tvEpisode
 
@@ -119,17 +143,17 @@ parcoords(
 ## Question 4 - Director writer pair - ridgeplot
 ```{r}
 library(ggridges)
-plot5 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
-```
-
-```{r}
-plot5
-```
-
-```{r}
-plot6 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+plot6 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges()
 ```
 
 ```{r}
 plot6
+```
+
+```{r}
+plot7 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+plot7
 ```
