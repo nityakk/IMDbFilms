@@ -1,4 +1,4 @@
-# Chapter 7 Conclusion
+#Chapter 7 Conclusion
 
 Our analysis and detailed exploration of the IMDb dataset has allowed us to obtain very interesting insights to answer our three objective questions.
 
