@@ -1,13 +1,19 @@
 # Chapter 7 Conclusion
 
-- Trends seem about right
+Our analysis and detailed exploration of the IMDb dataset has allowed us to obtain very interesting insights to answer our three objective questions.
 
+## Insights 
+### Objective Question 1
 
-Potential conclusions/insights (may be biased)
-- There is a larger market for TV series and movies due to streaming services like Netflix and Hulu. Many are marketed at a global scale.
-- Movie, Infinity War for example had the entire world sitting on their toes waiting for release and to watch
-- TV series > than movie
-    - As stated before, this may be due to the considerable time that an audience member would invest to understand and watch a series or an episode. There is more room for the audience member to grow attached to the characters and see their development. This also leads to higher quality works in the market.
-- Short films on the other hand may be more local with less well known artists. may have trouble getting publicity
-- Game shows are less popular amongst the youngest generation which may cause them to lose a large number of votes
-- Video game types are most likely only watched by those who play video games rather than the general public
+### Objective Question 2
+The largest number of observations come from the movie and tv title types. This may be because there is a larger market for TV series and movies due to streaming services like Netflix and Hulu. Many of these works are therefore marketed at a global scale. As stated before, we saw that there are more votes for tv related title types rather than movies. This may be due to the considerable time that an audience member would invest to understand and watch a series or an episode. There is more room for the audience member to grow attached to the characters and see their development. This also leads to higher quality works in the market. Short films on the other hand may be more local with less well known artists. may have trouble getting publicity. Game shows are less popular amongst the youngest generation which may cause them to lose a large number of votes. Video game types are most likely only watched by those who play video games rather than the general public.
+
+### Ojective Question 3
+For the titleTypes of tvMiniSeries, tvSeries, and tvSpecial, there is only 1 pair of director-writer who have an average rating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director-writer pairs that have average rating 10 and have worked for more than 5 times together. Surprisingly, the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have average rating of 10 but the pair might have worked for less than 5 times or second there could be no movies that have average ratings of 10.
+
+## Limitations
+Our largest setback was in dealing with the large scale of the data. We wanted to look at different directors and analyze more trends in what/who seems to bring in the highest votes and ratings. However, the large amount of directors slowed down our work immensely and made it difficult for us to plot in a readable fashion.
+
+## Future Directions
+- The IMDb dataset has a names dataset that contains the first, second, and tertiary professions or the individuals listed in the database. It would interesting to look deeper into how the professions of an individual can change their impact on a work, i.e., comparing the average ratings of individuals who have experience as directors and writers vs directors and actors.
+- Another dataset in the database had spatial data that would have been useful in seeing trends in how different title types are recieved based on location.

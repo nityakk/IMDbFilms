@@ -4,10 +4,12 @@
 Weighted Averages Over Time of Different Works Based on Title Type
 <iframe src="Interactive/InteractivePlot.html" width="400" height="300"></iframe>
 
-## Description + Usage
-The above component was built using D3 v6. It is a scatterplot showing the weighted ratings of different works over time. The dropdown menu at the top can be used to 
+## Description
+Different title types within the parallel coordinate diagram gave rise to a varied distribution of ratings. We wanted to compare how each title type's ratings has changed over time. Especially as one of our inferences was that the difference between older title types vs newer title types and how they are received in today's generation may change what the ratings look like. Therefore the above component shows a scatterplot displaying the weighted ratings of different works over time.
+
+## Usage
+The above component was built using D3 v6. The dropdown menu at the top can be used to pick a specific title type. The plot will change to show works within that specific title type. Data used for this section can be found [here](https://github.com/nityakk/IMDbFilms/tree/main/sources_short/titletypes).
 
 ## Sources:
-- https://www.d3-graph-gallery.com/graph/scatter_grouped_highlight.html
 - https://bl.ocks.org/martinjc/8a2a545d5c48ef1ff65b747554332e3d
 - https://bl.ocks.org/floofydugong/9c94ab01d8c3ed8ea3821d4a7e119b07

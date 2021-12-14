@@ -46,11 +46,26 @@
 		.attr("transform", "translate(0," + (h - padding) + ")")
 		.call(xAxis);
 		
-				//Create Y axis
+		//Create Y axis
 		svg.append("g")
 		.attr("id", "yaxis")
 		.attr("transform", "translate(" + padding + ",0)")
 		.call(yAxis);
+		
+		svg.append("text")
+      .attr("class", "x label")
+      .attr("text-anchor", "end")
+      .attr("x", w)
+      .attr("y", h - 6)
+      .text("Year");
+      
+    svg.append("text")
+      .attr("class", "y label")
+      .attr("text-anchor", "end")
+      .attr("y", 5)
+      .attr("dy", ".75em")
+      .attr("transform", "rotate(-90)")
+      .text("Weighted Average");
 	
 		
 		d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/groupedGenres_complete.csv")
@@ -64,21 +79,9 @@
       d3.select("#xaxis").call(xAxis);
       d3.select("#yaxis").call(yAxis);
       
-
-     /* d3.select("svg")
-  		      .selectAll("circle")
-  		      .data(data)
-  		      .enter()
-  		      .append("circle")
-  		      .attr("cx", d => xScale(d.startYear))
-  		      .attr("cy", d => yScale(d.weigthedRating))
-  		      .attr("r", "3")
-  		      .attr("fill", "purple");*/
-      
-      
       
       let typeOptions = [...new Set(data.map(d => d.titleType))];
-      
+      var def = "movie"
       // add the options to the button
       d3.select("#selectButton")
         .selectAll('myOptions')
@@ -87,7 +90,7 @@
       	.append('option')
         .text(function (d) { return d; }) // text showed in the menu
         .attr("chosen", function (d) { return d; }) // corresponding value returned by the button
-        .property("selected", function(d){ return d == "movie"; })
+        .property("selected", function(d){ return d == def; })
       
       
       function Update(type){
@@ -117,9 +120,7 @@
       d3.select("#selectButton").on('change', function() {
         Update(this.value)
       })
-      Update("movie")
-      
-      d3.select("circle")
+      Update(def);
       
 		});
 		
