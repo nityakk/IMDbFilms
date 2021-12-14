@@ -53,8 +53,6 @@ basics_ratings_crew
 
 ```{r}
 basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
-sum(is.na(basics_ratings$isAdult))
-basics_ratings <- basics_ratings[,c(3,4,6,7)]
 basics_ratings$startYear <- as.numeric(basics_ratings$startYear)
 basics_ratings$isAdult <- as.numeric(basics_ratings$isAdult)
 
@@ -207,22 +205,23 @@ new_df3_filter <- merge(df3_filtered, tt, by = 'director_writer_pair')
 new_filter <- filter(new_df3_filter, n > 5)
 ```
 <br/>The question basically addresses two problems<br/>
-- The first part studies the top 10 director - writer pairs based on the number of times they worked together. Further, this will help to know the distribution of averageRating for different pairs of director-writer.<br/>
-- The second part studies that out of all the director writer pairs having averageRating of 10 what is the distribution of the numVotes for those particular pairs faceted by titleType. <br/>
+- The first part studies the top 10 director - writer pairs based on the number of times they worked together. Further, these pairs are used to study the distribution of average ratings of different title types they have produced.<br/>
+- The second part studies that out of all the director writer pairs having average rating of 10, what is the distribution of the num of Votes for those particular pairs faceted by titleType. <br/>
 
 <br/><br/>
 For addressing the first question mentioned above we need to perform the following transformations:<br/>
-- First, we filtered out the rows from the basics_ratings_crew dataset that had NA for writers and directors. We wanted to study the different director writer pairs so it was important that the dataset had both the values.<br/>
-- Further, for making the pair we used the paste function for concatenating the director column with writer column to form new column named director_writer_pair.<br/>
-- Next as the total unique director writer pairs were approximately 600K so visualizing all of them was not possible. Therefore, we decided to pick top 10 pairs based on the number of times they worked together. So we calculated the count of all the pairs and then selected the top 10. <br/> 
-- Further we filtered the original dataset with the top 10 director writer pairs.<br/>
+- First, we filtered out the rows from the basics_ratings_crew dataset that had NA for writers and directors. We wanted to study the different director writer pairs so it was important that the dataset had no NULL values for either of these variables.<br/>
+- Furthermore, for making the pair we used the paste function for concatenating the director column with writer column to form new column named director_writer_pair. This merging was required as our main aim revolves around studying the director-writer pair and this new columns will ease the upcoming visualization process.<br/>
+- The total unique director writer pairs were approximately 600K. Visualizing all of them is not feasible and the results that they would give would also not be intuitive. Therefore, we decided to pick the top 10 pairs based on the number of times they have worked together. So we calculated the count of all the pairs and then selected the top 10. <br/> 
+- Eventually, we filtered the original dataset with the top 10 director writer pairs.<br/>
 
 <br/><br/>
 For addressing the second question mentioned above we need to perform the following transformations:<br/>
-- First, we used the dataset created for the above question which contained the director writer pairs. Furthermore, we group_by the data by "director_writer_pair", "titleType", and "genres" and then we summarised the data by calculating the total number of Votes<br/>
-- Further,  we summarised the same grouped data for calculating the weightedRating which is calculated by taking the sum of averageRating * numVotes divided by total numVotes.<br/>
-- Further we then joined both the grouped data to get the weightedRating as well as total numVotes for a particular director_writer_pair.  <br/> 
-- Finally, wew filtered the data by weightedRating inorder to get only the pairs having weightedRating equal to 10. We then merged this filtered data with the data having the count of number of times a partcular pair worked together. The final dataset had total of 783 pairs who had averageRating of 10 so to further filter the data we studied the distribution of the number of times the pair worked together and found that out of 783, 692 pairs only worked with each other once or twice and therefore we further narrowed the data to only consider the pairs who have worked atleast 5 times with each other.<br/>
+- To begin with, we used the dataset created for the above question which contained the director writer pairs. Furthermore, we grouped the data by "director_writer_pair", "titleType", and "genres" and then summarized the data by calculating the total number of Votes received by the pair for different title types.<br/>
+- Further, we summarized the same grouped data for calculating the weighted rating which is calculated by taking the sum of average rating $\times$ number of Votes divided by total number of Votes.<br/>
+- Next, we joined both the grouped data to get the weighted rating as well as total number of Votes for a particular director-writer pair.<br/> 
+- Finally, we filtered the data by weighted rating in order to get only the pairs having weighted rating equal to 10. We then merged this filtered data with the data having the count of number of times a particular pair worked together.<br/>
+- The final dataset had total of 783 pairs who had average rating of 10 so to further filter the data we studied the distribution of the number of times the pair worked together and found that out of 783, 692 pairs worked with each other only once or twice and therefore we further narrowed the data to only consider the pairs who have worked more than 5 times with each other.<br/>
 
 ```{r}
 tttt <- df1 %>%
