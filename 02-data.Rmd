@@ -27,7 +27,7 @@ This dataset provides the basic information about different contents as displaye
 9. genrs (string array) – includes up to three genres associated with the title<br/>
 
 ```{r}
-basics <- read.csv("title.basics.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics <- read.csv("sources/title.basics.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 basics[basics == "\\N"] <- NA
 ```
 
@@ -47,7 +47,7 @@ This dataset gives information on directors and writers for each content type pr
 3. wrtrs (array of nconsts) – writer(s) of the given title<br/>
 
 ```{r}
-crew <- read.csv("title.crew.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew <- read.csv("sources/title.crew.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 crew[crew == "\\N"] <- NA
 ```
 
@@ -66,7 +66,7 @@ This dataset basically gives the average ratings as well as the number of votes 
 3. nmVts - number of votes the title has received<br/>
 
 ```{r}
-ratings <- read.csv("title.ratings.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings <- read.csv("sources/title.ratings.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 ratings[ratings == "\\N"] <- NA
 ```
 
