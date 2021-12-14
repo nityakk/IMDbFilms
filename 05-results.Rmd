@@ -153,7 +153,7 @@ plot6 <- parcoords(
 plot6
 ```
 
-In order to look deeper into the distributions of title types. We have made a parallel coordinate diagram. Here we can interactively compare title types, genres, total votes for each distribution, and weighted averages.
+In order to look deeper into the distributions of title types. We have made a parallel coordinate diagram. Here we can interactively compare title types, genres, total votes for each distribution, and weighted averages. Each axis can be dragged to different locations, i.e. axis can switch places. Clicking and dragging in a certain area will select a set of points encompassed in the location which the mouse was dragged.
 
 1. The highest of the ratings seem to come from tv types, i.e.: "tvEpisode, tvMiniSeries, and tvSeries". 
 2. Most works congregate towards the lower end of the total votes category. By selecting the upper half of the total votes axis, we see that every one of the potential outliers in total votes come from the movie type. 

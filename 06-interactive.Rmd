@@ -1,8 +1,11 @@
 # Interactive component
 
-
+## Interactive Component
+Weighted Averages Over Time of Different Works Based on Title Type
 <iframe src="Interactive/InteractivePlot.html" width="400" height="300"></iframe>
 
+## Description + Usage
+The above component was built using D3 v6. It is a scatterplot showing the weighted ratings of different works over time. The dropdown menu at the top can be used to 
 
 ## Sources:
 - https://www.d3-graph-gallery.com/graph/scatter_grouped_highlight.html
