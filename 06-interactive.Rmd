@@ -1,4 +1,4 @@
-#Interactive component
+# Interactive component
 
 ## Interactive Component
 Weighted Averages Over Time of Different Works Based on Title Type

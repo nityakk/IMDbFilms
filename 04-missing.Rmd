@@ -1,4 +1,4 @@
-#Chapter 4 Missing values
+# Chapter 4 Missing values
 
 ```{r}
 # cp = 0 for counts, 1 for percents
@@ -120,7 +120,7 @@ missing_plots <- function(data, percent = FALSE) {
 }
 ```
 
-##Basics
+## Basics
 ```{r}
 missing_plots(basics, percent = TRUE)
 ```
@@ -136,7 +136,7 @@ Analysis:<br/><br/>
 
 From this dataset, we have utilized the information about the start year of title, title type, and whether the title is adult or not. Therefore, to handle the missing values of the start year, we have dropped the rows where there were no start year mentioned. Further, to handle the rows with missing values for isAdult or not, we again dropped those rows from the dataset. This detailed information about this transformation is explained in the 'Data Transforamtion' chapter. Finally, as there are no missing values for the title type column thus we do not have to worry about it.<br/>
 
-##Crew
+## Crew
 ```{r}
 missing_plots(crew, percent = TRUE)
 ```
@@ -156,7 +156,7 @@ It is noted from the right-most graph that the percentage of rows where both dir
 
 We have made use of the 'title.crew.tsv.gz' dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, "NA" values and then utilized the two columns. The detail about this transformation is explained in the 'Data Transformation' chapter.<br/>
 
-##Ratings
+## Ratings
 ```{r}
 missing_plots(ratings, percent = TRUE)
 ```
