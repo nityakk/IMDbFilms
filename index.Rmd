@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
-# Introduction
+#Introduction
 
 The film, TV, and media industry has always been in talks among the user sector for one reason or the other. Since years, this industry has provided the society with variety of media content be it in form of TV series, movies, or short videos. These content are meant to not only entertain the user base but also educate them through releasing the video content of different genres such as Comedy, Crime, Suspense, Education to name a few. It is specifically noteworthy that such content knows no barrier and allows the users to watch any movie/video/TV series in different languages produced basically to target groups of people that belongs to specific regions. While the users enjoys and consumes these contents at anytime and anywhere through any platform they desire, it is undeniably appreciated that it is possible only through the hard work and passion of many crew members behind it, for instance, the directors and writers of the video content. It is extremely important for these people to learn and understand how does their users respond to the content that they produce. The most obvious way they can know this is through the ratings and number of votes they receive from the people that watch their films, series, and so on. Apart from this, the ratings of any movie, show, or other such content can help to study any kind of trend that prevails in this industry.<br/><br/>
 
