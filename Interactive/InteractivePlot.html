@@ -53,13 +53,13 @@
 		.call(yAxis);
 	
 		
-		d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/GroupedDirecs_complete.csv")
+		d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/groupedGenres_complete.csv")
 		.then(function(data) {
       xScale.domain([d3.min(data.map(d => d.startYear)),
                      d3.max(data.map(d => d.startYear))]);
         
-      yScale.domain([d3.min(data.map(d => d.weigthedRating)),
-                     d3.max(data.map(d => d.weigthedRating))]);
+      yScale.domain([d3.min(data.map(d => d.weightedRating)),
+                     d3.max(data.map(d => d.weightedRating))]);
         
       d3.select("#xaxis").call(xAxis);
       d3.select("#yaxis").call(yAxis);
@@ -77,7 +77,7 @@
       
       
       
-      let typeOptions = [...new Set(data.map(d => d.titleType))]; 
+      let typeOptions = [...new Set(data.map(d => d.titleType))];
       
       // add the options to the button
       d3.select("#selectButton")
@@ -87,51 +87,41 @@
       	.append('option')
         .text(function (d) { return d; }) // text showed in the menu
         .attr("chosen", function (d) { return d; }) // corresponding value returned by the button
+        .property("selected", function(d){ return d == "movie"; })
       
-      /*// add the options to the button
-      var dropdown = d3.select("#selectButton")
-        .selectAll('myOptions')
-       	.data(directorOptions)
-        .enter()
-      	.append('option')
-        .text(function (d) { return d; }) // text showed in the menu
-        .attr("chosen", function (d) { return d; }) // corresponding value returned by the button*/
-        
-      d3.select("#selectButton").on('change', function() {
+      
+      function Update(type){
+        file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/titletypes/" + type + ".csv";
+        d3.csv(file).then(function(data3) {
+		      var dots = d3.select("svg")
+            .selectAll("circle")
+            .data(data3);
 
-          file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/titletypes/" + this.value + ".csv";
-          d3.csv(file)
-          /*data
-          .filter(function(s) {s.titleType == this.value})*/
-          .then(function(data2) {
-
-            d3.select("svg")
-    		      .selectAll("circle")
-    		      .data(data2)
-    		      .enter()
-    		      .append("circle")
-    		      .attr("cx", d => xScale(d.startYear))
-    		      .attr("cy", d => yScale(d.weigthedRating))
-    		      .attr("r", "2")
-    		      .attr("fill", "purple")
-    		      .attr("class", "dot");
-		      
-            var dots = svg.selectAll('.dot')
-            .data(data2);
-
-            //exit
-            dots
-              .exit()
-              .remove();
+          //exit
+          dots
+            .exit()
+            .remove();
+            
+          //enter
+          var new_dots = dots
+            .enter()
+            .append("circle")
+  		      .attr("cx", d => xScale(d.startYear))
+  		      .attr("cy", d => yScale(d.weightedRating))
+  		      .attr("r", "2.5")
+  		      .attr("fill", "purple")
+  		      .attr("class", "dot");
           })
-		      
+      }
+      
+      d3.select("#selectButton").on('change', function() {
+        Update(this.value)
       })
+      Update("movie")
+      
+      d3.select("circle")
       
 		});
-		
-
-		
-		
 		
   </script>
 </html>

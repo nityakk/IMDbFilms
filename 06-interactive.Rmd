@@ -2,3 +2,9 @@
 
 
 <iframe src="Interactive/InteractivePlot.html" width="400" height="300"></iframe>
+
+
+## Sources:
+- https://www.d3-graph-gallery.com/graph/scatter_grouped_highlight.html
+- https://bl.ocks.org/martinjc/8a2a545d5c48ef1ff65b747554332e3d
+- https://bl.ocks.org/floofydugong/9c94ab01d8c3ed8ea3821d4a7e119b07
