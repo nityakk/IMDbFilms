@@ -1,4 +1,4 @@
-# Data transformation
+# Chapter 3 Data transformation
 
 We are working around three dataset in total, that is, titles.basics, title.crew, title.ratings. Therefore, it was very necessary to transformation the individual overall datasets by merging different datasets, adding new columns or removing the ones that were not needed or that had any NULL values.<br/><br/>
 
@@ -15,14 +15,14 @@ library(parcoords)
 library(ggrepel)
 ```
 
-## Transformations to study distribution trends in Adult v/s Non-Adult titles
+## 3.1 Transformations to study distribution trends in Adult v/s Non-Adult titles
 
 <br/>This question basically addresses two objectives.<br/>
 - The first part studies the trend of number of adult title releases with the change of time.<br/>
 - The second part studies the proportion of votes distribution of adult versus non-adult titles over the given period of time.<br/>
 For this question, we primarily use the title.basics and title.ratings dataset. Therefore, we will initially prepare a new auxiliary dataframe which contains transformed version of these datasets.<br/>
 
-### Adult title releases trends
+### 3.1.1 Adult title releases trends
 
 <br/> In this part of the first objective question we wish to observe that with progressing years, did the film industry started making more adults, or less adults, or was the number of releases constant. The following steps show a detailed explanation on how we transformed the data step by step:<br/>
 - Among all the columns available in the title.basics dataset, we are only interested in using the 'startYear' and 'isAdult' columns to achieve the first part of the first objective question. Thus, we dropped the other available columns in the data which were unnecessary for our exploration, likewise, 'primaryTitle', 'originalTitle', 'endYear', 'runtimeMinutes' and formed a new auxiliary dataframe named 'basics_ratings'.<br/>
@@ -92,7 +92,7 @@ In this part of the first objective question, we are basically studying that did
 - Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
 - Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
 
-## Transformations to study the distributions of genre
+## 3.2 Transformations to study the distributions of genre
 <br/><br/>
 Our second objective question studies how different genres vary in terms of votes, title type, and ratings. We would like to know which genres tend to recieve the most attention and how the type of work has an affect on ratings even within the most popular genre. As the dataset is very large, we decided to subset the dataset based on works done by experience directors. We have defined experience as those directors who have completed at least 20 works. By subsetting this way, we are also looking at top works within the dataset. The limitation with subsetting in this manner is that we may be losing data on works created by directors who are experienced but do not show up in the dataset at least 20 times.
 
@@ -154,6 +154,8 @@ for(genre in genres$genres) {
     }
   }
 }
+genrewtype <- genrewtype %>% 
+  mutate(IsDrama = ifelse(genre == "Drama", "drama", "other"))
 genrewtype
 ```
 
@@ -184,7 +186,7 @@ Our transformations are as follows:
 - Due to the large size of the data, it is difficult to view trends within each genre. Therefore, we decided to specifically look at the most popular genre. After visualizing the comparison of different genres (seen in Chapter 5.2), we concluded that the most popular genre is "Drama". Therefore, we subset our previous dataset of works by experienced directors by works that have "Drama" as at least one of the genre types. This was again grouped as earlier (grouped by title type, and genre, with the addition of total votes and weighted averages).
 
 
-## Transformations to study the performance of different director-writer pairs
+## 3.3 Transformations to study the performance of different director-writer pairs
 ```{r}
 #3(A)
 df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
@@ -244,7 +246,7 @@ t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
 t_final
 ```
 
-### Interactive Plot
+### 3.4 Interactive Plot
 
 ```{r}
 write.csv(groupedGenre,"sources_short/groupedGenres.csv", row.names = FALSE)
@@ -259,6 +261,8 @@ for(type in unique(groupedGenre_complete$titleType)) {
   write.csv(dRSub, filename, row.names = FALSE)
 }
 ```
+
+The above transformation subsets our data by genre and saves each subset as its own file.
 
 ```{r}
 directorRatings <- df1 %>%

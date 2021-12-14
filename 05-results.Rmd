@@ -1,45 +1,14 @@
 # Results
 
-## Initial Exploration:
-```{r}
-# basics_ratings_crew
-```   
+## 5.1 Adult Works
+
+### 5.1.1 Proportion of Adult movies over time
 
 ```{r}
-# full_year <- basics_ratings_crew %>%
-#   group_by(startYear) %>%
-#   count()
-# full_year
-```
-
-```{r}
-# worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
-#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-#   theme(axis.line = element_line(color="gray22")) +
-#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
-#   scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
-# worksovertime
-```
-
-```{r}
-# full_votes <- basics_ratings_crew %>%
-#   group_by(startYear) %>%
-#   summarise(weightedVotes = sum(numVotes))
-# full_votes
-```
-
-```{r}
-# votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
-#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-#   theme(axis.line = element_line(color="gray22")) +
-#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
-# votesOvertime
-```
-
-## Adult Works
-
-```{r}
-plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + 
+  geom_line() + 
+  scale_x_continuous(breaks = seq(1800, 2021, 3)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r}
@@ -53,6 +22,7 @@ plot1
 
 The results overall demonstrates that with progressing years, the proportio of adult movies increased though abruptly.<br/><br/>
 
+### 5.1.2 Comparison of Adult vs Non-Adult movies
 ```{r}
 plot2 <- ggplot(b_num_votes, aes(startYear)) + 
     geom_line(aes(y = numVotes.x, colour = "non_Adult")) + 
@@ -78,13 +48,11 @@ Note that we have used the log() function to calculate and represent the number(
 7. Moreover, the general trend studied for the weighted average rating distribution of adult titles versus non adult titles can interpreted as one where the proportion of votes for non adult titles was always more than the proportion of votes received by adult titles in any given year.<br/>
 
 
-## Variation of Average Ratings amongst genres
+## 5.2 Variation of Average Ratings amongst genres
 
-There is an interest in understanding which genres tend to perform better on IMDb ratings. Below we have plotted each genre based on the number of works existed in the dataset and their weighted ratings (weighted based on number of votes). 
+### 5.2.1 Comparing Genres with Weighted Ratings and Number of Works
 
-- genreRatings looks at all works in the cleaned dataset
-- 
-
+There is an interest in understanding which genres tend to perform better on IMDb ratings. Below we have plotted each genre based on the (i) number of works within that genre in the dataset and (ii) weighted ratings (weighted based on number of votes). 
 
 ```{r fig.height=10}
 
@@ -94,7 +62,7 @@ plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, 
   ggtitle("Weighted Ratings and Number of Works per Genre") +
   geom_text(aes(label = genre), size=4, vjust = -1) +
   scale_x_continuous(name = "Weighted Ratings") +
-  scale_y_continuous(name = "# of Works", breaks = seq(0,150000, 20000)) + 
+  scale_y_continuous(name = "# of Works", breaks = seq(0,1500, 50)) + 
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title = element_text(size=14),
@@ -103,9 +71,13 @@ plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, 
 plot3
 ```
 
+Based on the 'Weighted Ratings and Number of Works per Genre' scatterplot, we can see that the genre 'Documentary' has the highest weighted rating. 'Horror' has the lowest weighted rating which may be due to, given the relatively high number of works, overly-repetitive plot lines. 'News' has the lowest number of works. Lastly, we see that 'Drama' has the highest number of votes over all genres with a relatively high rating. This point is of particular interest to us. Most of the genres lie below the 700 works line, and much are congregated specifically between the 350-700 works mark. This makes 'Drama' (and 'Comedy') both potential outliers. Based on this plot, 'Drama' is a genre that not only has the highest number of works but it also has one of the the highest weighted ratings. It will be interesting to look deeper into the distribution within 'Drama'.
+
+### 5.2.2 Comparing Genres Across Different Title Types
+
 ```{r fig.height=10, fig.width=20}
-plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count))) + 
-      geom_bar( stat = "identity", width = 0.75, color = "purple", size = 0.05) + 
+plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count), fill = IsDrama)) + 
+      geom_bar( stat = "identity", width = 0.75, size = 0.05) + 
       facet_wrap( ~ type ) +
       ggtitle("Weighted Ratings per Genre Based on Title Type") +
       scale_x_discrete(name = "Genres") +
@@ -114,31 +86,29 @@ plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count))) +
             axis.text.y = element_text(size = 14),
             axis.title = element_text(size=14),
             plot.title = element_text(size=24, face="bold")) +
-      theme(strip.text.x = element_text(size = 20))
+      theme(strip.text.x = element_text(size = 20)) + 
+      scale_fill_manual( values = c( "drama"="tomato", "other"="purple"))
 plot4
 ```
+Using this faceted bar plot, we seek to compare the 'Drama' genre across different title types and between genres. It is evident that overall, the high number of works in the 'Drama' genre is not just due to one specific title type and that in almost all title types, the 'Drama' genre sticks out with competitive values. This is unlike the 'Short' genre, for example, which expectedly has a high number of works in the short title type but overall lower in other title types. From the previous graph we know that the 'Short' genre has an average number of works and rating. The Movie and tvEpisode title types seem to pull the weight on the large quantity of titles in the full dataset. Whereas tvShort and tvSpecial collectively have the least number of works in the dataset.
+
+The above graph does not allow us to compare weighted ratings in the same way as the values are quite similar.
 
 
--cleveland dot plot
+### 5.2.3 Deeper Dive - Comparing Different Genre Subtypes
 ```{r Cleveland Plot, fig.height=30, fig.width=10}
 plot5 <- ggplot(groupedGenre_complete2, aes(x = weightedRating, y = fct_reorder(genres, weightedRating), color = titleType)) +
   geom_point(size=2.5) +
   ggtitle("Weighted Ratings per Genre") +
   ylab("") +
-  theme_linedraw()
+  theme_linedraw() + 
+  scale_fill_brewer(palette="Dark2")
 
 plot5
 ```
+To compare the weighted ratings within the 'Drama' genre, we have made a cleveland dot plot colored by title type. We primarily see that the video title type tends towards a lower weighted rating whereas tvEpisode and tvSeries tends towards a higher weighted rating. This may be because TV Series/Episodes in comparison to say movies have more time to tell stories and captivate the audience. Movie steadily tends to stay in the middle of all other title types for ratings. Looking deeper at the 'Drama' genres, we see more combinations with Biography and Reality-TV at the bottom (lower weighted ratings) in comparison to Documentary or History at the top of the graph.
 
 
-From above:
-- Many of the the highest ratings are of the Drama genre
-
-
-Looking at just the Drama genre
-
-
-- parcoord
 ```{r Parcoord}
 library(parcoords)
 plot6 <- parcoords(
@@ -163,8 +133,8 @@ plot6
 - highest ratings is mostly tvEpisode
 
 
-<<<<<<< HEAD
-## Best Director-Writer Pairings
+## 5.3 Best Director-Writer Pairings
+### 5.3.1 Comparing best Director-Writer Pairs over work ratings
 ```{r}
 library(ggridges)
 plot7 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
@@ -186,6 +156,8 @@ plot7
 9. The pair “n112-n” seems to have worked for titleType tvEpisode, tvSeries, and movie. Amongst all the titleType we can say that the pair is more famous for the tvEpidose. <br/>
 10. The pair “n09” have only worked together for the titleType tvEpisode. Moreover, the mean of the tvEpisode is 6.6 ratings. <br/>
 
+
+### 5.3.2 Which director-writer pairs had the most votes
 ```{r}
 plot8 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
 ```
