@@ -245,7 +245,7 @@ t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
 t_final
 ```
 
-### 3.4 Interactive Plot
+### 3.4 Interactive Plots
 
 ```{r}
 write.csv(groupedGenre,"sources_short/groupedGenres.csv", row.names = FALSE)

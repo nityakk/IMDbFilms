@@ -165,7 +165,7 @@ In order to look deeper into the distributions of title types. We have made a pa
 3. Movie works typically have weighted averages lying in the 6-8 range. Not single work within the Drama category seems to have a weighted rating above 9. This title type has the largest variance for number of votes.
 4. Short has a very low variance for total votes as all of the works are congregated towards the lower set of votes. There are some short works that have amazing ratings, however, most tend to stay between 6-8.
 5. There are very few works in the dataset for tvShort, tvSpecial, and videogame types. 
-6.. There is a subset of "Drama" combo genres for each title type that has no works, according to the dataset. However it is hard to distinguish the difference between these genre combos.
+6.. There is a subset of "Drama" combo genres for each title type that has no works, according to the dataset. However it is hard to distinguish the difference between these genre combos. 
 
 
 ## 5.3 Best Director-Writer Pairings
