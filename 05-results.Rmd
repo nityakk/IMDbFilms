@@ -1,10 +1,12 @@
-# Results
+# Chapter 5 Results
 
-## 5.1 Adult Works
+## Adult Works
 
-### 5.1.1 Proportion of Adult movies over time
+### Proportion of Adult movies over time
 
 ```{r}
+plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + xlab("Start Year") + ylab("Proportion of Adult Title Types Released") + ggtitle("Adult Title Type Releases Trend") + theme(plot.title = element_text(hjust = 0.5))
+
 plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + 
   geom_line() + 
   scale_x_continuous(breaks = seq(1800, 2021, 3)) + 
@@ -22,15 +24,15 @@ plot1
 
 The results overall demonstrates that with progressing years, the proportio of adult movies increased though abruptly.<br/><br/>
 
-### 5.1.2 Comparison of Adult vs Non-Adult movies
+### Comparison of Adult vs Non-Adult movies
 ```{r}
 plot2 <- ggplot(b_num_votes, aes(startYear)) + 
-    geom_line(aes(y = numVotes.x, colour = "non_Adult")) + 
+    geom_line(aes(y = numVotes.x, colour = "Non Adult")) + 
     geom_line(aes(y = numVotes.y, colour = "Adult")) + 
     scale_y_continuous(trans='log2') + 
     scale_x_continuous(breaks = seq(1800, 2021, 5)) + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-    ylab("Log2(Count of Num of Votes)")
+    ylab("Log2(Total Votes)") + ggtitle("Adult vs Non-Adult Vote Proportion Distribution Trend") + theme(plot.title = element_text(hjust = 0.5)) + xlab("Start Year")
 ```
 
 ```{r}
@@ -48,9 +50,9 @@ Note that we have used the log() function to calculate and represent the number(
 7. Moreover, the general trend studied for the weighted average rating distribution of adult titles versus non adult titles can interpreted as one where the proportion of votes for non adult titles was always more than the proportion of votes received by adult titles in any given year.<br/>
 
 
-## 5.2 Variation of Average Ratings amongst genres
+## Variation of Average Ratings amongst genres
 
-### 5.2.1 Comparing Genres with Weighted Ratings and Number of Works
+### Comparing Genres with Weighted Ratings and Number of Works
 
 ```{r fig.height=10}
 
@@ -79,7 +81,7 @@ There is an interest in understanding which genres tend to perform better on IMD
 
 It will be interesting to look deeper into the distribution within 'Drama'.
 
-### 5.2.2 Comparing Genres Across Different Title Types
+### Comparing Genres Across Different Title Types
 
 ```{r fig.height=10, fig.width=20}
 plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count), fill = IsDrama)) + 
@@ -108,7 +110,7 @@ Using this faceted bar plot, we seek to compare the 'Drama' genre across differe
 The above graph does not allow us to compare weighted ratings in the same way as the values are quite similar.
 
 
-### 5.2.3 Deeper Dive - Comparing Different Genre Subtypes
+### Deeper Dive - Comparing Different Genre Subtypes
 ```{r Cleveland Plot, fig.height=30, fig.width=10}
 plot5 <- ggplot(groupedGenre_complete2, aes(x = weightedRating, y = fct_reorder(genres, weightedRating), color = titleType)) +
   geom_point(size=2.5) +
@@ -128,7 +130,7 @@ To compare the weighted ratings within the 'Drama' genre, we have made a clevela
 4. Movie steadily tends to stay in the middle of all other title types for ratings. 
 5. Looking deeper at the 'Drama' genres, we see more combinations with Thriller/Horror and Reality-TV at the bottom (lower weighted ratings) in comparison to Documentary or History at the top of the graph. Looking back at plot 5.2.1 we can wee that these other genres have overall lower or higher ratings respectively, especially given that they have similar amounts of work. 
 
-### 5.3.4 Comparing Title Types Based on Ratings and Total Votes
+### Comparing Title Types Based on Ratings and Total Votes
 ```{r Parcoord}
 library(parcoords)
 plot6 <- parcoords(
@@ -150,6 +152,7 @@ plot6 <- parcoords(
 
 plot6
 ```
+
 In order to look deeper into the distributions of title types. We have made a parallel coordinate diagram. Here we can interactively compare title types, genres, total votes for each distribution, and weighted averages.
 
 1. The highest of the ratings seem to come from tv types, i.e.: "tvEpisode, tvMiniSeries, and tvSeries". 
@@ -157,48 +160,47 @@ In order to look deeper into the distributions of title types. We have made a pa
 3. Movie works typically have weighted averages lying in the 6-8 range. Not single work within the Drama category seems to have a weighted rating above 9. This title type has the largest variance for number of votes.
 4. Short has a very low variance for total votes as all of the works are congregated towards the lower set of votes. There are some short works that have amazing ratings, however, most tend to stay between 6-8.
 5. There are very few works in the dataset for tvShort, tvSpecial, and videogame types. 
-6.. There is a subset of "Drama" combo genres for each title type that has no works, according to the dataset. However it is hard to distinguish the difference between these genre combos.
+6.. There is a subset of "Drama" combo genres for each title type that has no works, according to the dataset. However it is hard to distinguish the difference between these genre combos. 
 
-## 5.3 Best Director-Writer Pairings
-### 5.3.1 Comparing best Director-Writer Pairs over work ratings
+
+## Best Director-Writer Pairings
+### Comparing best Director-Writer Pairs over work ratings
 ```{r}
 library(ggridges)
-plot7 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
+plot7 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate) + ggtitle("Weighted Average Rating Distribution Trend of Top 10 Director Writer Pair") + theme(plot.title = element_text(hjust = 0.5)) + ylab("") + xlab("Weighted Average Rating") + ylab("Director Writer Pair")
 ```
 
 ```{r}
 plot7
 ```
 
-<br/> We have plotted the above graph to visualize the averageRating distribution of top 10 director_writer_pairs based on the number of times they worked together. We have filled the ridge plot with the titleType to get the bifurcation of averageRating based on titleType.<br/>
-1. The director-writer pair “n59-n” have worked together in shortMovie, Movie, tvEpisode, video and videoGame. Amongst all the title types the pair has the highest averageRating for movies. The mean of the averageRating for movies is approximately 9.2. This suggest that the movies of the pair “n59-n” are more liked by the audience.<br/>
-2. The director-writer pair “n57-n” have worked together in shortMovie, tvEpisode, and tvSeries. The pair seems to be famous for its tvSeries as we can see that the distribution of the averageRating for tvSeries seems to be narrow and has the mean around 7.5 ratings. <br/>
-3. The pair “n44-n” seems to make only tvSeries or tvEpisodes. Visualizing the graph we can say that the pair is more likely famous for tvSeries as their averageRating is distributed above 9.<br/>
-4. Interestingly, the pair “n43-n” only makes tvEpisode having a mean rating of 9.5 rating that is highest among all the top 10 pairs  of director and writer. This suggest that the tvEpisode of this pair are more liked by the people.<br/>
-5. The pair ”n37-n” has worked together for tvSeries and tvEpisodes. From the graph we can say that the particular pair is more likely by audience when they work together for a tvEpisode.<br/>
-6. The pair “n30-n” has only worked together for tvEpisodes. The mean of these tvEpisodes are nearly 6.8 ratings.<br/>
-7. The pair “n30-n” have worked together for different shortMovies, tvSeries, video and tvEpisodes. Amongst all the titleType the pair is more liked by the audience for the video. The mean of their averageRating distribution is approximately 7.5 ratings.<br/>
-8. The pair “n134-n” seems to have worked for titleType tvEpisode, video, tvSeries, and movie. Amongst all the titleType we can say that the pair is more famous for the tvEpisode. <br/>
-9. The pair “n112-n” seems to have worked for titleType tvEpisode, tvSeries, and movie. Amongst all the titleType we can say that the pair is more famous for the tvEpidose. <br/>
-10. The pair “n09” have only worked together for the titleType tvEpisode. Moreover, the mean of the tvEpisode is 6.6 ratings. <br/>
-
+<br/> We have plotted the above graph to visualize the weighted average ratings distribution of top 10 pairs of director and writer that have worked together for the most of the times. For each director-writer pair, the individual ridges shows the spread of the weighted average ratings of different title types they have worked together.<br/>
+The following are the basics results we interpret from the graph above:<br/>
+1. The director-writer pair “n59-n” have worked together in shortMovie, Movie, tvEpisode, video and videoGame. Amongst all the title types, the pair has the highest weighted average rating for movies. The mean of the weighted average ratings for movies is approximately 9.2. This suggest that the movies of the pair “n59-n” are more liked by the audience.<br/>
+2. The director-writer pair “n57-n” have worked together in shortMovie, tvEpisode, and tvSeries. The pair seems to be famous for its tvSeries as we can see that the distribution of the weighted average rating for tvSeries is spread towards the higher end compared to other title types and has the mean of around 7.5 ratings. <br/>
+3. The pair “n44-n” is observed to make only tvSeries or tvEpisodes. Visualizing the graph we can say that the pair is more likely famous for tvSeries as their weighted average rating spread extends above 9.<br/>
+4. Interestingly, the pair “n43-n” only produces tvEpisode having a mean rating of 9.5 that is the highest amongst all the top 10 pairs of director and writer. This suggest that the tvEpisodes of this pair are more liked by the people compared to the tvEpisodes released by other pairs.<br/>
+5. The pair ”n37-n” has worked together for tvSeries and tvEpisodes. From the graph we interpret that the particular pair is more liked by audience when they work together for a tvEpisode.<br/>
+6. The pair “n3006-n” is also seen to have worked together only for tvEpisodes. The mean of these tvEpisodes are nearly 6.8 ratings.<br/>
+7. The pair “n3005-n” have worked together for different shortMovies, tvSeries, video and tvEpisodes. Amongst all the titleType, the pair is more liked by the audience for the video content that they release. The mean of their weighted average rating distribution is approximately 7.5 ratings.<br/>
+8. The pair “n13-n” seems to have worked for titleType tvEpisode, video, tvSeries, and movie. Amongst all the titleType we can say that the pair is most famous for the tvEpisode. This pair is observed to produce the least liked video content compared to video content produced by other pairs.<br/>
+9. The pair “n11-n” is noticed to have worked for tvEpisode, tvSeries, and movie types of contents. Amongst all the titleTypes this pair worked on, they are most rated for the tvEpisodes. <br/>
+10. The pair “n0-n” have only worked together to create tvEpisodes. Moreover, the mean of their tvEpisodes is 6.6 ratings. <br/>
 
 ### 5.3.2 Which director-writer pairs had the most votes
 ```{r}
-plot8 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+plot8 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate) + ggtitle("Total Votes Dustribution Trend for Highest Rated Director Writer Pair") + theme(plot.title = element_text(hjust = 0.5)) + ylab("") + xlab("Director Writer Pair") + ylab("Total Votes")
 ```
 
 ```{r}
 plot8
 ```
 
-<br/> We have plotted the above graph to visualize the top 10 director writer pair having averageRating equal to 10. <br/>
-1. For the titleType short we can see clearly that the pair “n336-n” has the highest number of votes. Although, all the pairs have received the averageRating 10 but the most likely pair for the titleType short is “n336-n” and then followed by “n64-n” as they are supported by the total numVotes .<br/>
-2. For the titleType tvEpisode we can see that there are plenty of pairs that have worked together for a tvEpisode. Out of all the pairs, we observe that “n37-n” has the highest number of votes , approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar likening between the audience.<br/>
-3. For the titleType tvMiniSeries there are hardly pairs of director writer that have worked together except for 1 that is the pair “n113-n”. <br/>
-4. Interestingly, for titleType tvSeries we can only see one pair that is “n113-n”. The reason for this might be either there are very few tvSeries that have averageRating equal to 10 or else less director writer pairs have made tvSeries compared to other titleTypes.<br/>
-5. Similarly for the titleType tvShort there is only 1 pair that has worked together to make a tvShort and that pair is “n336-n”.  <br/>
-6.  titleType tvSpecial also has only 1 pair of director writers that have worked together. The pair “n18-n” is the pair that has approximately 20 numbers of Votes.<br/>
-7. For the titleType video there are a few pairs of director_writer that have worked together. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100.<br/> 
+<br/> We have plotted the above graph to visualize the number of votes received for different title types released by each director writer pairs that have worked more than 5 times together and had produced contents of weighted average rating equal to 10. <br/>
+1. For the titleType short we can see clearly that the pair “64-n" has the highest number of votes. Although, all the pairs have received the an average rating 10 but the most likely pair for the titleType short is “n64-n”. <br/>
+2. For the titleType tvEpisode we observe that there are plenty of pairs that have worked together for this content type. Out of all the pairs, we observe that “n37-n” has the highest number of votes , that is approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar trend of likening among the audience.<br/>
+3. Interestingly, among all the available pairs above, the only the pair that have worked together to release the titleTypes of tvMiniSeries and tvSeries is "n113-n".<br/>
+4. Similarly, for tvSpecial, we noticed that there is only 1 pair of director-writers who have worked more than 5 times and produced a 10 rated content of this titleType. This pair is "n18-n" and they have received around 20 number of votes.<br/>
+6. For the titleType video there are 5 pairs of director-writer that have worked together more than 5 times and gained 10 ratings. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100.<br/> 
 
-In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, tvShort and tvSpecial there are only 1 pair of director_writer who have an averageRating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director_writer_pairs that have averageRating 10 and have worked for more than 5 times together. Surprisingly the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have averageRating of 10 but the pair might have worked for only once or twice or second there could be no movies that have averageRating of 10.<br/>
+In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, and tvSpecial there are only 1 pair of director-writer who have an average rating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director-writer pairs that have average rating 10 and have worked for more than 5 times together. Surprisingly, the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have average rating of 10 but the pair might have worked for less than 5 times or second there could be no movies that have average ratings of 10.<br/>

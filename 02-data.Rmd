@@ -10,7 +10,7 @@ We will be using the [IMDb Datasets](https://www.imdb.com/interfaces/) for our f
 
 Among all the available datasets on the above link, we collected and used three datasets for our project: title.basics.tsv.gz, title.crew.tsv.gz, and title.ratings.tsv.gz. Moreover, we have also merged and manipulated these datasets based on our requirements to address the said objectives. We Each team member of our was responsible to collect the data. We simply downloaded it from the said link and then unzipped it to be accessed for this project. <br/>
 
-We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/>
+We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below: <br/>
 
 
 ## 2.1 Basics
