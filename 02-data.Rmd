@@ -1,4 +1,4 @@
-# Data sources
+# Chapter 2 Data sources
 
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,8 @@ Among all the available datasets on the above link, we collected and used three 
 We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/>
 
 
-## [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
+## 2.1 Basics
+[title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
 This dataset provides the basic information about different contents as displayed below:<br/>
 1. tconst (string) - alphanumeric unique identifier of the title<br/>
 2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
@@ -38,6 +39,7 @@ The potential columns that we will use from this datatset are titleType, isAdult
 
 The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/>
 
+## 2.2 Crew
 [title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
 This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
 1. tcnst (string) - alphanumeric unique identifier of the title<br/>
@@ -56,6 +58,7 @@ We will make use of all the columns from this dataset to address the question 3 
 
 The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/>
 
+2.3 Ratings
 [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
 This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>
 1. tcnst (string) - alphanumeric unique identifier of the title<br/>
