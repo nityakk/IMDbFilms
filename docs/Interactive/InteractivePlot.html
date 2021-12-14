@@ -12,8 +12,8 @@
 
   <script>
   
-    var w = 500;
-		var h = 500;
+    var w = 1000;
+		var h = 800;
 		var padding = 40;
 
 		//Create scale functions
@@ -46,39 +46,42 @@
 		.attr("transform", "translate(0," + (h - padding) + ")")
 		.call(xAxis);
 		
-				//Create Y axis
+		//Create Y axis
 		svg.append("g")
 		.attr("id", "yaxis")
 		.attr("transform", "translate(" + padding + ",0)")
 		.call(yAxis);
+		
+		svg.append("text")
+      .attr("class", "x label")
+      .attr("text-anchor", "end")
+      .attr("x", w)
+      .attr("y", h - 6)
+      .text("Year");
+      
+    svg.append("text")
+      .attr("class", "y label")
+      .attr("text-anchor", "end")
+      .attr("y", 5)
+      .attr("dy", ".75em")
+      .attr("transform", "rotate(-90)")
+      .text("Weighted Average");
 	
 		
-		d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/GroupedDirecs_complete.csv")
+		d3.csv("https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/groupedGenres_complete.csv")
 		.then(function(data) {
       xScale.domain([d3.min(data.map(d => d.startYear)),
                      d3.max(data.map(d => d.startYear))]);
         
-      yScale.domain([d3.min(data.map(d => d.weigthedRating)),
-                     d3.max(data.map(d => d.weigthedRating))]);
+      yScale.domain([d3.min(data.map(d => d.weightedRating)),
+                     d3.max(data.map(d => d.weightedRating))]);
         
       d3.select("#xaxis").call(xAxis);
       d3.select("#yaxis").call(yAxis);
       
-
-     /* d3.select("svg")
-  		      .selectAll("circle")
-  		      .data(data)
-  		      .enter()
-  		      .append("circle")
-  		      .attr("cx", d => xScale(d.startYear))
-  		      .attr("cy", d => yScale(d.weigthedRating))
-  		      .attr("r", "3")
-  		      .attr("fill", "purple");*/
       
-      
-      
-      let typeOptions = [...new Set(data.map(d => d.titleType))]; 
-      
+      let typeOptions = [...new Set(data.map(d => d.titleType))];
+      var def = "movie"
       // add the options to the button
       d3.select("#selectButton")
         .selectAll('myOptions')
@@ -87,51 +90,39 @@
       	.append('option')
         .text(function (d) { return d; }) // text showed in the menu
         .attr("chosen", function (d) { return d; }) // corresponding value returned by the button
+        .property("selected", function(d){ return d == def; })
       
-      /*// add the options to the button
-      var dropdown = d3.select("#selectButton")
-        .selectAll('myOptions')
-       	.data(directorOptions)
-        .enter()
-      	.append('option')
-        .text(function (d) { return d; }) // text showed in the menu
-        .attr("chosen", function (d) { return d; }) // corresponding value returned by the button*/
-        
-      d3.select("#selectButton").on('change', function() {
+      
+      function Update(type){
+        file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/titletypes/" + type + ".csv";
+        d3.csv(file).then(function(data3) {
+		      var dots = d3.select("svg")
+            .selectAll("circle")
+            .data(data3);
 
-          file = "https://raw.githubusercontent.com/nityakk/IMDbFilms/main/sources_short/titletypes/" + this.value + ".csv";
-          d3.csv(file)
-          /*data
-          .filter(function(s) {s.titleType == this.value})*/
-          .then(function(data2) {
-
-            d3.select("svg")
-    		      .selectAll("circle")
-    		      .data(data2)
-    		      .enter()
-    		      .append("circle")
-    		      .attr("cx", d => xScale(d.startYear))
-    		      .attr("cy", d => yScale(d.weigthedRating))
-    		      .attr("r", "2")
-    		      .attr("fill", "purple")
-    		      .attr("class", "dot");
-		      
-            var dots = svg.selectAll('.dot')
-            .data(data2);
-
-            //exit
-            dots
-              .exit()
-              .remove();
+          //exit
+          dots
+            .exit()
+            .remove();
+            
+          //enter
+          var new_dots = dots
+            .enter()
+            .append("circle")
+  		      .attr("cx", d => xScale(d.startYear))
+  		      .attr("cy", d => yScale(d.weightedRating))
+  		      .attr("r", "2.5")
+  		      .attr("fill", "purple")
+  		      .attr("class", "dot");
           })
-		      
+      }
+      
+      d3.select("#selectButton").on('change', function() {
+        Update(this.value)
       })
+      Update(def);
       
 		});
-		
-
-		
-		
 		
   </script>
 </html>

@@ -127,10 +127,10 @@ missing_plots(basics, percent = TRUE)
 <br/><br/>
 We studied the percentage of missing values in the 'title.basics.tsv.gz' through the graph plotted above.<br/>
 
-Analysis:<br/><br/>
+Analysis:<br/>
 1. It is observed that out of all the total rows, almost ~99% of row are there which does not have the value for the end year of the title. This is followed by ~74% rows where runtime in minutes of the title is not available. Moreover, there are only ~12% and 5% rows respectively that does not contain the values for the start year and genre of the corresponding title.<br/>
-3. Very insignificant percentage of missing values are observed for columns that provides information if the title is adult or not, what is the primary title name, and original title name.<br/>
-4. Interestingly, there are no missing values for title type and the alphanumeric constant of the title.<br/>  
+2. Very insignificant percentage of missing values are observed for columns that provides information if the title is adult or not, what is the primary title name, and original title name.<br/>
+3. Interestingly, there are no missing values for title type and the alphanumeric constant of the title.<br/>  
 4.Among all the rows that has missing values, majority of the rows has missing values for both end year as well as runtime of the title combined. This constitutes for ~56% rows.<br/> 
 5.Moreover, there are 25% rows which has solely end year missing values, whereas ~12% rows where end year is missing along with runtime and start year of the title. There are minimal percentage of rows which witnesses complete cases, that is, only around 1% of rows has no missing values in them.<br/><br/>
 
@@ -142,17 +142,16 @@ missing_plots(crew, percent = TRUE)
 ```
 <br/><br/>The graph above manifests the percentage of missing data in the 'title.crew.tsv.gz' dataset.<br/>
 
-Analysis:<br/><br/>
+Analysis:<br/>
 1. It is observed from the top-most graph that approximately 50% of the total rows in the dataset has missing values for the writers and 40% of the total rows of the dataset contains missing values for the directors. However, the the alphanumeric identifier is present for all the rows irrespective if the writer or director is missing or not.<br/>
 2. The main graph reveals that there are 4 different patterns in the data, likewise, the rows where: <br/>
 i) only directors are missing,<br/>
 ii) only writers are missing,<br/>
 iii) both writer and directors are missing<br/>
 iv) there are no missing values<br/><br/>
-
-It is noted from the right-most graph that the percentage of rows where both director and writers are missing is significantly more than the percentage of rows where only director or only writer is missing.<br/>
-3. It is interpreted that out of the 50% of the rows where writers are missing, there ~37% of the rows where the writers values are missing along with some directors values. Whereas there are only ~13% rows where solely writers are missing. Similarly, out of the 40% of the rows where directors values are missing, there are ~37% rows where the directors are missing along with the writers while only ~3% rows where solely directors values are missing.<br/>
-4. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/>
+3. It is noted from the right-most graph that the percentage of rows where both director and writers are missing is significantly more than the percentage of rows where only director or only writer is missing.<br/>
+4. It is interpreted that out of the 50% of the rows where writers are missing, there ~37% of the rows where the writers values are missing along with some directors values. Whereas there are only ~13% rows where solely writers are missing. Similarly, out of the 40% of the rows where directors values are missing, there are ~37% rows where the directors are missing along with the writers while only ~3% rows where solely directors values are missing.<br/>
+5. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/>
 
 We have made use of the 'title.crew.tsv.gz' dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, "NA" values and then utilized the two columns. The detail about this transformation is explained in the 'Data Transformation' chapter.<br/>
 

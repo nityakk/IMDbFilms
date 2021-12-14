@@ -32,7 +32,7 @@ basics[basics == "\\N"] <- NA
 ```
 
 ```{r}
-basics
+head(basics, 5)
 ```
 
 The potential columns that we will use from this datatset are titleType, isAdult, startYear, and genres of different contents. These information will help us answer all the objective questions that we have formulated.<br/><br/>
@@ -52,7 +52,7 @@ crew[crew == "\\N"] <- NA
 ```
 
 ```{r}
-crew
+head(crew, 5)
 ```
 We will make use of all the columns from this dataset to address the question 3 for our project.<br/><br/>
 
@@ -71,7 +71,7 @@ ratings[ratings == "\\N"] <- NA
 ```
 
 ```{r}
-ratings
+head(ratings, 5)
 ```
 
 Potentially, we will utilize all the columns of this datatset to answer all the 3 questions of our project. The variable type of the columns in this dataset is character, double, and integer respecively for tconst, averageRating, and numVotes variables. There are 1191702, that is, 1.1 million rows and 3 columns in the ratings dataset.

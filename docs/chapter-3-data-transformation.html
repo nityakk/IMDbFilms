@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Chapter 3 Data transformation | Film Industry Trend Exploration</title>
+  <meta name="description" content="Chapter 3 Chapter 3 Data transformation | Film Industry Trend Exploration" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Chapter 3 Data transformation | Film Industry Trend Exploration" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Chapter 3 Data transformation | Film Industry Trend Exploration" />
+  
+  
+  
+
+<meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
+
+
+<meta name="date" content="2021-12-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="chapter-2-data-sources.html"/>
+<link rel="next" href="chapter-4-missing-values.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">IMDb Films</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html"><i class="fa fa-check"></i><b>2</b> Chapter 2 Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#basics"><i class="fa fa-check"></i><b>2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#crew"><i class="fa fa-check"></i><b>2.2</b> Crew</a></li>
+<li class="chapter" data-level="2.3" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#ratings"><i class="fa fa-check"></i><b>2.3</b> Ratings</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html"><i class="fa fa-check"></i><b>3</b> Chapter 3 Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-distribution-trends-in-adult-vs-non-adult-titles"><i class="fa fa-check"></i><b>3.1</b> Transformations to study distribution trends in Adult v/s Non-Adult titles</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#adult-title-releases-trends"><i class="fa fa-check"></i><b>3.1.1</b> Adult title releases trends</a></li>
+<li class="chapter" data-level="3.1.2" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#ratings-distribution-of-non-adult-vs-adult-titles"><i class="fa fa-check"></i><b>3.1.2</b> Ratings distribution of non-adult vs adult titles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-the-distributions-of-genre"><i class="fa fa-check"></i><b>3.2</b> Transformations to study the distributions of genre</a></li>
+<li class="chapter" data-level="3.3" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-the-performance-of-different-director-writer-pairs"><i class="fa fa-check"></i><b>3.3</b> Transformations to study the performance of different director-writer pairs</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#interactive-plot"><i class="fa fa-check"></i><b>3.3.1</b> Interactive Plot</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html"><i class="fa fa-check"></i><b>4</b> Chapter 4 Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#basics-1"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#crew-1"><i class="fa fa-check"></i><b>4.2</b> Crew</a></li>
+<li class="chapter" data-level="4.3" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#ratings-1"><i class="fa fa-check"></i><b>4.3</b> Ratings</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="chapter-5-results.html"><a href="chapter-5-results.html"><i class="fa fa-check"></i><b>5</b> Chapter 5 Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#adult-works"><i class="fa fa-check"></i><b>5.1</b> Adult Works</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#proportion-of-adult-movies-over-time"><i class="fa fa-check"></i><b>5.1.1</b> Proportion of Adult movies over time</a></li>
+<li class="chapter" data-level="5.1.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparison-of-adult-vs-non-adult-movies"><i class="fa fa-check"></i><b>5.1.2</b> Comparison of Adult vs Non-Adult movies</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#variation-of-average-ratings-amongst-genres"><i class="fa fa-check"></i><b>5.2</b> Variation of Average Ratings amongst genres</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-genres-with-weighted-ratings-and-number-of-works"><i class="fa fa-check"></i><b>5.2.1</b> Comparing Genres with Weighted Ratings and Number of Works</a></li>
+<li class="chapter" data-level="5.2.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-genres-across-different-title-types"><i class="fa fa-check"></i><b>5.2.2</b> Comparing Genres Across Different Title Types</a></li>
+<li class="chapter" data-level="5.2.3" data-path="chapter-5-results.html"><a href="chapter-5-results.html#deeper-dive---comparing-different-genre-subtypes"><i class="fa fa-check"></i><b>5.2.3</b> Deeper Dive - Comparing Different Genre Subtypes</a></li>
+<li class="chapter" data-level="5.2.4" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-title-types-based-on-ratings-and-total-votes"><i class="fa fa-check"></i><b>5.2.4</b> Comparing Title Types Based on Ratings and Total Votes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="chapter-5-results.html"><a href="chapter-5-results.html#best-director-writer-pairings"><i class="fa fa-check"></i><b>5.3</b> Best Director-Writer Pairings</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-best-director-writer-pairs-over-work-ratings"><i class="fa fa-check"></i><b>5.3.1</b> Comparing best Director-Writer Pairs over work ratings</a></li>
+<li class="chapter" data-level="5.3.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#which-director-writer-pairs-had-the-most-votes"><i class="fa fa-check"></i><b>5.3.2</b> Which director-writer pairs had the most votes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#interactive-component-1"><i class="fa fa-check"></i><b>6.1</b> Interactive Component</a></li>
+<li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#description"><i class="fa fa-check"></i><b>6.2</b> Description</a></li>
+<li class="chapter" data-level="6.3" data-path="interactive-component.html"><a href="interactive-component.html#usage"><i class="fa fa-check"></i><b>6.3</b> Usage</a></li>
+<li class="chapter" data-level="6.4" data-path="interactive-component.html"><a href="interactive-component.html#sources"><i class="fa fa-check"></i><b>6.4</b> Sources:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html"><i class="fa fa-check"></i><b>7</b> Chapter 7 Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#insights"><i class="fa fa-check"></i><b>7.1</b> Insights</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-1"><i class="fa fa-check"></i><b>7.1.1</b> Objective Question 1</a></li>
+<li class="chapter" data-level="7.1.2" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-2"><i class="fa fa-check"></i><b>7.1.2</b> Objective Question 2</a></li>
+<li class="chapter" data-level="7.1.3" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-3"><i class="fa fa-check"></i><b>7.1.3</b> Objective Question 3</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#limitations"><i class="fa fa-check"></i><b>7.2</b> Limitations</a></li>
+<li class="chapter" data-level="7.3" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#future-directions"><i class="fa fa-check"></i><b>7.3</b> Future Directions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Film Industry Trend Exploration</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="chapter-3-data-transformation" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Chapter 3 Data transformation</h1>
+<p>We are working around three dataset in total, that is, titles.basics, title.crew, title.ratings. Therefore, it was very necessary to transformation the individual overall datasets by merging different datasets, adding new columns or removing the ones that were not needed or that had any NULL values.<br/><br/></p>
+<p>Below, we describe the transformations that we incorporated which were necessary to accomplish the results of different questions.<br/><br/></p>
+<div id="transformations-to-study-distribution-trends-in-adult-vs-non-adult-titles" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Transformations to study distribution trends in Adult v/s Non-Adult titles</h2>
+<p><br/>This question basically addresses two objectives.<br/>
+- The first part studies the trend of number of adult title releases with the change of time.<br/>
+- The second part studies the proportion of votes distribution of adult versus non-adult titles over the given period of time.<br/>
+For this question, we primarily use the title.basics and title.ratings dataset. Therefore, we will initially prepare a new auxiliary dataframe which contains transformed version of these datasets.<br/></p>
+<div id="adult-title-releases-trends" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Adult title releases trends</h3>
+<p><br/> In this part of the first objective question we wish to observe that with progressing years, did the film industry started making more adults, or less adults, or was the number of releases constant. The following steps show a detailed explanation on how we transformed the data step by step:<br/>
+- Among all the columns available in the title.basics dataset, we are only interested in using the ‘startYear’ and ‘isAdult’ columns to achieve the first part of the first objective question. Thus, we dropped the other available columns in the data which were unnecessary for our exploration, likewise, ‘primaryTitle’, ‘originalTitle’, ‘endYear’, ‘runtimeMinutes’ and formed a new auxiliary dataframe named ‘basics_ratings’.<br/>
+- Further, as mentioned earlier, we need the necessary information(‘startYear’ and ‘isAdult’) from title.basics, which basically is the basics_ratings dataframe, and title.ratings data combined in one auxiliary dataframe. So, we merge the title.ratings dataset with the basics_ratings dataframe and use to address both first and second part of the first objective question.<br/>
+-Moreover, we analyzed that there were missing values in the ‘isAdult’ and ‘startYear’ columns. As we are going to explore that with the progress of year does the number of adult movies released had any trend or not, so we need to remove the start years values that have NULL. Also, we are summing up the total number of adult titles released per year, therefore, it is necessary to delete the rows that have NA values for isAdult. Thus, we dropped the rows which either contained NULL values for startYear or NULL values for isAdult.<br/>
+- After cleaning the data by adding, removing and merging the columns, the next step is to group similar start years together and calculate the total number of adult titles that were released in that particular year. For this grouping operation to execute, we converted the datatype of both ‘startYear’ and ‘isAdult’ columns to numeric. Once the datatype was transformed in the desired format, we grouped similar years together based on two different conditions:<br/>
+-Grouped same years and calculated the sum of the isAdult column which gave the total number of adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
+-Grouped same years and counted the number of rows of the isAdult column which gave the total number of titles released in a particular in a particular year irrespective of adult or non-adult. We assigned this to another new temporary dataframe.<br/>
+Finally, we merged the above two temporary dataframes into one by the grouped start years.<br/>
+- As the last step, we calculated the proportion of the adult titles released per start year. This percent would then be used to plot it against their respective start years and study the trend.<br/><br/></p>
+</div>
+<div id="ratings-distribution-of-non-adult-vs-adult-titles" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Ratings distribution of non-adult vs adult titles</h3>
+<p><br/><br/>
+In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
+- First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
+- Further, we merged the above two temporary dataframes together into one based on similar start years and calculated the sum of the number of votes that were received by non adult and adult titles respectively. These two sums were basically created as two different new columns.<br/>
+- Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
+- Finally, we calculated a new column ‘non-adult’ in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/></p>
+</div>
+</div>
+<div id="transformations-to-study-the-distributions-of-genre" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Transformations to study the distributions of genre</h2>
+<p><br/><br/>
+Our second objective question studies how different genres vary in terms of votes, title type, and ratings. We would like to know which genres tend to recieve the most attention and how the type of work has an affect on ratings even within the most popular genre. As the dataset is very large, we decided to subset the dataset based on works done by experience directors. We have defined experience as those directors who have completed at least 20 works. By subsetting this way, we are also looking at top works within the dataset. The limitation with subsetting in this manner is that we may be losing data on works created by directors who are experienced but do not show up in the dataset at least 20 times.</p>
+<p><br/><br/>
+Our transformations are as follows:
+- First we filtered out all of the titles that were not created by experienced directors. The remaining titles were grouped by title type, and genre. A new column was added for weighted ratings (ratings weighted by number of votes) and total number of votes. Any potential rows with missing values were dropped.
+- To see how different genres compare with each other, we first obtained all unique genres. Many of the rows in the genre column had comma separated values. However, there were some rows that had singular genre names. It can be noted that a list of all singular genre names represents the unique genre names. For each unique genre name, we obtained the total number of times the genre appears (within both singular and comma separated row values) and the average rating of all of the works within that genre. We also grouped this dataset based on title type to see what the distribution across title types looks like.
+- Due to the large size of the data, it is difficult to view trends within each genre. Therefore, we decided to specifically look at the most popular genre. After visualizing the comparison of different genres (seen in Chapter 5.2), we concluded that the most popular genre is “Drama”. Therefore, we subset our previous dataset of works by experienced directors by works that have “Drama” as at least one of the genre types. This was again grouped as earlier (grouped by title type, and genre, with the addition of total votes and weighted averages).</p>
+</div>
+<div id="transformations-to-study-the-performance-of-different-director-writer-pairs" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Transformations to study the performance of different director-writer pairs</h2>
+<p><br/>The question basically addresses two problems<br/>
+- The first part studies the top 10 director - writer pairs based on the number of times they worked together. Further, these pairs are used to study the distribution of average ratings of different title types they have produced.<br/>
+- The second part studies that out of all the director writer pairs having average rating of 10, what is the distribution of the num of Votes for those particular pairs faceted by titleType. <br/></p>
+<p><br/><br/>
+For addressing the first question mentioned above we need to perform the following transformations:<br/>
+- First, we filtered out the rows from the basics_ratings_crew dataset that had NA for writers and directors. We wanted to study the different director writer pairs so it was important that the dataset had no NULL values for either of these variables.<br/>
+- Furthermore, for making the pair we used the paste function for concatenating the director column with writer column to form new column named director_writer_pair. This merging was required as our main aim revolves around studying the director-writer pair and this new columns will ease the upcoming visualization process.<br/>
+- The total unique director writer pairs were approximately 600K. Visualizing all of them is not feasible and the results that they would give would also not be intuitive. Therefore, we decided to pick the top 10 pairs based on the number of times they have worked together. So we calculated the count of all the pairs and then selected the top 10. <br/>
+- Eventually, we filtered the original dataset with the top 10 director writer pairs.<br/></p>
+<p><br/><br/>
+For addressing the second question mentioned above we need to perform the following transformations:<br/>
+- To begin with, we used the dataset created for the above question which contained the director writer pairs. Furthermore, we grouped the data by “director_writer_pair”, “titleType”, and “genres” and then summarized the data by calculating the total number of Votes received by the pair for different title types.<br/>
+- Further, we summarized the same grouped data for calculating the weighted rating which is calculated by taking the sum of average rating <span class="math inline">\(\times\)</span> number of Votes divided by total number of Votes.<br/>
+- Next, we joined both the grouped data to get the weighted rating as well as total number of Votes for a particular director-writer pair.<br/>
+- Finally, we filtered the data by weighted rating in order to get only the pairs having weighted rating equal to 10. We then merged this filtered data with the data having the count of number of times a particular pair worked together.<br/>
+- The final dataset had total of 783 pairs who had average rating of 10 so to further filter the data we studied the distribution of the number of times the pair worked together and found that out of 783, 692 pairs worked with each other only once or twice and therefore we further narrowed the data to only consider the pairs who have worked more than 5 times with each other.<br/></p>
+<pre><code>## # A tibble: 603,287 × 4
+## # Groups:   director_writer_pair, directors [603,287]
+##    director_writer_pair            directors writers             weightedRating
+##    &lt;chr&gt;                           &lt;chr&gt;     &lt;chr&gt;                        &lt;dbl&gt;
+##  1 nm0000005 - nm0000005           nm0000005 nm0000005                     8.06
+##  2 nm0000005 - nm0000005,nm0279027 nm0000005 nm0000005,nm0279027           6.4 
+##  3 nm0000005 - nm0000005,nm0340471 nm0000005 nm0000005,nm0340471           7.5 
+##  4 nm0000005 - nm0000005,nm0410694 nm0000005 nm0000005,nm0410694           7.5 
+##  5 nm0000005 - nm0000005,nm0529508 nm0000005 nm0000005,nm0529508           6.6 
+##  6 nm0000005 - nm0000005,nm0845496 nm0000005 nm0000005,nm0845496           6.4 
+##  7 nm0000005 - nm0000005,nm1749058 nm0000005 nm0000005,nm1749058           7   
+##  8 nm0000005 - nm0051923,nm0000005 nm0000005 nm0051923,nm0000005           7.1 
+##  9 nm0000005 - nm0074790           nm0000005 nm0074790                     6.2 
+## 10 nm0000005 - nm0091112,nm0649636 nm0000005 nm0091112,nm0649636           5.6 
+## # … with 603,277 more rows</code></pre>
+<div id="interactive-plot" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Interactive Plot</h3>
+<pre><code>## # A tibble: 4,137 × 4
+## # Groups:   titleType [10]
+##    titleType genres                     weightedRating totalVotes
+##    &lt;chr&gt;     &lt;chr&gt;                               &lt;dbl&gt;      &lt;int&gt;
+##  1 movie     Action                               5.35     124954
+##  2 movie     Action,Adult                         4.69        286
+##  3 movie     Action,Adult,Adventure               6.6           8
+##  4 movie     Action,Adult,Crime                   5.37        241
+##  5 movie     Action,Adult,Drama                   4.66       1196
+##  6 movie     Action,Adventure                     7.51    3527216
+##  7 movie     Action,Adventure,Animation           7.23    1342592
+##  8 movie     Action,Adventure,Biography           7.07     684209
+##  9 movie     Action,Adventure,Comedy              6.60    8364728
+## 10 movie     Action,Adventure,Crime               6.32    1809553
+## # … with 4,127 more rows</code></pre>
+<p>The above transformation subsets our data by genre and saves each subset as its own file.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chapter-2-data-sources.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chapter-4-missing-values.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/nityakk/IMDbFilms/edit/main/03-cleaning.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/nityakk/IMDbFilms/blob/main/03-cleaning.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

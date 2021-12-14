@@ -42,13 +42,11 @@ basics_ratings <- basics[ , !(names(basics) %in% drops)]
 
 ```{r}
 basics_ratings <- merge(basics_ratings, ratings, by="tconst")
-basics_ratings
 ```
 
 ```{r}
 basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
 basics_ratings_crew <- basics_ratings_crew[!is.na(basics_ratings_crew$directors) & !is.na(basics_ratings_crew$startYear), ]
-basics_ratings_crew
 ```
 
 ```{r}
@@ -99,7 +97,6 @@ expDirecs <- basics_ratings_crew %>%
   group_by(directors) %>%
   count()
 expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
-expDirecs2
 ```
 
 
@@ -112,7 +109,6 @@ groupedGenre <- byGenre1 %>%
   summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
 groupedGenre_complete <- na.omit(groupedGenre)
-groupedGenre_complete
 ```
 
 
@@ -132,7 +128,6 @@ for(genre in genres$genres) {
     genreRatings[nrow(genreRatings)+1,] = c(genre, num, weight)
   }
 }
-genreRatings
 ```
 
 ```{r}
@@ -154,7 +149,6 @@ for(genre in genres$genres) {
 }
 genrewtype <- genrewtype %>% 
   mutate(IsDrama = ifelse(genre == "Drama", "drama", "other"))
-genrewtype
 ```
 
 
@@ -166,16 +160,8 @@ groupedGenre2 <- byGenre2 %>%
   summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
 groupedGenre_complete2 <- na.omit(groupedGenre2)
-groupedGenre_complete2
 ```
 
-```{r}
-# cleveland <- groupedGenre_complete2 %>% 
-#   ungroup() %>%
-#   group_by(titleType, genres) %>%
-#   summarize(mean = mean(weightedRating))
-# cleveland
-```
 
 <br/><br/>
 Our transformations are as follows:
@@ -242,7 +228,6 @@ tttt <- df1 %>%
 tttt
 t_final <- merge(tttt, tt, by = 'director_writer_pair')
 t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
-t_final
 ```
 
 ### Interactive Plot

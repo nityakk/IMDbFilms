@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Chapter 4 Missing values | Film Industry Trend Exploration</title>
+  <meta name="description" content="Chapter 4 Chapter 4 Missing values | Film Industry Trend Exploration" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Chapter 4 Missing values | Film Industry Trend Exploration" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Chapter 4 Missing values | Film Industry Trend Exploration" />
+  
+  
+  
+
+<meta name="author" content="Nitya Krishna Kumar, Binny Naik" />
+
+
+<meta name="date" content="2021-12-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="chapter-3-data-transformation.html"/>
+<link rel="next" href="chapter-5-results.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">IMDb Films</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html"><i class="fa fa-check"></i><b>2</b> Chapter 2 Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#basics"><i class="fa fa-check"></i><b>2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#crew"><i class="fa fa-check"></i><b>2.2</b> Crew</a></li>
+<li class="chapter" data-level="2.3" data-path="chapter-2-data-sources.html"><a href="chapter-2-data-sources.html#ratings"><i class="fa fa-check"></i><b>2.3</b> Ratings</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html"><i class="fa fa-check"></i><b>3</b> Chapter 3 Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-distribution-trends-in-adult-vs-non-adult-titles"><i class="fa fa-check"></i><b>3.1</b> Transformations to study distribution trends in Adult v/s Non-Adult titles</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#adult-title-releases-trends"><i class="fa fa-check"></i><b>3.1.1</b> Adult title releases trends</a></li>
+<li class="chapter" data-level="3.1.2" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#ratings-distribution-of-non-adult-vs-adult-titles"><i class="fa fa-check"></i><b>3.1.2</b> Ratings distribution of non-adult vs adult titles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-the-distributions-of-genre"><i class="fa fa-check"></i><b>3.2</b> Transformations to study the distributions of genre</a></li>
+<li class="chapter" data-level="3.3" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#transformations-to-study-the-performance-of-different-director-writer-pairs"><i class="fa fa-check"></i><b>3.3</b> Transformations to study the performance of different director-writer pairs</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="chapter-3-data-transformation.html"><a href="chapter-3-data-transformation.html#interactive-plot"><i class="fa fa-check"></i><b>3.3.1</b> Interactive Plot</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html"><i class="fa fa-check"></i><b>4</b> Chapter 4 Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#basics-1"><i class="fa fa-check"></i><b>4.1</b> Basics</a></li>
+<li class="chapter" data-level="4.2" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#crew-1"><i class="fa fa-check"></i><b>4.2</b> Crew</a></li>
+<li class="chapter" data-level="4.3" data-path="chapter-4-missing-values.html"><a href="chapter-4-missing-values.html#ratings-1"><i class="fa fa-check"></i><b>4.3</b> Ratings</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="chapter-5-results.html"><a href="chapter-5-results.html"><i class="fa fa-check"></i><b>5</b> Chapter 5 Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#adult-works"><i class="fa fa-check"></i><b>5.1</b> Adult Works</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#proportion-of-adult-movies-over-time"><i class="fa fa-check"></i><b>5.1.1</b> Proportion of Adult movies over time</a></li>
+<li class="chapter" data-level="5.1.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparison-of-adult-vs-non-adult-movies"><i class="fa fa-check"></i><b>5.1.2</b> Comparison of Adult vs Non-Adult movies</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#variation-of-average-ratings-amongst-genres"><i class="fa fa-check"></i><b>5.2</b> Variation of Average Ratings amongst genres</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-genres-with-weighted-ratings-and-number-of-works"><i class="fa fa-check"></i><b>5.2.1</b> Comparing Genres with Weighted Ratings and Number of Works</a></li>
+<li class="chapter" data-level="5.2.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-genres-across-different-title-types"><i class="fa fa-check"></i><b>5.2.2</b> Comparing Genres Across Different Title Types</a></li>
+<li class="chapter" data-level="5.2.3" data-path="chapter-5-results.html"><a href="chapter-5-results.html#deeper-dive---comparing-different-genre-subtypes"><i class="fa fa-check"></i><b>5.2.3</b> Deeper Dive - Comparing Different Genre Subtypes</a></li>
+<li class="chapter" data-level="5.2.4" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-title-types-based-on-ratings-and-total-votes"><i class="fa fa-check"></i><b>5.2.4</b> Comparing Title Types Based on Ratings and Total Votes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="chapter-5-results.html"><a href="chapter-5-results.html#best-director-writer-pairings"><i class="fa fa-check"></i><b>5.3</b> Best Director-Writer Pairings</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="chapter-5-results.html"><a href="chapter-5-results.html#comparing-best-director-writer-pairs-over-work-ratings"><i class="fa fa-check"></i><b>5.3.1</b> Comparing best Director-Writer Pairs over work ratings</a></li>
+<li class="chapter" data-level="5.3.2" data-path="chapter-5-results.html"><a href="chapter-5-results.html#which-director-writer-pairs-had-the-most-votes"><i class="fa fa-check"></i><b>5.3.2</b> Which director-writer pairs had the most votes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#interactive-component-1"><i class="fa fa-check"></i><b>6.1</b> Interactive Component</a></li>
+<li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#description"><i class="fa fa-check"></i><b>6.2</b> Description</a></li>
+<li class="chapter" data-level="6.3" data-path="interactive-component.html"><a href="interactive-component.html#usage"><i class="fa fa-check"></i><b>6.3</b> Usage</a></li>
+<li class="chapter" data-level="6.4" data-path="interactive-component.html"><a href="interactive-component.html#sources"><i class="fa fa-check"></i><b>6.4</b> Sources:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html"><i class="fa fa-check"></i><b>7</b> Chapter 7 Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#insights"><i class="fa fa-check"></i><b>7.1</b> Insights</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-1"><i class="fa fa-check"></i><b>7.1.1</b> Objective Question 1</a></li>
+<li class="chapter" data-level="7.1.2" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-2"><i class="fa fa-check"></i><b>7.1.2</b> Objective Question 2</a></li>
+<li class="chapter" data-level="7.1.3" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#objective-question-3"><i class="fa fa-check"></i><b>7.1.3</b> Objective Question 3</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#limitations"><i class="fa fa-check"></i><b>7.2</b> Limitations</a></li>
+<li class="chapter" data-level="7.3" data-path="chapter-7-conclusion.html"><a href="chapter-7-conclusion.html#future-directions"><i class="fa fa-check"></i><b>7.3</b> Future Directions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Film Industry Trend Exploration</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="chapter-4-missing-values" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Chapter 4 Missing values</h1>
+<div id="basics-1" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Basics</h2>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<br/><br/>
+We studied the percentage of missing values in the ‘title.basics.tsv.gz’ through the graph plotted above.<br/></p>
+<p>Analysis:<br/>
+1. It is observed that out of all the total rows, almost ~99% of row are there which does not have the value for the end year of the title. This is followed by ~74% rows where runtime in minutes of the title is not available. Moreover, there are only ~12% and 5% rows respectively that does not contain the values for the start year and genre of the corresponding title.<br/>
+2. Very insignificant percentage of missing values are observed for columns that provides information if the title is adult or not, what is the primary title name, and original title name.<br/>
+3. Interestingly, there are no missing values for title type and the alphanumeric constant of the title.<br/><br />
+4.Among all the rows that has missing values, majority of the rows has missing values for both end year as well as runtime of the title combined. This constitutes for ~56% rows.<br/>
+5.Moreover, there are 25% rows which has solely end year missing values, whereas ~12% rows where end year is missing along with runtime and start year of the title. There are minimal percentage of rows which witnesses complete cases, that is, only around 1% of rows has no missing values in them.<br/><br/></p>
+<p>From this dataset, we have utilized the information about the start year of title, title type, and whether the title is adult or not. Therefore, to handle the missing values of the start year, we have dropped the rows where there were no start year mentioned. Further, to handle the rows with missing values for isAdult or not, we again dropped those rows from the dataset. This detailed information about this transformation is explained in the ‘Data Transforamtion’ chapter. Finally, as there are no missing values for the title type column thus we do not have to worry about it.<br/></p>
+</div>
+<div id="crew-1" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Crew</h2>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="672" />
+<br/><br/>The graph above manifests the percentage of missing data in the ‘title.crew.tsv.gz’ dataset.<br/></p>
+<p>Analysis:<br/>
+1. It is observed from the top-most graph that approximately 50% of the total rows in the dataset has missing values for the writers and 40% of the total rows of the dataset contains missing values for the directors. However, the the alphanumeric identifier is present for all the rows irrespective if the writer or director is missing or not.<br/>
+2. The main graph reveals that there are 4 different patterns in the data, likewise, the rows where: <br/>
+i) only directors are missing,<br/>
+ii) only writers are missing,<br/>
+iii) both writer and directors are missing<br/>
+iv) there are no missing values<br/><br/>
+3. It is noted from the right-most graph that the percentage of rows where both director and writers are missing is significantly more than the percentage of rows where only director or only writer is missing.<br/>
+4. It is interpreted that out of the 50% of the rows where writers are missing, there ~37% of the rows where the writers values are missing along with some directors values. Whereas there are only ~13% rows where solely writers are missing. Similarly, out of the 40% of the rows where directors values are missing, there are ~37% rows where the directors are missing along with the writers while only ~3% rows where solely directors values are missing.<br/>
+5. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/></p>
+<p>We have made use of the ‘title.crew.tsv.gz’ dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, “NA” values and then utilized the two columns. The detail about this transformation is explained in the ‘Data Transformation’ chapter.<br/></p>
+</div>
+<div id="ratings-1" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Ratings</h2>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+<br/><br/>
+The above graph reveals the information about missing values in the ‘title.ratings.tsv.gz’. This dataset contains the following information:<br/></p>
+<p>Analysis:<br/>
+1. It is clearly seen that there are no values missing in the ‘title.ratings.tsv.gz’ dataset. There is only 1 pattern found, that is, all the columns of the dataset have complete and consistent values. Therefore, we have 100% complete cases for the average ratings and number of votes for all the titles given in the dataset and there are no missing patterns.<br/><br/></p>
+<p>We are utilizing the ‘title.ratings.tsv.gz’ majorly to answer all of our objective questions. It is thus observed that we do not have to worry about any missing patterns for this datatset as there are none.<br/></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chapter-3-data-transformation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chapter-5-results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/nityakk/IMDbFilms/edit/main/04-missing.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/nityakk/IMDbFilms/blob/main/04-missing.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

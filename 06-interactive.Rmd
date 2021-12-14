@@ -10,6 +10,6 @@ Different title types within the parallel coordinate diagram gave rise to a vari
 ## Usage
 The above component was built using D3 v6. The dropdown menu at the top can be used to pick a specific title type. The plot will change to show works within that specific title type. Data used for this section can be found [here](https://github.com/nityakk/IMDbFilms/tree/main/sources_short/titletypes).
 
-##Sources:
+## Sources:
 - https://bl.ocks.org/martinjc/8a2a545d5c48ef1ff65b747554332e3d
 - https://bl.ocks.org/floofydugong/9c94ab01d8c3ed8ea3821d4a7e119b07
