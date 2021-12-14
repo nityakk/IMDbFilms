@@ -52,8 +52,6 @@ Note that we have used the log() function to calculate and represent the number(
 
 ### 5.2.1 Comparing Genres with Weighted Ratings and Number of Works
 
-There is an interest in understanding which genres tend to perform better on IMDb ratings. Below we have plotted each genre based on the (i) number of works within that genre in the dataset and (ii) weighted ratings (weighted based on number of votes). 
-
 ```{r fig.height=10}
 
 library(ggrepel)
@@ -70,8 +68,16 @@ plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, 
 
 plot3
 ```
+<br/>
+There is an interest in understanding which genres tend to perform better on IMDb ratings. Below we have plotted each genre based on the (i) number of works within that genre in the dataset and (ii) weighted ratings (weighted based on number of votes). 
+1. The weighted ratings range from 6.0 to 7.2. 
+2. There doesn't seem to be a general trend in the data between weighted ratings and number of works.
+3. Most of the genres lie below the 700 works line, and much are congregated specifically between the 350-700 works mark.
+4. Based on the 'Weighted Ratings and Number of Works per Genre' scatterplot, we can see that the genre 'Documentary' has the highest weighted rating. 'Horror' has the lowest weighted rating which may be due to, given the relatively high number of works, overly-repetitive plot lines. 'News' has the lowest number of works. 
+5. We see that 'Drama' has the highest number of votes over all genres with a relatively high rating. This point is of particular interest to us. 
+6. 'Drama' (and 'Comedy') are both potential outliers. Based on this plot, 'Drama' is a genre that not only has the highest number of works but it also has one of the the highest weighted ratings. 
 
-Based on the 'Weighted Ratings and Number of Works per Genre' scatterplot, we can see that the genre 'Documentary' has the highest weighted rating. 'Horror' has the lowest weighted rating which may be due to, given the relatively high number of works, overly-repetitive plot lines. 'News' has the lowest number of works. Lastly, we see that 'Drama' has the highest number of votes over all genres with a relatively high rating. This point is of particular interest to us. Most of the genres lie below the 700 works line, and much are congregated specifically between the 350-700 works mark. This makes 'Drama' (and 'Comedy') both potential outliers. Based on this plot, 'Drama' is a genre that not only has the highest number of works but it also has one of the the highest weighted ratings. It will be interesting to look deeper into the distribution within 'Drama'.
+It will be interesting to look deeper into the distribution within 'Drama'.
 
 ### 5.2.2 Comparing Genres Across Different Title Types
 
@@ -90,7 +96,14 @@ plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count), fill = IsDram
       scale_fill_manual( values = c( "drama"="tomato", "other"="purple"))
 plot4
 ```
-Using this faceted bar plot, we seek to compare the 'Drama' genre across different title types and between genres. It is evident that overall, the high number of works in the 'Drama' genre is not just due to one specific title type and that in almost all title types, the 'Drama' genre sticks out with competitive values. This is unlike the 'Short' genre, for example, which expectedly has a high number of works in the short title type but overall lower in other title types. From the previous graph we know that the 'Short' genre has an average number of works and rating. The Movie and tvEpisode title types seem to pull the weight on the large quantity of titles in the full dataset. Whereas tvShort and tvSpecial collectively have the least number of works in the dataset.
+<br/>
+Using this faceted bar plot, we seek to compare the 'Drama' genre across different title types and between genres. Note that the 'Drama' genre column is highlighted for ease in comparison.
+
+1. The Movie and tvEpisode title types seem to pull the weight on the large quantity of titles in the full dataset. They typically have over 100 works for each genre in this cleaned dataset.
+2. The Game-Show genre has one of the lowest number of works in every single title type.
+3. Whereas tvShort and tvSpecial collectively have the least number of works in the dataset. They typically stay to below 100 works.
+4. It is evident that overall, the high number of works in the 'Drama' genre is not just due to one specific title type and that in almost all title types, the 'Drama' genre sticks out with competitive values. 
+5. The 'Short' genre, for example, which expectedly has a high number of works in the short title type but overall lower in other title types. From the previous graph we know that the 'Short' genre has an average number of works and rating. 
 
 The above graph does not allow us to compare weighted ratings in the same way as the values are quite similar.
 
@@ -106,13 +119,20 @@ plot5 <- ggplot(groupedGenre_complete2, aes(x = weightedRating, y = fct_reorder(
 
 plot5
 ```
-To compare the weighted ratings within the 'Drama' genre, we have made a cleveland dot plot colored by title type. We primarily see that the video title type tends towards a lower weighted rating whereas tvEpisode and tvSeries tends towards a higher weighted rating. This may be because TV Series/Episodes in comparison to say movies have more time to tell stories and captivate the audience. Movie steadily tends to stay in the middle of all other title types for ratings. Looking deeper at the 'Drama' genres, we see more combinations with Biography and Reality-TV at the bottom (lower weighted ratings) in comparison to Documentary or History at the top of the graph.
+<br/>
+To compare the weighted ratings within the 'Drama' genre, we have made a cleveland dot plot colored by title type. 
 
+1. The lowest rating is in the "Drama, Short, Thriller" category whereas the highest rating is in the 'Biography, Drama, History' category.
+2. Some genres like "Comedy, Drama, Sport" have very different ratings based on the title type but some like 'Drama, News, Talk-show' at the very top have either very few points (in this case causing the point to be at the very top as it is not pulled down by lower ratings during reordering) or have very similar ratings. However, if they have similar ratings, it is highly likely that the genre combo is not found in all title types.
+3. We primarily see that the video title type tends towards a lower weighted rating whereas tvEpisode and tvSeries tends towards a higher weighted rating. This may be because TV Series/Episodes in comparison to say movies have more time to tell stories and captivate the audience. 
+4. Movie steadily tends to stay in the middle of all other title types for ratings. 
+5. Looking deeper at the 'Drama' genres, we see more combinations with Thriller/Horror and Reality-TV at the bottom (lower weighted ratings) in comparison to Documentary or History at the top of the graph. Looking back at plot 5.2.1 we can wee that these other genres have overall lower or higher ratings respectively, especially given that they have similar amounts of work. 
 
+### 5.3.4 Comparing Title Types Based on Ratings and Total Votes
 ```{r Parcoord}
 library(parcoords)
 plot6 <- parcoords(
-  groupedGenre_complete2[,c(1:4)],#[sample(1:nrow(groupedGenre_complete),1000), c(2:5)], 
+  groupedGenre_complete2[,c(1:4)],
   rownames = F, 
   brushMode = "2D-strums", 
   reorderable = T, 
@@ -130,8 +150,14 @@ plot6 <- parcoords(
 
 plot6
 ```
-- highest ratings is mostly tvEpisode
+In order to look deeper into the distributions of title types. We have made a parallel coordinate diagram. Here we can interactively compare title types, genres, total votes for each distribution, and weighted averages.
 
+1. The highest of the ratings seem to come from tv types, i.e.: "tvEpisode, tvMiniSeries, and tvSeries". 
+2. Most works congregate towards the lower end of the total votes category. By selecting the upper half of the total votes axis, we see that every one of the potential outliers in total votes come from the movie type. 
+3. Movie works typically have weighted averages lying in the 6-8 range. Not single work within the Drama category seems to have a weighted rating above 9. This title type has the largest variance for number of votes.
+4. Short has a very low variance for total votes as all of the works are congregated towards the lower set of votes. There are some short works that have amazing ratings, however, most tend to stay between 6-8.
+5. There are very few works in the dataset for tvShort, tvSpecial, and videogame types. 
+6.. There is a subset of "Drama" combo genres for each title type that has no works, according to the dataset. However it is hard to distinguish the difference between these genre combos.
 
 ## 5.3 Best Director-Writer Pairings
 ### 5.3.1 Comparing best Director-Writer Pairs over work ratings

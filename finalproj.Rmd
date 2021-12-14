@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
+# Chapter 1 Introduction
 
 The film, TV, and media industry has always been in talks among the user sector for one reason or the other. Since years, this industry has provided the society with variety of media content be it in form of TV series, movies, or short videos. These content are meant to not only entertain the user base but also educate them through releasing the video content of different genres such as Comedy, Crime, Suspense, Education to name a few. It is specifically noteworthy that such content knows no barrier and allows the users to watch any movie/video/TV series in different languages produced basically to target groups of people that belongs to specific regions. While the users enjoys and consumes these contents at anytime and anywhere through any platform they desire, it is undeniably appreciated that it is possible only through the hard work and passion of many crew members behind it, for instance, the directors and writers of the video content. It is extremely important for these people to learn and understand how does their users respond to the content that they produce. The most obvious way they can know this is through the ratings and number of votes they receive from the people that watch their films, series, and so on. Apart from this, the ratings of any movie, show, or other such content can help to study any kind of trend that prevails in this industry.<br/><br/>
 
@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 ```
-# Data sources
+# Chapter 2 Data sources
 
 
 ```{r setup, include=FALSE}
@@ -49,7 +49,8 @@ Among all the available datasets on the above link, we collected and used three 
 We chose to use the three datasets mentioned above as we firmly thought that they contained the information that was relevant to answer the questions that we were interested to investigate. The detailed information about the datasets that we used is described below:<br/>
 
 
-## [title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
+## 2.1 Basics
+[title.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz)
 This dataset provides the basic information about different contents as displayed below:<br/>
 1. tconst (string) - alphanumeric unique identifier of the title<br/>
 2. ttlTy (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)<br/>
@@ -62,7 +63,7 @@ This dataset provides the basic information about different contents as displaye
 9. genrs (string array) – includes up to three genres associated with the title<br/>
 
 ```{r}
-basics <- read.csv(file = 'sources/title.basics.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+basics <- read.csv("https://media.githubusercontent.com/media/nityakk/IMDbFilms/main/sources/title.basics.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 basics[basics == "\\N"] <- NA
 ```
 
@@ -74,8 +75,7 @@ The potential columns that we will use from this datatset are titleType, isAdult
 
 The variable types for all the columns above is character, which we will actually convert in different relevant datatypes that would help us answer our questions. Moreover, there are a total of 8486592 rows, that is, 8.4 million rows and 9 columns in the basics dataset.<br/><br/>
 
-
-
+## 2.2 Crew
 [title.crew.tsv.gz](https://datasets.imdbws.com/title.crew.tsv.gz)
 This dataset gives information on directors and writers for each content type produced. The description of the columns contained in this dataset is as below:<br/>
 1. tcnst (string) - alphanumeric unique identifier of the title<br/>
@@ -83,7 +83,7 @@ This dataset gives information on directors and writers for each content type pr
 3. wrtrs (array of nconsts) – writer(s) of the given title<br/>
 
 ```{r}
-crew <- read.csv(file = 'sources/title.crew.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+crew <- read.csv("https://media.githubusercontent.com/media/nityakk/IMDbFilms/main/sources/title.crew.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 crew[crew == "\\N"] <- NA
 ```
 
@@ -94,8 +94,7 @@ We will make use of all the columns from this dataset to address the question 3 
 
 The default datatype of the columns above is character. Quantitatively, there are 8486594, that is, 8.4 million rows and 3 columns in the crew dataset.<br/><br/>
 
-
-
+2.3 Ratings
 [title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz)
 This dataset basically gives the average ratings as well as the number of votes for each title. We may need to normalize this dataset as ratings can be skewed heavily if they have too little votes. The columns contained in this dataset are as follows:<br/>
 1. tcnst (string) - alphanumeric unique identifier of the title<br/>
@@ -103,7 +102,7 @@ This dataset basically gives the average ratings as well as the number of votes 
 3. nmVts - number of votes the title has received<br/>
 
 ```{r}
-ratings <- read.csv(file = 'sources/title.ratings.tsv', sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
+ratings <- read.csv("https://media.githubusercontent.com/media/nityakk/IMDbFilms/main/sources/title.ratings.tsv", sep = '\t', header = TRUE, fill = TRUE, na.strings = "NA")
 ratings[ratings == "\\N"] <- NA
 ```
 
@@ -122,7 +121,7 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 ```
-# Data transformation
+# Chapter 3 Data transformation
 
 We are working around three dataset in total, that is, titles.basics, title.crew, title.ratings. Therefore, it was very necessary to transformation the individual overall datasets by merging different datasets, adding new columns or removing the ones that were not needed or that had any NULL values.<br/><br/>
 
@@ -135,23 +134,25 @@ library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(ggridges)
+library(parcoords)
+library(ggrepel)
 ```
 
-## Transformations to study distribution trends in Adult v/s Non-Adult titles
+## 3.1 Transformations to study distribution trends in Adult v/s Non-Adult titles
 
 <br/>This question basically addresses two objectives.<br/>
 - The first part studies the trend of number of adult title releases with the change of time.<br/>
 - The second part studies the proportion of votes distribution of adult versus non-adult titles over the given period of time.<br/>
 For this question, we primarily use the title.basics and title.ratings dataset. Therefore, we will initially prepare a new auxiliary dataframe which contains transformed version of these datasets.<br/>
 
-### Adult title releases trends
+### 3.1.1 Adult title releases trends
 
 <br/> In this part of the first objective question we wish to observe that with progressing years, did the film industry started making more adults, or less adults, or was the number of releases constant. The following steps show a detailed explanation on how we transformed the data step by step:<br/>
 - Among all the columns available in the title.basics dataset, we are only interested in using the 'startYear' and 'isAdult' columns to achieve the first part of the first objective question. Thus, we dropped the other available columns in the data which were unnecessary for our exploration, likewise, 'primaryTitle', 'originalTitle', 'endYear', 'runtimeMinutes' and formed a new auxiliary dataframe named 'basics_ratings'.<br/>
 - Further, as mentioned earlier, we need the necessary information('startYear' and 'isAdult') from title.basics, which basically is the basics_ratings dataframe, and title.ratings data combined in one auxiliary dataframe. So, we merge the title.ratings dataset with the basics_ratings dataframe and use to address both first and second part of the first objective question.<br/>
 -Moreover, we analyzed that there were missing values in the 'isAdult' and 'startYear' columns. As we are going to explore that with the progress of year does the number of adult movies released had any trend or not, so we need to remove the start years values that have NULL. Also, we are summing up the total number of adult titles released per year, therefore, it is necessary to delete the rows that have NA values for isAdult. Thus, we dropped the rows which either contained NULL values for startYear or NULL values for isAdult.<br/>
 - After cleaning the data by adding, removing and merging the columns, the next step is to group similar start years together and calculate the total number of adult titles that were released in that particular year. For this grouping operation to execute, we converted the datatype of both 'startYear ' and 'isAdult' columns to numeric. Once the datatype was transformed in the desired format, we grouped similar years together based on two different conditions:<br/>
-  -Grouped same years and calculated the sum of the isAdult column which gave the total number of         adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
+  -Grouped same years and calculated the sum of the isAdult column which gave the total number of adult titles released in a particular year. We assigned this to a new temporary dataframe. <br/>
   -Grouped same years and counted the number of rows of the isAdult column which gave the total number    of titles released in a particular in a particular year irrespective of adult or non-adult. We        assigned this to another new temporary dataframe.<br/>
 Finally, we merged the above two temporary dataframes into one by the grouped start years.<br/>
 - As the last step, we calculated the proportion of the adult titles released per start year. This percent would then be used to plot it against their respective start years and study the trend.<br/><br/>
@@ -172,21 +173,6 @@ basics_ratings_crew <- merge(basics_ratings, crew, by = "tconst")
 basics_ratings_crew <- basics_ratings_crew[!is.na(basics_ratings_crew$directors) & !is.na(basics_ratings_crew$startYear), ]
 basics_ratings_crew
 ```
-
-```{r}
-# byDirectors <- merge(basics_ratings_crew, names, by.x = "directors", by.y = "nconst")
-byDirectors
-```
-
-```{r}
-expDirecs <- basics_ratings_crew %>%
-  group_by(directors) %>%
-  count()
-expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
-expDirecs2
-```
-
-
 
 ```{r}
 basics_ratings <- basics_ratings[!is.na(basics_ratings$isAdult), ]
@@ -222,7 +208,6 @@ b_num_votes[is.na(b_num_votes)] <- 0
 b_num_votes$non_adult <- as.matrix(b_num_votes[2] / rowSums(b_num_votes[2:3])) * 100
 b_num_votes$adult <- as.matrix(b_num_votes[3] / rowSums(b_num_votes[2:3])) * 100
 ```
-
 <br/><br/>
 In this part of the first objective question, we are basically studying that did the non-adult titles released more percentages of votes, or less percentages of votes, or same as compared to the votes received by the adult titles in particular year. The following steps explains the transformations that we followed:<br/>
 - First, we filtered out the rows from the basics_ratings dataset that had information about the non-adult titles and stored them in a new temporary auxiliary dataframe. Similarily, we filtered out the rows from the basics_ratings dataset that had information about the adult titles and stored them in another new temporary auxiliary dataframe.<br/>
@@ -230,75 +215,101 @@ In this part of the first objective question, we are basically studying that did
 - Next we merged the above two columns based on start year to form a new transformed dataframe. Moreover, while merging there was a case when there would be some years which were not present in non adult titles or vice versa. So, performed a detailed transformation that included the start years from both the columns and not just the common years. In this situation, the rows that would result in NA values for the number of votes were transformed to get replaced by 0.<br/>
 - Finally, we calculated a new column 'non-adult' in the merged dataframe above that contained the proportion of titles that were non-adult type for the particular year. Similarly, we created another new column in the merged dataframe above that contained the proportion of titles that were adult type for that particular year. These two columns would be used to plot against the start year and study that among the total votes received per year, how much percentage of votes were for non-adult titles and how much were for adult.<br/>
 
+## 3.2 Transformations to study the distributions of genre
+<br/><br/>
+Our second objective question studies how different genres vary in terms of votes, title type, and ratings. We would like to know which genres tend to recieve the most attention and how the type of work has an affect on ratings even within the most popular genre. As the dataset is very large, we decided to subset the dataset based on works done by experience directors. We have defined experience as those directors who have completed at least 20 works. By subsetting this way, we are also looking at top works within the dataset. The limitation with subsetting in this manner is that we may be losing data on works created by directors who are experienced but do not show up in the dataset at least 20 times.
+
+```{r}
+expDirecs <- basics_ratings_crew %>%
+  group_by(directors) %>%
+  count()
+expDirecs2 <- expDirecs[which(expDirecs$n >= 20), ]
+expDirecs2
+```
+
 
 ```{r}
 # 2(A)
-byDirectors1 <- subset(basics_ratings_crew, basics_ratings_crew$directors %in% expDirecs2$directors)
-byDirectors1 <- byDirectors1[which(strtoi(byDirectors1$startYear) >= '2010'), ]
+byGenre1 <- subset(basics_ratings_crew, basics_ratings_crew$directors %in% expDirecs2$directors)
 
-groupedDirec <- byDirectors1 %>%
-  group_by(directors, titleType, genres, numVotes) %>%
-  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
+groupedGenre <- byGenre1 %>%
+  group_by(titleType, genres) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
-groupedDirec_complete <- na.omit(groupedDirec)
-groupedDirec_complete
+groupedGenre_complete <- na.omit(groupedGenre)
+groupedGenre_complete
+```
 
 
-genres <- subset(groupedDirec_complete, select = c(genres))
+```{r}
+genres <- subset(groupedGenre_complete, select = c(genres))
 genres <- genres[!grepl(",", genres[["genres"]]), ]
 genres <- unique(genres)
 genreRatings <- data.frame(matrix(ncol = 3, nrow = 0))
 colnames(genreRatings) <- c('genre', 'count', 'weight')
 
-genreRatings
 for(genre in genres$genres) {
   if(genre != ""){
-    temp <- groupedDirec_complete[grepl(genre, groupedDirec_complete[["genres"]]), ]
-    num <- length(temp$directors)
+    temp <- groupedGenre_complete[grepl(genre, groupedGenre_complete[["genres"]]), ]
+    num <- length(temp$weightedRating)
     weight <- mean(temp$weightedRating)
     #print(c(genre, num, weight))
     genreRatings[nrow(genreRatings)+1,] = c(genre, num, weight)
   }
 }
+genreRatings
+```
 
-    #toppercent <- max(byDirectors2$numVotes)*0.1
-    #byDirectors3 <- byDirectors2[which(byDirectors2$numVotes >= 0), ]
+```{r}
+# 2(B)
+types <- unique(groupedGenre_complete$titleType)
+genrewtype <- data.frame(matrix(ncol = 4, nrow = 0))
+colnames(genrewtype) <- c('genre', 'type', 'count', 'weight')
 
-# 2(B,C)
-byDirectors2 <- byDirectors1[grepl("Drama", byDirectors1[["genres"]]), ]# | grepl("Comedy", byDirectors2[["genres"]]), ]
-groupedDirec2 <- byDirectors2 %>%
-  group_by(directors, titleType, genres, numVotes) %>%
-  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-
-groupedDirec_complete2 <- na.omit(groupedDirec2)
-groupedDirec_complete2
-
-cleveland <- groupedDirec_complete2 %>% 
-  ungroup() %>%
-  group_by(titleType, genres) %>%
-  summarize(mean = mean(weightedRating))
-cleveland
-
-# For Interactive
-write.csv(groupedDirec,"sources_short/GroupedDirecs.csv", row.names = FALSE)
-write.csv(groupedDirec_complete,"sources_short/GroupedDirecs_complete.csv", row.names = FALSE)
+for(genre in genres$genres) {
+  if(genre != ""){
+    temp <- groupedGenre_complete[grepl(genre, groupedGenre_complete[["genres"]]), ]
+    for(type in types) {
+      temp2 <- temp[grepl(type, temp[["titleType"]]), ]
+      num <- length(temp2$weightedRating)
+      weight <- mean(temp2$weightedRating)
+      genrewtype[nrow(genrewtype)+1,] = c(genre, type, num, weight)
+    }
+  }
+}
+genrewtype <- genrewtype %>% 
+  mutate(IsDrama = ifelse(genre == "Drama", "drama", "other"))
+genrewtype
 ```
 
 
 ```{r}
-# type = "movie"
-# dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
-# dRSub
+# 2(C,D)
+byGenre2 <- byGenre1[grepl("Drama", byGenre1[["genres"]]), ]
+groupedGenre2 <- byGenre2 %>%
+  group_by(titleType, genres) %>%
+  summarize(weightedRating = sum(averageRating * numVotes) / sum(numVotes), totalVotes = sum(numVotes))
 
-
-for(type in unique(groupedDirec_complete$titleType)) {
-  dRSub <- groupedDirec_complete[which(groupedDirec_complete$titleType == type), ]
-  filename = paste0("sources_short/titletypes/",type,".csv")
-  write.csv(dRSub, filename, row.names = FALSE)
-}
+groupedGenre_complete2 <- na.omit(groupedGenre2)
+groupedGenre_complete2
 ```
 
-## Transformations to study the performance of different director-writer pairs
+```{r}
+# cleveland <- groupedGenre_complete2 %>% 
+#   ungroup() %>%
+#   group_by(titleType, genres) %>%
+#   summarize(mean = mean(weightedRating))
+# cleveland
+```
+
+<br/><br/>
+Our transformations are as follows:
+- First we filtered out all of the titles that were not created by experienced directors. The remaining titles were grouped by title type, and genre. A new column was added for weighted ratings (ratings weighted by number of votes) and total number of votes. Any potential rows with missing values were dropped.
+- To see how different genres compare with each other, we first obtained all unique genres. Many of the rows in the genre column had comma separated values. However, there were some rows that had singular genre names. It can be noted that a list of all singular genre names represents the unique genre names. For each unique genre name, we obtained the total number of times the genre appears (within both singular and comma separated row values) and the average rating of all of the works within that genre. We also grouped this dataset based on title type to see what the distribution across title types looks like.
+- Due to the large size of the data, it is difficult to view trends within each genre. Therefore, we decided to specifically look at the most popular genre. After visualizing the comparison of different genres (seen in Chapter 5.2), we concluded that the most popular genre is "Drama". Therefore, we subset our previous dataset of works by experienced directors by works that have "Drama" as at least one of the genre types. This was again grouped as earlier (grouped by title type, and genre, with the addition of total votes and weighted averages).
+
+
+## 3.3 Transformations to study the performance of different director-writer pairs
 ```{r}
 #3(A)
 df1 <- basics_ratings_crew[!is.na(basics_ratings_crew$writers),]
@@ -347,18 +358,6 @@ t_final <- merge(tttt, tt, by = 'director_writer_pair')
 t_final <- t_final[with(t_final, order(-n, -weigthedRating)), ]
 ```
 
-```{r}
-# last20years <- df1[which(strtoi(df1$startYear) >= '2000'), ]
-# last20years
-# write.csv(last20years,"sources/last20years.csv", row.names = FALSE)
-```
-
-```{r}
-# last100years <- df1[which(strtoi(df1$startYear) >= '1900'), ]
-# last100years
-# write.csv(last20years,"sources_short/last100years.csv", row.names = FALSE)
-```
-
 
 ```{r}
 tttt <- df1 %>%
@@ -370,28 +369,30 @@ t_final <- t_final[with(t_final, order(-n, -weightedRating)), ]
 t_final
 ```
 
+### 3.4 Interactive Plot
+
+```{r}
+write.csv(groupedGenre,"sources_short/groupedGenres.csv", row.names = FALSE)
+write.csv(groupedGenre_complete,"sources_short/groupedGenres_complete.csv", row.names = FALSE)
+```
+
+
+```{r}
+for(type in unique(groupedGenre_complete$titleType)) {
+  dRSub <- groupedGenre_complete[which(groupedGenre_complete$titleType == type), ]
+  filename = paste0("sources_short/titletypes/",type,".csv")
+  write.csv(dRSub, filename, row.names = FALSE)
+}
+```
+
+The above transformation subsets our data by genre and saves each subset as its own file.
+
 ```{r}
 directorRatings <- df1 %>%
      group_by(directors, startYear) %>%
      summarise(weightedRating = sum(averageRating * numVotes) / sum(numVotes))
-#directorRatings$fileName = gsub("\\s", "_", directorRatings$primaryName)
 directorRatings
-#unique(directorRatings$primaryName)
 write.csv(directorRatings,"sources_short/directors/directorRatings.csv", row.names = FALSE)
-```
-
-```{r}
-# director <-  "Alan J.W. Bell"
-# dRSub <- directorRatings[which(directorRatings$primaryName == director), ]
-# dRSub
-# paste0(director,"_Rangints")
-# 
-# for(director in directorRatings$fileName) {
-#    dRSub <- directorRatings[which(directorRatings$fileName == director), ]
-#    filename = paste0("sources_short/directors/",director,"_Ratings.csv")
-#    write.csv(dRSub, filename, row.names = FALSE)
-#  }
-
 ```
 
 <!--chapter:end:03-cleaning.Rmd-->
@@ -403,7 +404,7 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 ```
-# Missing values
+# Chapter 4 Missing values
 
 ```{r}
 # cp = 0 for counts, 1 for percents
@@ -525,7 +526,7 @@ missing_plots <- function(data, percent = FALSE) {
 }
 ```
 
-
+## 4.1 Basics
 ```{r}
 missing_plots(basics, percent = TRUE)
 ```
@@ -541,6 +542,7 @@ Analysis:<br/><br/>
 
 From this dataset, we have utilized the information about the start year of title, title type, and whether the title is adult or not. Therefore, to handle the missing values of the start year, we have dropped the rows where there were no start year mentioned. Further, to handle the rows with missing values for isAdult or not, we again dropped those rows from the dataset. This detailed information about this transformation is explained in the 'Data Transforamtion' chapter. Finally, as there are no missing values for the title type column thus we do not have to worry about it.<br/>
 
+## 4.2 Crew
 ```{r}
 missing_plots(crew, percent = TRUE)
 ```
@@ -559,6 +561,8 @@ It is noted from the right-most graph that the percentage of rows where both dir
 4. Notably, a total of 44% of the rows in the dataset have complete cases patterns, meaning there are no missing values in this proportion of rows.<br/>
 
 We have made use of the 'title.crew.tsv.gz' dataset to answer the question 2 and 3 of our objective. We primarily use the director and writer values provided in the above dataset, therefore, it is very necessary to handle the missing values in these columns. To do so, we simply dropped the rows which had the missing values, that is, "NA" values and then utilized the two columns. The detail about this transformation is explained in the 'Data Transformation' chapter.<br/>
+
+## 4.3 Ratings
 ```{r}
 missing_plots(ratings, percent = TRUE)
 ```
@@ -581,46 +585,15 @@ knitr::opts_chunk$set(
 ```
 # Results
 
-## Initial Exploration:
-```{r}
-# basics_ratings_crew
-```   
+## 5.1 Adult Works
+
+### 5.1.1 Proportion of Adult movies over time
 
 ```{r}
-# full_year <- basics_ratings_crew %>%
-#   group_by(startYear) %>%
-#   count()
-# full_year
-```
-
-```{r}
-# worksovertime <- ggplot(full_year, aes(x = startYear, y = n)) +
-#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-#   theme(axis.line = element_line(color="gray22")) +
-#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10)) + 
-#   scale_y_continuous(name = "Number of Works", breaks = seq(0,60000, 10000)) 
-# worksovertime
-```
-
-```{r}
-# full_votes <- basics_ratings_crew %>%
-#   group_by(startYear) %>%
-#   summarise(weightedVotes = sum(numVotes))
-# full_votes
-```
-
-```{r}
-# votesOvertime <- ggplot(full_votes, aes(x = startYear, y = weightedVotes)) +
-#   geom_bar(stat="identity", fill = "mediumorchid4", color = "black") +
-#   theme(axis.line = element_line(color="gray22")) +
-#   scale_x_discrete(name = "Year", breaks = seq(0,2021,10))
-# votesOvertime
-```
-
-## Adult Works
-
-```{r}
-plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + geom_line() + scale_x_continuous(breaks = seq(1800, 2021, 3)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+plot1 <- ggplot(b_final, aes(x = startYear, y = adult_proportion)) + 
+  geom_line() + 
+  scale_x_continuous(breaks = seq(1800, 2021, 3)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r}
@@ -634,6 +607,7 @@ plot1
 
 The results overall demonstrates that with progressing years, the proportio of adult movies increased though abruptly.<br/><br/>
 
+### 5.1.2 Comparison of Adult vs Non-Adult movies
 ```{r}
 plot2 <- ggplot(b_num_votes, aes(startYear)) + 
     geom_line(aes(y = numVotes.x, colour = "non_Adult")) + 
@@ -659,55 +633,70 @@ Note that we have used the log() function to calculate and represent the number(
 7. Moreover, the general trend studied for the weighted average rating distribution of adult titles versus non adult titles can interpreted as one where the proportion of votes for non adult titles was always more than the proportion of votes received by adult titles in any given year.<br/>
 
 
-## Variation of Average Ratings amongst genres
+## 5.2 Variation of Average Ratings amongst genres
 
-```{r}
+### 5.2.1 Comparing Genres with Weighted Ratings and Number of Works
+
+There is an interest in understanding which genres tend to perform better on IMDb ratings. Below we have plotted each genre based on the (i) number of works within that genre in the dataset and (ii) weighted ratings (weighted based on number of votes). 
+
+```{r fig.height=10}
 
 library(ggrepel)
-
 plot3 <- ggplot(genreRatings, aes(x = as.numeric(weight), y = as.numeric(count, options(scipen=999)))) +
-  geom_point() +
+  geom_point(size = 3, color = "red") +
   ggtitle("Weighted Ratings and Number of Works per Genre") +
-  geom_text_repel(aes(label=genre), size=3)+#, vjust = -1)+
+  geom_text(aes(label = genre), size=4, vjust = -1) +
   scale_x_continuous(name = "Weighted Ratings") +
-  scale_y_continuous(name = "# of Works", breaks = seq(0,150000, 20000))
+  scale_y_continuous(name = "# of Works", breaks = seq(0,1500, 50)) + 
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title = element_text(size=14),
+        plot.title = element_text(size=24, face="bold")) 
 
 plot3
 ```
 
+Based on the 'Weighted Ratings and Number of Works per Genre' scatterplot, we can see that the genre 'Documentary' has the highest weighted rating. 'Horror' has the lowest weighted rating which may be due to, given the relatively high number of works, overly-repetitive plot lines. 'News' has the lowest number of works. Lastly, we see that 'Drama' has the highest number of votes over all genres with a relatively high rating. This point is of particular interest to us. Most of the genres lie below the 700 works line, and much are congregated specifically between the 350-700 works mark. This makes 'Drama' (and 'Comedy') both potential outliers. Based on this plot, 'Drama' is a genre that not only has the highest number of works but it also has one of the the highest weighted ratings. It will be interesting to look deeper into the distribution within 'Drama'.
 
--cleveland dot plot
+### 5.2.2 Comparing Genres Across Different Title Types
+
+```{r fig.height=10, fig.width=20}
+plot4 <- ggplot(genrewtype, aes(x = genre, y =  as.numeric(count), fill = IsDrama)) + 
+      geom_bar( stat = "identity", width = 0.75, size = 0.05) + 
+      facet_wrap( ~ type ) +
+      ggtitle("Weighted Ratings per Genre Based on Title Type") +
+      scale_x_discrete(name = "Genres") +
+      scale_y_continuous(name = "Number of works") +
+      theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 14),
+            axis.text.y = element_text(size = 14),
+            axis.title = element_text(size=14),
+            plot.title = element_text(size=24, face="bold")) +
+      theme(strip.text.x = element_text(size = 20)) + 
+      scale_fill_manual( values = c( "drama"="tomato", "other"="purple"))
+plot4
+```
+Using this faceted bar plot, we seek to compare the 'Drama' genre across different title types and between genres. It is evident that overall, the high number of works in the 'Drama' genre is not just due to one specific title type and that in almost all title types, the 'Drama' genre sticks out with competitive values. This is unlike the 'Short' genre, for example, which expectedly has a high number of works in the short title type but overall lower in other title types. From the previous graph we know that the 'Short' genre has an average number of works and rating. The Movie and tvEpisode title types seem to pull the weight on the large quantity of titles in the full dataset. Whereas tvShort and tvSpecial collectively have the least number of works in the dataset.
+
+The above graph does not allow us to compare weighted ratings in the same way as the values are quite similar.
+
+
+### 5.2.3 Deeper Dive - Comparing Different Genre Subtypes
 ```{r Cleveland Plot, fig.height=30, fig.width=10}
-plot4 <- ggplot(cleveland, aes(x = mean, y = fct_reorder(genres, mean), color = titleType)) +
-  geom_point() +
+plot5 <- ggplot(groupedGenre_complete2, aes(x = weightedRating, y = fct_reorder(genres, weightedRating), color = titleType)) +
+  geom_point(size=2.5) +
   ggtitle("Weighted Ratings per Genre") +
   ylab("") +
   theme_linedraw()
 
-plot4
+plot5
 ```
-
-```{r}
-# ggplot(cleveland, aes(x = genres, y = mean, color = mean)) +
-#   geom_point(size = 1.5) +
-#   facet_wrap(~titleType) + 
-#   scale_x_discrete()
-```
+To compare the weighted ratings within the 'Drama' genre, we have made a cleveland dot plot colored by title type.
 
 
-From above:
-- Many of the the highest ratings are of the Drama genre
-
-
-Looking at just the Drama genre
-
-
-- parcoord
 ```{r Parcoord}
 library(parcoords)
-
-plot5 <- parcoords(
-  groupedDirec_complete[,c(2:5)],#[sample(1:nrow(groupedDirec_complete),1000), c(2:5)], 
+plot6 <- parcoords(
+  groupedGenre_complete2[,c(1:4)],#[sample(1:nrow(groupedGenre_complete),1000), c(2:5)], 
   rownames = F, 
   brushMode = "2D-strums", 
   reorderable = T, 
@@ -719,52 +708,58 @@ plot5 <- parcoords(
     colorScheme = "schemeCategory10"),
   withD3 = TRUE,
   alpha = 0.5,
-  height = 1000,
-  width = 1000
+  height = 1500,
+  width = 1200
 )
 
-plot5
+plot6
 ```
 - highest ratings is mostly tvEpisode
 
 
-## Best Director-Writer Pairings
+## 5.3 Best Director-Writer Pairings
+### 5.3.1 Comparing best Director-Writer Pairs over work ratings
 ```{r}
 library(ggridges)
-plot6 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
-```
-
-```{r}
-plot6
-```
-
-<br/> We have ploted the above graph to visualize the averageRating distribution of top 10 director_writer_pairs based on the number of times they worked together.
-1. We have filled the ridge plot with the titleType to get the bifurcation of averageRating based on titleType. <br/>
-2. As we can see from the above graph, the pair "n43-n" has the highest mean of averageRating which is approximately 9.5 ratings that too for tvEpisodes. Moreover, the standard deviation of the averageRating is also less compared to other director writer pairs. <br/>
-3. For titleType movie we can see the pair "n59-n" has the highest mean of the averageRating. <br/>
-4. For the titeType short, there are few pairs that have worked upon the short movie, from the graph we can see that the pair “n59-n” has averageRating spread till 9.8 approximately while the averageRating for the tittleType short has the mean of averageRating around 6 to 7 ratings. <br/>
-5. For the titleType tvSeries there are 6 pairs that have worked for that particular titleType. Out of all the pairs, the pair “n57-n” and “n44-n” seem to have a high distribution of averageRating but the pair “n44-n” seems to be more successful for tvSeries compared to “n57-n” as the data is spreaded till 9.5 averageRatings.<br/>
-6. For the titleType video there are 3 pairs in total that have worked on it. Out of all the pairs, the pair “n59-n” and “n30-n” seem to have similar distribution of averageRating where the pair “n59-n” being on the higher side.<br/>
-
-
-```{r}
-plot7 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+plot7 <- ggplot(df2, aes(x = averageRating, y = director_writer_pair, fill = titleType)) + geom_density_ridges() + scale_y_discrete(label = abbreviate)
 ```
 
 ```{r}
 plot7
 ```
 
-<br/> We have plotted the above graph to visualize the top 10 director writer pair having averageRating equal to 10. <br/>
-1. For the titleType short we can see clearly that the pair “n336-n” has the highest number of votes in the averageRating equal to 10. Although, all the pairs have received the averageRating 10 but the most likely pair for the titleType short is “n336-n” and then followed by “n64-n”. <br/>
-2. For the titleType tvEpisode we can see that there are plenty of pairs that have worked together for a tvEpisode. Out of all the pairs, we observe that “n37-n” has the highest number of votes , approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar likening between the audience. <br/>
-3. For the titleType tvMiniSeries there are hardly pairs of director writer that have worked together except for 1 that is the pair “n113-n”. <br/>
-4. Interestingly, for titleType tvSeries we can only see one pair that is “n113-n”. The reason for this might be either there are very few tvSeries that have averageRating equal to 10 or else less director writer pair have made tvSeries compared to other titleTypes. <br/>
-5. Similarly for the titleType tvShort there is only 1 pair that has worked together to make a tvShort and that pair is “n336-n”. <br/>
-6.  titleType tvSpecial also has only 1 pair of director writers that have worked together. The pair “n18-n” is the pair that has approximately 20 numbers of Votes. <br/>
-7. For the titleType video there are a few pairs of director_writer that have worked together. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100. <br/>
+<br/> We have plotted the above graph to visualize the averageRating distribution of top 10 director_writer_pairs based on the number of times they worked together. We have filled the ridge plot with the titleType to get the bifurcation of averageRating based on titleType.<br/>
+1. The director-writer pair “n59-n” have worked together in shortMovie, Movie, tvEpisode, video and videoGame. Amongst all the title types the pair has the highest averageRating for movies. The mean of the averageRating for movies is approximately 9.2. This suggest that the movies of the pair “n59-n” are more liked by the audience.<br/>
+2. The director-writer pair “n57-n” have worked together in shortMovie, tvEpisode, and tvSeries. The pair seems to be famous for its tvSeries as we can see that the distribution of the averageRating for tvSeries seems to be narrow and has the mean around 7.5 ratings. <br/>
+3. The pair “n44-n” seems to make only tvSeries or tvEpisodes. Visualizing the graph we can say that the pair is more likely famous for tvSeries as their averageRating is distributed above 9.<br/>
+4. Interestingly, the pair “n43-n” only makes tvEpisode having a mean rating of 9.5 rating that is highest among all the top 10 pairs  of director and writer. This suggest that the tvEpisode of this pair are more liked by the people.<br/>
+5. The pair ”n37-n” has worked together for tvSeries and tvEpisodes. From the graph we can say that the particular pair is more likely by audience when they work together for a tvEpisode.<br/>
+6. The pair “n30-n” has only worked together for tvEpisodes. The mean of these tvEpisodes are nearly 6.8 ratings.<br/>
+7. The pair “n30-n” have worked together for different shortMovies, tvSeries, video and tvEpisodes. Amongst all the titleType the pair is more liked by the audience for the video. The mean of their averageRating distribution is approximately 7.5 ratings.<br/>
+8. The pair “n134-n” seems to have worked for titleType tvEpisode, video, tvSeries, and movie. Amongst all the titleType we can say that the pair is more famous for the tvEpisode. <br/>
+9. The pair “n112-n” seems to have worked for titleType tvEpisode, tvSeries, and movie. Amongst all the titleType we can say that the pair is more famous for the tvEpidose. <br/>
+10. The pair “n09” have only worked together for the titleType tvEpisode. Moreover, the mean of the tvEpisode is 6.6 ratings. <br/>
 
-In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, tvShort and tvSpecial there are only 1 pair of director_writer who have an averageRating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director_writer_pairs that have averageRating 10 and have worked for more than 5 times together. Surprisingly the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have averageRating of 10 but the pair might have worked for only once or twice or second there could be no movies that have averageRating of 10. <br/>
+
+### 5.3.2 Which director-writer pairs had the most votes
+```{r}
+plot8 <- ggplot(new_filter, aes(x = reorder(director_writer_pair, -totalVotes), y = totalVotes, fill = titleType)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+plot8
+```
+
+<br/> We have plotted the above graph to visualize the top 10 director writer pair having averageRating equal to 10. <br/>
+1. For the titleType short we can see clearly that the pair “n336-n” has the highest number of votes. Although, all the pairs have received the averageRating 10 but the most likely pair for the titleType short is “n336-n” and then followed by “n64-n” as they are supported by the total numVotes .<br/>
+2. For the titleType tvEpisode we can see that there are plenty of pairs that have worked together for a tvEpisode. Out of all the pairs, we observe that “n37-n” has the highest number of votes , approximately 87.5 votes. Moreover, the pair “n10640878-n10640878” also seem to have similar likening between the audience.<br/>
+3. For the titleType tvMiniSeries there are hardly pairs of director writer that have worked together except for 1 that is the pair “n113-n”. <br/>
+4. Interestingly, for titleType tvSeries we can only see one pair that is “n113-n”. The reason for this might be either there are very few tvSeries that have averageRating equal to 10 or else less director writer pairs have made tvSeries compared to other titleTypes.<br/>
+5. Similarly for the titleType tvShort there is only 1 pair that has worked together to make a tvShort and that pair is “n336-n”.  <br/>
+6.  titleType tvSpecial also has only 1 pair of director writers that have worked together. The pair “n18-n” is the pair that has approximately 20 numbers of Votes.<br/>
+7. For the titleType video there are a few pairs of director_writer that have worked together. Amongst all the pairs, the pair “n3195-n” has the highest number of Votes which is approximately 100.<br/> 
+
+In Conclusion, for the titleTypes of tvMiniSeries, tvSeries, tvShort and tvSpecial there are only 1 pair of director_writer who have an averageRating of 10 and have worked together for more than 5 times. The titleTypes short, tvEpisodes, and video have many director_writer_pairs that have averageRating 10 and have worked for more than 5 times together. Surprisingly the above plot does not have any pairs that have worked together for the titleType movies, this suggests that there could be two scenarios for this: first there would be pairs that have averageRating of 10 but the pair might have worked for only once or twice or second there could be no movies that have averageRating of 10.<br/>
 
 <!--chapter:end:05-results.Rmd-->
 
